@@ -1,0 +1,33 @@
+***************************************************
+
+Wedding/Event RSVP & Update app
+    -there would be a single superuser/admin account
+    -there would be a level of accounts with read and write permissions for
+        posting topics and update, as well as commenting on them.
+    -there would be a level of majority accounts with read only permissions 
+        for postings, but write permissions for commenting(to ask questions 
+         or give feedback)
+
+    Potentially implement 'Magic Links' as a Token distrobution feature
+
+    Preset schema layout for Blogs and Comments, limited involvement with customization issues
+
+        ?keep comments in own collection and reference with each blog?
+        ?file size of posts if comments lived in post?    
+
+
+
+
+
+
+(Maintain exclusiveness)would like to send (maybe single use/ expirable) 
+       invitations to register-- if rsvp declined, dissolve authentication for id?(too complex for)
+ 
+
+
+
+
+
+
+
+Would just be a multi tiered Auth implementation of Blog App 
