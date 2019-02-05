@@ -10,14 +10,12 @@ const seedPosts = require('../db/posts');
 const seedUsers = require('../db/users');
 
 
-console.info('Connecting to:', MONGODB_URI);
-mongoose.connect(MONGODB_URI, { useNewUrlParser: true })
-  .then(() => {
-    console.info('Dropping Database');
-    return mongoose.connection.db.dropDatabase();
-  })
-  .then(() => {
-    console.info('Seeding Database');
+mongoose.connect(MONGODB_URI)
+.then(() => {
+  console.info('Dropping Database');
+  return mongoose.connection.db.dropDatabase();
+})
+.then(() =>{
     return Promise.all([
       Post.insertMany(seedPosts),
       User.insertMany(seedUsers),
