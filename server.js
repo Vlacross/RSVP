@@ -1,26 +1,15 @@
 const express = require('express');
-const bodyParser = require('bodyParser')
+const bodyParser = require('body-parser')
 
 const app = express()
 
 app.use(express.static('/views'))
 
-app.route('/')
-    .get(function(req, res) {
+app.get('/Home', function(req, res) {
+        console.log("obtained GET route")
 
-    })
-
-    .post(function(req, res) {
-
-    })
-
-    .put(function(req, res) {
-
-    })
-
-    .delete(function(req, res) {
-        
-    })
+    });
+    
 
 
 

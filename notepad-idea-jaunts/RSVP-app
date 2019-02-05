@@ -20,7 +20,23 @@ Wedding/Event RSVP & Update app
 (Maintain exclusiveness)would like to send (maybe single use/ expirable) 
        invitations to register-- if rsvp declined, dissolve authentication for id?(too complex for)
 
-Would just be a multi tiered Auth implementation of Blog App 
+Would just be a multi tiered Auth implementation of Blog App
+
+*****************************************************
+Agenda - Rough dev plan
+*****************************************************
+
+
+-Build bones - express app w/ CRUD endpoints(Build user flow, then build into app)
+
+-Add authentication
+        -make mock views/response for each(console.log / response message)
+
+-Integrate Mongoose for each endpoint
+
+-Configure MongoDb User Roles
+
+-Add front-end for each
 
 *****************************************************
 Visual - CSS ideas:
@@ -47,20 +63,55 @@ Like the idea of tabs on left&right sides that transition between pages/depths o
 ----------------------------------------------------------------------------------
 
 *****************************************************
-Agenda - Rough dev plan
-*****************************************************
+Flow - description of use
+****************************************************
+
+Enter Landing page(load static view folder)=[login, register]
+
+REGISTER - nothing now(eventual load a form for new event)
+
+LOGIN(send auth req to server(./AUTH) with user inputs rerender content) 
+
+Load Home
+(send req to server(./POSTS) to display event posts(mongooseFIND) load into premade template and append(JQuery))
+
+depending on user account privliges(coordination team or invitee/basic viewer)
+
+Click on post(send req to server(./POSTS) to get single post(mongooseFINDONE))
+ 
 
 
--Build express app w/ CRUD endpoints
 
--Add authentication
-        -make mock views/response for each(console.log / response message)
 
--Integrate Mongoose for each endpoint
 
--Configure MongoDb User Roles
 
--Add front-end for each
+
+
+
+
+leads can create update, post comments, delete any comment, delete any post
+
+users can delete their own comments, and post comments
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
