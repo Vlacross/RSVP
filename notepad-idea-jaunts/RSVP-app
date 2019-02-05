@@ -1,4 +1,6 @@
-***************************************************
+*****************************************************
+Initial Rough Idea
+*****************************************************
 
 Wedding/Event RSVP & Update app
     -there would be a single superuser/admin account
@@ -15,19 +17,55 @@ Wedding/Event RSVP & Update app
         ?keep comments in own collection and reference with each blog?
         ?file size of posts if comments lived in post?    
 
-
-
-
-
-
 (Maintain exclusiveness)would like to send (maybe single use/ expirable) 
        invitations to register-- if rsvp declined, dissolve authentication for id?(too complex for)
- 
-
-
-
-
-
-
 
 Would just be a multi tiered Auth implementation of Blog App 
+
+*****************************************************
+Visual - CSS ideas:
+*****************************************************
+
+
+Intro landing (black back and cursive white/clean gold cream; light/pleasant diagonal 
+    transition[moving picture] top right to bottom left)
+
+onscroll(or other)- show about allow login or signup
+    
+    -login requires [userName, passWord, eventId]
+     runs auth and moves to app home page
+
+    -signup requires app form-page for event details[headCount, date, type/event, people in charge]
+
+_Homepage
+
+----------------------------------------------------------------------------------
+Like the idea of tabs on left&right sides that transition between pages/depths of site dir;
+    not practical here.
+
+
+----------------------------------------------------------------------------------
+
+*****************************************************
+Agenda - Rough dev plan
+*****************************************************
+
+
+-Build express app w/ CRUD endpoints
+
+-Add authentication
+        -make mock views/response for each(console.log / response message)
+
+-Integrate Mongoose for each endpoint
+
+-Configure MongoDb User Roles
+
+-Add front-end for each
+
+
+
+
+
+
+
+
