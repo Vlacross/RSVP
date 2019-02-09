@@ -5,28 +5,17 @@ const bodyParser = require('body-parser')
 const jsonParser = bodyParser.json()
 
 const { User, Post, Comments } = require('./models')
+const { authRouter } = require('./auth')
 
 const passport = require('passport')
 const LocalStrategy = require('passport-local')
 
-// passport.use(new LocalStrategy(
-// 	function(usr, pwd, done) {
-// 		User.findOne({userName: usr}, function(err, usr) {
-// 			if(err) {return done(err) }
-// 			if (!usr) {
-// 				return done(null, false, {message: 'Invalid username!'})
-// 			}
-// 			if (!user.validPassword(pwd)) {
-// 				return done(null, false, {message: 'Invalid Password!!'})
-// 			}
-// 			return done(null, usr);
-// 		});
-// 	}
-// ));
 
 const app = express()
 
 app.use(express.static('./views'))
+
+app.use('/loggin', authRouter)
 
 app.get('/', function(req, res) {
         console.log("obtained GET route")
@@ -34,7 +23,7 @@ app.get('/', function(req, res) {
 
     });
 
-app.post(jsonParser, function(req, res) {
+app.post('/', jsonParser, function(req, res) {
 
 console.log('authenticatin', req.body)
 res.status(200).end()

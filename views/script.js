@@ -16,7 +16,7 @@
 
 function promptAuth() {
     const loginForm = `
-    <form class="othForm">
+    <form action="../loggin" class="othForm">
 			<label for="userNameInput">UserId
 				<input id="userNameInput" name="userNameInput" class="userNameInput" type="text">
 			</label>
@@ -37,14 +37,13 @@ function promptAuth() {
 					userName: id.value,
 					passWord: pwd.value
 				};
-			
-			fetch('../auth', {
+			fetch('../loggin', {
 				method: 'post',
 				headers: {
 					'Accept': 'application/json',
 					'Content-Type': 'application/json'
 				},
-				user: JSON.stringify(logIn)
+				body: JSON.stringify(logIn)
 			})
 			.then(res => console.log(res.status))
 			.catch(err => console.log(err))
