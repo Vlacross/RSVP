@@ -1,0 +1,1 @@
+module.exports = { rsvpRouter: require('./router') }

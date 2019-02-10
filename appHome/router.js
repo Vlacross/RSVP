@@ -3,7 +3,7 @@ const app = express.Router()
 
 const mongoose = require('mongoose')
 
-const {}
+app.use(express.static('./views'))
 
 
 app.get('/', function(req, res) {

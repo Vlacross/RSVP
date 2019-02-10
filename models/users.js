@@ -5,7 +5,8 @@ const ObjectId = Schema.Types.ObjectId
 /*User Schema */
 
 const userSchema = new Schema ({
-    name: String,
+    fullname: String,
+    username: String,
     role: String
 })
 

@@ -7,41 +7,22 @@ const Router = express.Router()
 const passport = require('passport')
 const LocalStrategy = require('passport-local')
 
+const mongoose = require('mongoose')
+
 const jwt = require('jsonwebtoken')
 
-const checkHeaders = (req, res, next) => {
-    if(!req.body.userName) {
-        console.log('missing username or password')
-        return req
-    }
-    
-}
 
-
-Router.use('*', jsonParser)
+// Router.use('*', jsonParser)
 
 Router.get('/', function(req, res) {
     console.log('herego!')
 })
 
-Router.post('/', checkHeaders, function(req, res) {
+Router.post('/', function(req, res) {
     console.log('AuthPosters', req.body)
 })
 
-passport.use(new LocalStrategy(
-	function(usr, pwd, done) {
-		User.findOne({userName: usr}, function(err, usr) {
-			if(err) {return done(err) }
-			if (!usr) {
-				return done(null, false, {message: 'Invalid username!'})
-			}
-			if (!user.validPassword(pwd)) {
-				return done(null, false, {message: 'Invalid Password!!'})
-			}
-			return done(null, usr);
-		});
-	}
-));
+
 
 
 const checkToken = (req, res, next) => {
