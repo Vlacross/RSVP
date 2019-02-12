@@ -1,3 +1,3 @@
 module.exports = { authRouter: require('./router'),
-                   tokenStrat: require('./passport'),
-                   localStrat: require('./passport') }
+                   tokenStrat: require('./passport').tokenStrat,
+                   localStrat: require('./passport').localStrat }
