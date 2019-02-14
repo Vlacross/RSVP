@@ -53,13 +53,7 @@ router.post('/create', jsonParser, (req, res) => {
 	}
 	console.log(missing)
 
-		// requiredFields.forEach(field => {
-		// 	if (!req.body[field]) {
-		// 		msg = `Missing ${field} in header!`
-		// 		console.error(msg)
-		// 		return res.status(400).json(msg).end()
-		// 	}
-		// })
+		/*add validation for user/author */
 
 	const { title, author, body } = req.body
 	

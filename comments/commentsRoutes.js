@@ -37,7 +37,7 @@ router.get('/', (req, res) => {
 router.post('/create', jsonParser, (req, res) => {
 	
 	/*forEach wasn't handling err - allowed to pass to create */
-	const requiredFields = ['text', userId]
+	const requiredFields = ['text', 'userId']
 	let missing = requiredFields.filter(field => (!req.body[field]))
 	if(missing.length > 0) {
 		msg = `Missing ${missing} in header!`
@@ -46,17 +46,12 @@ router.post('/create', jsonParser, (req, res) => {
 	}
 	console.log(missing)
 
-		// requiredFields.forEach(field => {
-		// 	if (!req.body[field]) {
-		// 		msg = `Missing ${field} in header!`
-		// 		console.error(msg)
-		// 		return res.status(400).json(msg).end()
-		// 	}
-		// })
+	/*add validation for user/author */
 
 	const { text, userId } = req.body
 	
-	console.log('made it to create!')
+    console.log('made it to create!')
+    console.log(userId)
 	
 	CommentPost.create({
         text,
