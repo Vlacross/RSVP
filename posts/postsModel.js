@@ -35,7 +35,8 @@ function populatePost() {
   this.populate({
     path: 'comments',
     populate: {path: 'userId',
-               select: 'username, id'}});
+               options: {select: {username: 0, id: 0}}}
+            });
 };
 
 postSchema.pre('find', populatePost)

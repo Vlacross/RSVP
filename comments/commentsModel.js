@@ -18,6 +18,10 @@ commentSchema.set('toJSON', {
   }
 });
 
+commentSchema.virtual('listing').get(function() {
+  return this.userId.fullname
+})
+
 
 // function populateAuthor() {
 //   this.populate('author');

@@ -15,6 +15,7 @@ router.get('/', (req, res) => {
 
 
 /*can search Posts*/
+		/*should be available for all accounts */
 router.get('/find', (req, res) => {
 	console.log('tried to find')
 	Post.find()
@@ -29,6 +30,7 @@ router.get('/find', (req, res) => {
 })
 
 /*Can create a new Post */
+		/*Add Auth for Support Accounts Only */
 router.post('/create', jsonParser, (req, res) => {
 	
 	/*forEach wasn't handling err - allowed to pass to create */
@@ -68,7 +70,7 @@ router.post('/create', jsonParser, (req, res) => {
 
 })
 
-/*Admin or own User only can update details */
+/*Admin only can update details */
 router.put('/details/:id', (req, res) => {
 	if(!req.params.id || !req.body.id || req.body.id !== req.params.id) {
 		let msg = `Incomplete credentials!`
