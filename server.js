@@ -27,6 +27,7 @@ const jwtAuth = passport.authenticate('jwt')
 app.use(jsonParser)
 app.use(express.static('./views'))
 
+app.use('/comments', CommentRoutes)
 app.use('/users', UserRoutes)
 app.use('/posts', PostRoutes)
 app.use('/home', rsvpRouter)
