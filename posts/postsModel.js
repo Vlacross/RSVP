@@ -26,11 +26,24 @@ postSchema.methods.serialize = function() {
     title: this.title,
     author: this.author.fullname,
     body: this.body,
+    comments: this.comments.length
+  }
+}
+
+postSchema.methods.serializeSingle = function() {
+  return {
+    title: this.title,
+    author: this.author.fullname,
+    body: this.body,
     comments: this.comments
   }
 }
 
 function populatePost() {
+  this.populate({path: 'author'});
+};
+
+function populatePostList() {
   this.populate({path: 'author'});
   this.populate({
     path: 'comments',
@@ -40,7 +53,7 @@ function populatePost() {
 };
 
 postSchema.pre('find', populatePost)
-postSchema.pre('findOne', populatePost)
+postSchema.pre('findOne', populatePostList)
 
 // postSchema.pre('find', populateComments)
 

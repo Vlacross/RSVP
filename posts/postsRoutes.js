@@ -29,6 +29,16 @@ router.get('/find', (req, res) => {
 	res.status(200)
 })
 
+router.get('/find/:id', (req, res) => {
+    Post.findOne({ _id: req.params.id })
+        .then(post => {
+            
+            res.json(post.serializeSingle())
+        });
+    res.status(200);
+})
+
+
 /*Can create a new Post */
 		/*Add Auth for Support Accounts Only */
 router.post('/create', jsonParser, (req, res) => {
@@ -84,7 +94,7 @@ router.put('/details/:id', (req, res) => {
 		author,
 		body
 	}
-	User.findByIdAndUpdate(id, {$set: newDetails}, {new: true})
+	Post.findByIdAndUpdate(id, {$set: newDetails}, {new: true})
 	.then(updatedPost => {
 		return res.json(updatedPost.serialize()).status(203).end()
 	})

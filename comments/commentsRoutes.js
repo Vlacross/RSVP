@@ -15,19 +15,22 @@ router.get('/', (req, res) => {
 
 
 /*can search for individual comments*/
-		/*should be available for all accounts */
-router.get('/find', (req, res) => {
-	console.log('tried to find')
-	CommentPost.find()
-		.then(comments => {
-			let list = [];
-			comments.forEach(comment => {
-				list.push(comment)
-			})
-			res.json(list)
-		})
-	res.status(200)
-})
+        /*should be available for all accounts */
+
+    /*make so can search for all comments by single author - maybe look into populate with virtuals */
+
+// router.get('/find', (req, res) => {
+// 	console.log('tried to find')
+// 	CommentPost.find()
+// 		.then(comments => {
+// 			let list = [];
+// 			comments.forEach(comment => {
+// 				list.push(comment)
+// 			})
+// 			res.json(list)
+// 		})
+// 	res.status(200)
+// })
 
 /*Can create a new CommentPost */
 		/*Access to All */
