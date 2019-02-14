@@ -20,4 +20,27 @@ postSchema.set('toJSON', {
   }
 });
 
+/*maybe make two serialize one for listing all posts, another for individual post selection */
+postSchema.methods.serialize = function() {
+  return {
+    title: this.title,
+    author: this.author.fullname,
+    body: this.body,
+    comments: this.comments
+  }
+}
+
+function populatePost() {
+  this.populate({path: 'author'});
+  this.populate({
+    path: 'comments',
+    populate: {path: 'userId',
+               select: 'username, id'}});
+};
+
+postSchema.pre('find', populatePost)
+postSchema.pre('findOne', populatePost)
+
+// postSchema.pre('find', populateComments)
+
 module.exports = mongoose.model('Post', postSchema)

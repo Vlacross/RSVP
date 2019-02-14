@@ -1,1 +1,2 @@
-module.exports = { Post: require('./postsModel') }
+module.exports = { Post: require('./postsModel'), 
+                   PostRoutes: require('./postsRoutes') }

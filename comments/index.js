@@ -1,1 +1,2 @@
-module.exports = { Comments: require('./commentsModel') }
+module.exports = { Comment: require('./commentsModel'),
+                   CommentsRoutes: require('./commentsRoutes') }

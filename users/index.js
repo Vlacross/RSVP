@@ -1,1 +1,2 @@
-module.exports = { User: require('./usersModel')}
+module.exports = { User: require('./usersModel'),
+                   UserRoutes: require('./usersRoutes')}

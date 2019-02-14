@@ -6,7 +6,7 @@ const ObjectId = Schema.Types.ObjectId
 /*comment style schema */
 
 const commentSchema = new Schema ({
-    user: {type: ObjectId, ref: 'Users'},
+    userId: {type: ObjectId, ref: 'User'},
     text: String
 })
 
@@ -19,4 +19,16 @@ commentSchema.set('toJSON', {
 });
 
 
-module.exports = mongoose.model('Comments', commentSchema)
+// function populateAuthor() {
+//   this.populate('author');
+// };
+
+// function populateComments() {
+//   this.populate('comments')
+// }
+
+// commentSchema.pre('find', populateAuthor)
+// commentSchema.pre('findOne', populateAuthor)
+
+
+module.exports = mongoose.model('Comment', commentSchema)

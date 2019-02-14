@@ -5,7 +5,7 @@ const { Strategy: JwtStrategy } = require('passport-jwt');
 const { ExtractJwt } = require('passport-jwt');
 
 
-const { User } = require('../models')
+const { User } = require('../users')
 const { JWT_SECRET, ALG } = require('../config')
 
 

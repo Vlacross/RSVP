@@ -3,8 +3,12 @@ const bodyParser = require('body-parser')
 const jsonParser = bodyParser.json()
 const mongoose = require('mongoose')
 
+
 const { MONGODB_URI, PORT } = require('./config')
-const { User, Post, Comments } = require('./models')
+const { User, UserRoutes } = require('./users')
+const { Post, PostRoutes } = require('./posts')
+const { Comment, CommentRoutes } = require('./comments')
+
 const { localStrategy, jwtStrategy } = require('./passport');
 
 const { rsvpRouter } = require('./appHome')
@@ -23,6 +27,8 @@ const jwtAuth = passport.authenticate('jwt')
 app.use(jsonParser)
 app.use(express.static('./views'))
 
+app.use('/users', UserRoutes)
+app.use('/posts', PostRoutes)
 app.use('/home', rsvpRouter)
 
 app.get('/len', localAuth, function(req, res) {
@@ -71,3 +77,4 @@ function closeServer() {
 if(require.main === module ) {
 runServer()
 }
+

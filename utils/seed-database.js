@@ -3,11 +3,13 @@ const mongoose = require('mongoose')
 
 const { MONGODB_URI } = require('../config');
 
-const Post = require('../models/posts');
-const User = require('../models/users');
+const Post = require('../posts/postsModel');
+const User = require('../users/usersModel');
+const Comments = require('../comments/commentsModel');
 
 const seedPosts = require('../db/posts');
 const seedUsers = require('../db/users');
+const seedComments = require('../db/comments');
 
 
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true })
@@ -20,6 +22,7 @@ mongoose.connect(MONGODB_URI, { useNewUrlParser: true })
     return Promise.all([
       Post.insertMany(seedPosts),
       User.insertMany(seedUsers),
+      Comments.insertMany(seedComments),
     ]);
   })
   .then(() => {

@@ -5,12 +5,15 @@ const jsonParser = bodyParser.json()
 
 const mongoose = require('mongoose')
 
-const { User } = require('./models')
+const User = require('./usersModel')
 
 router.use(bodyParser.json())
 
 router.get('/', (req, res) => {
 	console.log('got to the users!')
+	console.log(User)
+	
+
 })
 
 
@@ -33,13 +36,13 @@ router.post('/create', jsonParser, (req, res) => {
 	
 	/*forEach wasn't handling err - allowed to pass to create */
 	const requiredFields = ['fullname', 'username', 'password']
-	let ring = requiredFields.filter(field => (!req.body[field]))
-	if(ring.length > 0) {
-		msg = `Missing ${ring} in header!`
+	let missing = requiredFields.filter(field => (!req.body[field]))
+	if(missing.length > 0) {
+		msg = `Missing ${missing} in header!`
 				console.error(msg)
 		 		return res.status(400).json(msg).end()
 	}
-	console.log(ring)
+	console.log(missing)
 
 		// requiredFields.forEach(field => {
 		// 	if (!req.body[field]) {
