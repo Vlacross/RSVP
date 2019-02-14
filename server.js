@@ -5,29 +5,27 @@ const mongoose = require('mongoose')
 
 const { MONGODB_URI, PORT } = require('./config')
 const { User, Post, Comments } = require('./models')
-const { authRouter, localStrat, tokenStrat } = require('./auth')
+const { localStrategy, jwtStrategy } = require('./passport');
 
 const { rsvpRouter } = require('./appHome')
 
 const app = express()
 
 const passport = require('passport');
-passport.use('JWT', tokenStrat)
-passport.use('local', localStrat)
+passport.use('JWT', jwtStrategy)
+passport.use('local', localStrategy)
 
-const local_auth = passport.authenticate('local', {session: false}, {failureRedirect: '/loggin'});
-const jwt_auth = passport.authenticate('jwt')
+const localAuth = passport.authenticate('local', {session: false});
+const jwtAuth = passport.authenticate('jwt')
 
 
 
 app.use(jsonParser)
 app.use(express.static('./views'))
 
-app.use('/loggin', authRouter)
-
 app.use('/home', rsvpRouter)
 
-app.get('/len', passport.authenticate('local'), function(req, res) {
+app.get('/len', localAuth, function(req, res) {
 	console.log("obtained root route")
 	res.status(207).end()
 	

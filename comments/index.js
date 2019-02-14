@@ -1,0 +1,1 @@
+module.exports = { Comments: require('./commentsModel') }

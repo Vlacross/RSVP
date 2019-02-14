@@ -1,0 +1,66 @@
+Intro landing (black back and cursive white/clean gold cream; light/pleasant diagonal 
+    transition[moving picture] top right to bottom left)
+
+onscroll(or other)- show about allow login or signup
+    
+    -login requires [userName, passWord, eventId]
+     runs auth and moves to app home page
+
+    -signup requires app form-page for event details[headCount, date, type/event, people in charge]
+
+_Homepage
+
+----------------------------------------------------------------------------------
+Like the idea of tabs on left&right sides that transition between pages/depths of site dir;
+    not practical here.
+
+
+----------------------------------------------------------------------------------
+
+server.js
+
+config.js
+
+
+Models -
+        users
+        posts
+        comments
+
+
+View - 
+        index.html
+        main.css
+        script.js
+
+Auth - 
+        
+
+----------------------------------------------------------------------------------
+
+
+-Build express app w/ CRUD endpoints
+
+-Add authentication
+        -make mock views/response for each(console.log / response message)
+
+-Integrate Mongoose for each endpoint
+
+-Configure MongoDb User Roles
+
+-Add front-end for each
+
+
+
+----------------------------------------------------------------------------------
+Resources ***
+----------------------------------------------------------------------------------
+ 
+ Fair tutorial on building own AUTH middleware instead of using Passport 
+ https://medium.com/dev-bits/a-guide-for-adding-jwt-token-based-authentication-to-your-single-page-nodejs-applications-c403f7cf04f4 
+
+
+
+
+
+
