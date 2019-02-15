@@ -11,7 +11,6 @@ router.use(bodyParser.json())
 
 router.get('/', (req, res) => {
 	console.log('got to the users!')
-	console.log(User)
 	
 
 })
@@ -62,9 +61,10 @@ router.post('/create', jsonParser, (req, res) => {
 		fullname: full,
 		username: user,
 		role: 'attendee',
-		password: User.buildDigest(pass)
+		password: pass
 	})
 	.then(newUser => {
+		
 		res.json(newUser.serialize())
 		res.status(202)
 })
@@ -72,6 +72,17 @@ router.post('/create', jsonParser, (req, res) => {
 		return res.json(err.message).status(400)
 	})
 
+})
+
+router.post('/test', function(req, res) {
+	User.findOne({username: req.body.username}, function(err, user) {
+		if(err) {throw err}
+
+		user.comparePassword(req.body.password, function(err, isMatch) {
+			if(err) {console.log('noMatches BRO!')}
+			console.log(`${req.body.password}`, isMatch)
+		})
+	})
 })
 
 /*Admin or own User only can update details */
