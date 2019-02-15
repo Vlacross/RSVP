@@ -9,4 +9,6 @@ const JWT_SECRET = process.env.SECRET || 'w3llb0ws'
 
 const ALG = process.env.ALGORITHM || 'HS256'
 
-module.exports = { MONGODB_URI, MONGODB_URI_TEST, JWT_SECRET, ALG, PORT }
+const EXP = process.env.EXPIRES_IN || '10h'
+
+module.exports = { MONGODB_URI, MONGODB_URI_TEST, JWT_SECRET, ALG, EXP, PORT }
