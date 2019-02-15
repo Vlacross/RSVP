@@ -10,9 +10,9 @@ const localStrategy = new LocalStrategy(
       User.findOne({username: userName}, function(err, user) {
           if(err) {return done(err, false)};
           if(!user) {return done(null, false)}
-          if(!user.comparePassword(passWord)) {
+          if(!user.checkPass(passWord)) {
               return done(null, false)
-          } else {console.log('pass passed')
+          } else {console.log('Login Success!')
               return done(null, user)
           }
       });

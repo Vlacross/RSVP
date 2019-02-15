@@ -32,7 +32,7 @@ app.use(jsonParser)
 app.use('/login', LoginRoute)
 // app.post('/login', LoginRoute)
 
-app.use('*', jwtAuth)
+// app.use('*', jwtAuth)
 
 /*keep the whole place on lockDown! */
 app.use(express.static('./views'))

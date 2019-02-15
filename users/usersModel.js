@@ -42,12 +42,21 @@ userSchema.pre('save', function(next) {
     })
 })
 
-userSchema.methods.comparePassword = function(pwd) {
-  var pass = buildHash(pwd) 
-  console.log(pass.exec(), 'yuser', this.password)
-  return bcrypt.compare(pass, this.password)
+userSchema.methods.comparePassword = function(pwd, done) {
+   
+ bcrypt.compare(pwd, this.password, function(err, res) {
+   console.log(res, 'rezzy')
+   if (err) {return done(err)}
+   if(res === false) {return done(false)}
+   else return done(true)
+
+ })
+ 
 }
 
+userSchema.methods.checkPass = function(pwd) {
+  return bcrypt.compareSync(pwd, this.password)
+}
 
 // userSchema.methods.comparePassword = function(storedPass, done) {
 //   bcrypt.compare(storedPass, this.password, function(err, isMatch) {
@@ -56,9 +65,6 @@ userSchema.methods.comparePassword = function(pwd) {
 //   })
 // }
 
-// userSchema.methods.checkPass = function() {
-//   return bcrypt.compare(this.password, pwd )
-// }
 
 userSchema.methods.serialize = function () {
   return {
@@ -68,20 +74,10 @@ userSchema.methods.serialize = function () {
   }
 };
 
-// userSchema.statics.buildDigest = function (pass) {
-//   return bcrypt.hash(pass, 10)
-// };
-
-// userSchema.statics.unHash = function (pass, hash) {
-//   return bcrypt.compare(pass, hash)
-// };
-
-
 userSchema.statics.checkUniquity = async function (userName, next) {
 
   let msg;
-
-  var tar = await this.count({ username: userName })
+  var unique = await this.count({ username: userName })
     .then(function (count) {
       console.log(`${count} is the count`)
       if (!(count === 0)) {
@@ -92,10 +88,9 @@ userSchema.statics.checkUniquity = async function (userName, next) {
       return userName
     })
     .catch(function (error) {
-      return Promise.reject({ message: msg })
-    })
-  return tar
-    ;
-}
+    return Promise.reject({ message: msg })
+  })
+  return unique;
+};
 
 module.exports = mongoose.model('User', userSchema)

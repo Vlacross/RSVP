@@ -77,12 +77,13 @@ router.post('/create', jsonParser, (req, res) => {
 router.post('/test', function(req, res) {
 	User.findOne({username: req.body.username}, function(err, user) {
 		if(err) {throw err}
-
-		user.comparePassword(req.body.password, function(err, isMatch) {
-			if(err) {console.log('noMatches BRO!')}
+		
+		user.comparePassword(req.body.password, function(isMatch) {
+			if(err) {console.log('noMatches BRO!', err)}
 			console.log(`${req.body.password}`, isMatch)
 		})
 	})
+	.catch(err => console.log(err))
 })
 
 /*Admin or own User only can update details */
