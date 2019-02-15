@@ -20,7 +20,6 @@ userSchema.set('toJSON', {
   }
 });
 
-
 /*http://devsmash.com/blog/password-authentication-with-mongoose-and-bcrypt */
 userSchema.pre('save', function(next) {
   var user = this /*this way we have a steady scope/range of usage(otherwise won't work to assign pwd at end of block) */
@@ -43,12 +42,19 @@ userSchema.pre('save', function(next) {
     })
 })
 
-userSchema.methods.comparePassword = function(storedPass, next) {
-  bcrypt.compare(storedPass, this.password, function(err, isMatch) {
-    if(err) {return next(err)}
-    next(null, isMatch)
-  })
+userSchema.methods.comparePassword = function(pwd) {
+  var pass = buildHash(pwd) 
+  console.log(pass.exec(), 'yuser', this.password)
+  return bcrypt.compare(pass, this.password)
 }
+
+
+// userSchema.methods.comparePassword = function(storedPass, done) {
+//   bcrypt.compare(storedPass, this.password, function(err, isMatch) {
+//     if(err) {return next(err)}
+//     done(null, isMatch)
+//   })
+// }
 
 // userSchema.methods.checkPass = function() {
 //   return bcrypt.compare(this.password, pwd )

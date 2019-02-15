@@ -9,7 +9,7 @@ const { User, UserRoutes } = require('./users')
 const { Post, PostRoutes } = require('./posts')
 const { Comment, CommentRoutes } = require('./comments')
 
-const { localStrategy, jwtStrategy } = require('./passport');
+const { localStrategy, jwtStrategy, LoginRoute } = require('./passport');
 
 const { rsvpRouter } = require('./appHome')
 
@@ -24,12 +24,17 @@ const localAuth = passport.authenticate('local', {session: false,
    failureRedirect: '/logins'});
 const jwtAuth = passport.authenticate('JWT', {session: false,
 	successRedirect: '/login',
-   failureRedirect: '/logins'})
+   failureRedirect: '/login'})
 
 
 
 app.use(jsonParser)
-app.use('*', jwtAuth) /*keep the whole place on lockDown! */
+app.use('/login', LoginRoute)
+// app.post('/login', LoginRoute)
+
+app.use('*', jwtAuth)
+
+/*keep the whole place on lockDown! */
 app.use(express.static('./views'))
 
 app.use('/comments', CommentRoutes)
@@ -72,11 +77,11 @@ function closeServer() {
 }
 
 
- app.all('/*', function() {
-     /* catch-all - http://expressjs.com/en/4x/api.html#app.all */
-     console.log('no such location!')
-     res.status(501)
- })
+//  app.all('/*', function(req, res) {
+//      /* catch-all - http://expressjs.com/en/4x/api.html#app.all */
+//      console.log('no such location!')
+//      res.status(501)
+//  })
 
 
  /*https://nodejs.org/api/modules.html#modules_accessing_the_main_module */
