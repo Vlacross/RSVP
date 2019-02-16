@@ -19,35 +19,31 @@ const passport = require('passport');
 passport.use('JWT', jwtStrategy)
 passport.use('local', localStrategy)
 
-const localAuth = passport.authenticate('local', {
-	session: false,
-	successRedirect: '/login',
-	failureRedirect: '/logins'
-});
-const jwtAuth = passport.authenticate('JWT', { session: false, failureRedirect: '/login' })
-// 	successRedirect: '/munions',
-//    {failureRedirect: '/login'})
+const localAuth = passport.authenticate('local', {session: false});
+const jwtAuth = passport.authenticate('JWT', { session: false });
+
 
 
 
 app.use(jsonParser)
 app.use('/login', LoginRoute)
 
+
 // app.use('*', jwtAuth)
 /*keep the whole place on lockDown! */
-// app.use(express.static('./views'))
+app.use(express.static('public'))
 
 app.use('/comments', CommentRoutes)
 app.use('/users', UserRoutes)
 app.use('/posts', PostRoutes)
 app.use('/home', rsvpRouter)
 
-app.get('/', jwtAuth, function (req, res) {
-	console.log("obtained root route")
+// app.get('/', function (req, res) {
+// 	console.log("obtained root route")
 	
-	res.status(207).end()
+// 	res.status(207).end()
 
-});
+// });
 
 
 

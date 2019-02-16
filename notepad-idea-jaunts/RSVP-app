@@ -3,6 +3,9 @@ Initial Rough Idea
 *****************************************************
 
 Wedding/Event RSVP & Update app
+
+Accounts -
+
     -there would be a single superuser/admin account
     -there would be a level of accounts with read and write permissions for
         posting topics and update, as well as commenting on them.
@@ -12,15 +15,12 @@ Wedding/Event RSVP & Update app
 
     Potentially implement 'Magic Links' as a Token distrobution feature
 
-    Preset schema layout for Blogs and Comments, limited involvement with customization issues
+     *Too intensive for size of project*  Custom schema(ie: create new schema/model based on user inputs and create collection)
 
-        ?keep comments in own collection and reference with each blog?
-        ?file size of posts if comments lived in post?    
 
-(Maintain exclusiveness)would like to send (maybe single use/ expirable) 
-       invitations to register-- if rsvp declined, dissolve authentication for id?(too complex for)
 
-Would just be a multi tiered Auth implementation of Blog App
+
+Would just be a multi tiered Auth implementation of Blog App - YES
 
 *****************************************************
 Agenda - Rough dev plan
@@ -79,19 +79,31 @@ depending on user account privliges(coordination team or invitee/basic viewer)
 
 Click on post(send req to server(./POSTS) to get single post(mongooseFINDONE))
  
-
-
-
-
-
-
-
-
-
-
 leads can create update, post comments, delete any comment, delete any post
 
 users can delete their own comments, and post comments
+
+*****************************************************
+slightly more realistic Client Server interactions
+
+C - send GET to site\
+
+--S-- reroutes/returns html form in JSON format(for each obj.key, insert html 'input')
+
+C - Builds HTML template and awaits submit; then sends form data in JSON obj 
+
+--S-- Authenticates and return token in auth header; Reroutes to app home
+
+C - uses token to pass jwt to restricted appHome(single page app)
+
+--S-- setTimeouts/log in caps/ refresh warnings or auto refresh on active??
+
+*****************************************************
+
+
+
+
+
 
 
 

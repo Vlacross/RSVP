@@ -16,8 +16,6 @@ const jwtAuth = passport.authenticate('JWT', { session: false, failureRedirect: 
 const { JWT_SECRET, ALG, EXP } = require('../config')
 
 
-
-
 const opts = {
 	algorithm: ALG,
 	// iat: new Date(),
