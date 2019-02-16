@@ -1,13 +1,33 @@
 
 
 
+/*introView */
+
+function renderSignIn() {
+	console.log('Signing Up!')
+	$('.introView').addClass('hidden')
+
+	$('.accessView').removeClass('hidden')
+};
 
 
+function renderSignup() {
+	console.log('Signing In!')
+	$('.introView').addClass('hidden')
+	$('.accessView').removeClass('hidden')
+	$('.fullNameInput').removeClass('hidden').attr('required', true)
+};
 
-
-
-
-
+function watchIntro() {
+		console.log('watchintro')
+	$('body').on('click', '.introPageFieldset', function(e) {
+		e.preventDefault();
+		// console.log('triggered', event.target.name)
+		if(event.target.name !== 'getLogIn') {
+			renderSignup()}
+		else {renderSignIn()}
+	})
+};
 
 
 
@@ -39,7 +59,8 @@ function promptAuth() {
 
 
 $(document).ready(function() {
-    console.log('hittingJQscript!')
+	console.log('hittingJQscript!')
+	watchIntro()
 		promptAuth()
 		
 })

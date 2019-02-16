@@ -11,6 +11,16 @@ body {
 
 }
 
+fieldset {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+fieldset input {
+    margin: 4px;
+}
+
 .wrapper {
     position: absolute;
     top: 0;
@@ -50,5 +60,9 @@ main {
 
 .introPageButton {
     margin: 4px
+}
+
+.hidden {
+    display: none;
 }
 

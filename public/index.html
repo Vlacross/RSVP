@@ -12,6 +12,8 @@
 		<div class="wrapper">
 		<main role="main">
 			<h1 class="banner">R S V P</h1>
+
+		<section class="introView">
 			<h2>Be a part of your next event!</h2>
 			<h3>Register and stay up to date with your next occasion!</h3>
 
@@ -24,7 +26,35 @@
 					<button type="submit" name="getRegister" class="introPageButton">Sign Up!</button>
 				</label>
 			</fieldset>
-			
+		</section>
+
+
+		<section class="accessView hidden">
+			<form class="othForm" autocomplete="off">
+				<fieldset class="accessFieldset">		
+					<input autocomplete="false" name="hidden" type="text" style="display:none;">
+
+					<label for="fullNameInput" class="fullNameInput hidden">FullName
+						<input id="fullNameInput" name="fullNameInput" class="fullNameInput" type="text">
+					</label>
+
+					<label for="userNameInput">UserId
+						<input id="userNameInput" name="userNameInput" class="userNameInput" type="text" required>
+					</label>
+
+					<label for="userPassInput">PassWord
+						<input id="userPassInput" class="userPassInput" type="text" required>
+					</label>
+					
+					<button class="submit" type="submit">Submit</button>
+				</fieldset>
+			</form>
+		</section>
+
+
+
+
+
 			<p>contents</p>
 
 
