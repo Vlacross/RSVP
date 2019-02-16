@@ -1,7 +1,9 @@
 const mongoose = require('mongoose')
+const bcrypt = require('bcryptjs');
 
 
 const { MONGODB_URI } = require('../config');
+
 
 const Post = require('../posts/postsModel');
 const User = require('../users/usersModel');
@@ -17,7 +19,11 @@ mongoose.connect(MONGODB_URI, { useNewUrlParser: true })
   console.info('Dropping Database');
   return mongoose.connection.db.dropDatabase();
 })
-.then(() =>{
+.then(() => {
+  return Promise.all(seedUsers.map( user => bcrypt.hash(user.password, 10)));
+})
+.then((digests) =>{
+  seedUsers.forEach((user, i) => user.password = digests[i]);
   console.log('Seeding database')
     return Promise.all([
       Post.insertMany(seedPosts),
