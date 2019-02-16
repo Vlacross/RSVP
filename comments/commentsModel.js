@@ -5,21 +5,21 @@ const ObjectId = Schema.Types.ObjectId
 
 /*comment style schema */
 
-const commentSchema = new Schema ({
-    userId: {type: ObjectId, ref: 'User'},
-    text: String
+const commentSchema = new Schema({
+	userId: { type: ObjectId, ref: 'User' },
+	text: String
 })
 
 commentSchema.set('toJSON', {
-  virtuals: true,     // include built-in virtual `id`
-  transform: (doc, result) => {
-    delete result._id;
-    delete result.__v;
-  }
+	virtuals: true,     // include built-in virtual `id`
+	transform: (doc, result) => {
+		delete result._id;
+		delete result.__v;
+	}
 });
 
-commentSchema.virtual('listing').get(function() {
-  return this.userId.fullname
+commentSchema.virtual('listing').get(function () {
+	return this.userId.fullname
 })
 
 

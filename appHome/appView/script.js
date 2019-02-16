@@ -17,7 +17,7 @@
 function promptAuth() {
     const loginForm = `
     <form action="../loggin" class="othForm">
-			<label for="userNameInput">UserId
+			<label for="userNameInput">UserIdAPPPLEHOOOMELLL
 				<input id="userNameInput" name="userNameInput" class="userNameInput" type="text">
 			</label>
 			<label for="userPassInput">PassWord

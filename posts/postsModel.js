@@ -6,10 +6,10 @@ const ObjectId = Schema.Types.ObjectId
 /* Post style schema */
 
 const postSchema = new Schema({
-    title: String,
-    author: {type: ObjectId, ref: 'User'},
-    body: String,
-    comments: [{type: ObjectId, ref: 'Comment'}]
+  title: String,
+  author: { type: ObjectId, ref: 'User' },
+  body: String,
+  comments: [{ type: ObjectId, ref: 'Comment' }]
 });
 
 postSchema.set('toJSON', {
@@ -21,7 +21,7 @@ postSchema.set('toJSON', {
 });
 
 /*maybe make two serialize one for listing all posts, another for individual post selection */
-postSchema.methods.serialize = function() {
+postSchema.methods.serialize = function () {
   return {
     title: this.title,
     author: this.author.fullname,
@@ -30,7 +30,7 @@ postSchema.methods.serialize = function() {
   }
 }
 
-postSchema.methods.serializeSingle = function() {
+postSchema.methods.serializeSingle = function () {
   return {
     title: this.title,
     author: this.author.fullname,
@@ -40,16 +40,18 @@ postSchema.methods.serializeSingle = function() {
 }
 
 function populatePost() {
-  this.populate({path: 'author'});
+  this.populate({ path: 'author' });
 };
 
 function populatePostList() {
-  this.populate({path: 'author'});
+  this.populate({ path: 'author' });
   this.populate({
     path: 'comments',
-    populate: {path: 'userId',
-               options: {select: {username: 0, id: 0}}}
-            });
+    populate: {
+      path: 'userId',
+      options: { select: { username: 0, id: 0 } }
+    }
+  });
 };
 
 postSchema.pre('find', populatePost)

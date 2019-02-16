@@ -19,33 +19,34 @@ const passport = require('passport');
 passport.use('JWT', jwtStrategy)
 passport.use('local', localStrategy)
 
-const localAuth = passport.authenticate('local', {session: false,
+const localAuth = passport.authenticate('local', {
+	session: false,
 	successRedirect: '/login',
-   failureRedirect: '/logins'});
-const jwtAuth = passport.authenticate('JWT', {session: false,
-	successRedirect: '/login',
-   failureRedirect: '/login'})
+	failureRedirect: '/logins'
+});
+const jwtAuth = passport.authenticate('JWT', { session: false, failureRedirect: '/login' })
+// 	successRedirect: '/munions',
+//    {failureRedirect: '/login'})
 
 
 
 app.use(jsonParser)
 app.use('/login', LoginRoute)
-// app.post('/login', LoginRoute)
 
 // app.use('*', jwtAuth)
-
 /*keep the whole place on lockDown! */
-app.use(express.static('./views'))
+// app.use(express.static('./views'))
 
 app.use('/comments', CommentRoutes)
 app.use('/users', UserRoutes)
 app.use('/posts', PostRoutes)
 app.use('/home', rsvpRouter)
 
-app.get('/len', jwtAuth, function(req, res) {
+app.get('/', jwtAuth, function (req, res) {
 	console.log("obtained root route")
-	res.status(207).end()
 	
+	res.status(207).end()
+
 });
 
 
@@ -54,25 +55,25 @@ app.get('/len', jwtAuth, function(req, res) {
 let server;
 
 function runServer() {
-		mongoose.connect(MONGODB_URI, {useNewUrlParser: true, autoIndex: false}, err => {
-			if(err) {
-				console.log(err,)
-				reject(err)
-			} 
-			server = app.listen(PORT, () => {
-				console.log(`App is slistening on port ${PORT}`)
-			})
-			console.log(`connected to ${MONGODB_URI}`)
-		
-			})	
+	mongoose.connect(MONGODB_URI, { useNewUrlParser: true, autoIndex: false }, err => {
+		if (err) {
+			console.log(err)
+			reject(err)
+		}
+		server = app.listen(PORT, () => {
+			console.log(`App is slistening on port ${PORT}`)
+		})
+		console.log(`connected to ${MONGODB_URI}`)
+
+	})
 }
 
 function closeServer() {
 	return mongoose.disconnect()
-	.then(function(conn) {
-		server.close()
-	})
-	.catch(err => console.log(err))
+		.then(function (conn) {
+			server.close()
+		})
+		.catch(err => console.log(err))
 
 }
 
@@ -84,8 +85,8 @@ function closeServer() {
 //  })
 
 
- /*https://nodejs.org/api/modules.html#modules_accessing_the_main_module */
-if(require.main === module ) {
-runServer()
+/*https://nodejs.org/api/modules.html#modules_accessing_the_main_module */
+if (require.main === module) {
+	runServer()
 }
 
