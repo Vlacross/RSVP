@@ -22,9 +22,6 @@ passport.use('local', localStrategy)
 const localAuth = passport.authenticate('local', {session: false});
 const jwtAuth = passport.authenticate('JWT', { session: false });
 
-
-
-
 app.use(jsonParser)
 app.use('/login', LoginRoute)
 
