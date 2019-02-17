@@ -4,18 +4,21 @@
 /*introView */
 
 function renderSignIn() {
-	console.log('Signing Up!')
+	console.log('Signing In!')
+	const route = 'login'
 	$('.introView').addClass('hidden')
-
 	$('.accessView').removeClass('hidden')
+	promptAuth(route);
 };
 
 
-function renderSignup() {
-	console.log('Signing In!')
+function renderSignUp() {
+	console.log('Signing Up!')
+	const route = 'users/create'
 	$('.introView').addClass('hidden')
 	$('.accessView').removeClass('hidden')
-	$('.fullNameInput').removeClass('hidden').attr('required', true)
+	$('.fullNameLabel').removeClass('hidden').attr('required', true)
+	promptAuth(route);
 };
 
 function watchIntro() {
@@ -24,27 +27,26 @@ function watchIntro() {
 		e.preventDefault();
 		// console.log('triggered', event.target.name)
 		if(event.target.name !== 'getLogIn') {
-			renderSignup()}
+			renderSignUp()}
 		else {renderSignIn()}
 	})
 };
 
 
-
-
-
-
-function promptAuth() {
-		$('body').on('submit', '.othForm', function(e) {
+function promptAuth(route) {
+	console.log(route, 222)
+		$('body').on('submit', '.authForm', function(e) {
 			e.preventDefault();
+			const fullname = document.getElementsByClassName('fullNameInput')[0];
 			const id = document.getElementsByClassName('userNameInput')[0];
 			const pwd = document.getElementsByClassName('userPassInput')[0];
 			const logIn = {
+					fullname: fullname.value,
 					username: id.value,
 					password: pwd.value
 				};
-				
-			fetch('login', {
+				console.log(fullname, 'preauth send')
+			fetch(route, {
 				method: 'post',
 				headers: {
 					'Accept': 'application/json',
@@ -61,6 +63,6 @@ function promptAuth() {
 $(document).ready(function() {
 	console.log('hittingJQscript!')
 	watchIntro()
-		promptAuth()
+
 		
 })
