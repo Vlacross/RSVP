@@ -35,6 +35,7 @@ function watchIntro() {
 
 function promptAuth(route) {
 	console.log(route, 222)
+	var token;
 		$('body').on('submit', '.authForm', function(e) {
 			e.preventDefault();
 			const fullname = document.getElementsByClassName('fullNameInput')[0];
@@ -54,7 +55,11 @@ function promptAuth(route) {
 				},
 				body: JSON.stringify(logIn)
 			})
-			.then(res => console.log(res.status))
+			.then(res => res.json())
+			.then(function(resj) {
+				token = resj;
+				console.log(resj)
+			})
 			.catch(err => console.log(err))
 		})
 };

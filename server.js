@@ -5,11 +5,13 @@ const mongoose = require('mongoose')
 
 
 const { MONGODB_URI, PORT } = require('./config')
-const { User, UserRoutes } = require('./users')
-const { Post, PostRoutes } = require('./posts')
-const { Comment, CommentRoutes } = require('./comments')
+// const { User, UserRoutes } = require('./users')
+// const { Post, PostRoutes } = require('./posts')
+// const { Comment, CommentRoutes } = require('./comments')
 
-const { localStrategy, jwtStrategy, LoginRoute } = require('./passport');
+const { CommentRoutes, UserRoutes, PostRoutes } = require('./routes')
+
+const { localStrategy, jwtStrategy, AuthRoute } = require('./passport');
 
 const { rsvpRouter } = require('./appHome')
 
@@ -23,7 +25,7 @@ const localAuth = passport.authenticate('local', {session: false});
 const jwtAuth = passport.authenticate('JWT', { session: false });
 
 app.use(jsonParser)
-app.use('/login', LoginRoute)
+app.use('/login', AuthRoute)
 
 
 // app.use('*', jwtAuth)

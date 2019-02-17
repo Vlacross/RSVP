@@ -5,7 +5,7 @@ const jsonParser = bodyParser.json()
 
 const mongoose = require('mongoose')
 
-const CommentPost = require('./commentsModel')
+const CommentPost = require('../models/commentsModel')
 
 router.use(bodyParser.json())
 
@@ -15,9 +15,9 @@ router.get('/', (req, res) => {
 
 
 /*can search for individual comments*/
-        /*should be available for all accounts */
+/*should be available for all accounts */
 
-    /*make so can search for all comments by single author - maybe look into populate with virtuals */
+/*make so can search for all comments by single author - maybe look into populate with virtuals */
 
 // router.get('/find', (req, res) => {
 // 	console.log('tried to find')
@@ -33,58 +33,58 @@ router.get('/', (req, res) => {
 // })
 
 /*Can create a new CommentPost */
-		/*Access to All */
+/*Access to All */
 router.post('/create', jsonParser, (req, res) => {
-	
+
 	/*forEach wasn't handling err - allowed to pass to create */
 	const requiredFields = ['text', 'userId']
 	let missing = requiredFields.filter(field => (!req.body[field]))
-	if(missing.length > 0) {
+	if (missing.length > 0) {
 		msg = `Missing ${missing} in header!`
-				console.error(msg)
-		 		return res.status(400).json(msg).end()
+		console.error(msg)
+		return res.status(400).json(msg).end()
 	}
 	console.log(missing)
 
 	/*add validation for user/author */
 
 	const { text, userId } = req.body
-	
-    console.log('made it to create!')
-    console.log(userId)
-	
+
+	console.log('made it to create!')
+	console.log(userId)
+
 	CommentPost.create({
-        text,
-        userId
+		text,
+		userId
 	})
-	.then(newComment => {
-		res.json(newComment)
-		res.status(202)
-})
-	.catch(err => {
-		return res.json(err.message).status(400)
-	})
+		.then(newComment => {
+			res.json(newComment)
+			res.status(202)
+		})
+		.catch(err => {
+			return res.json(err.message).status(400)
+		})
 
 })
 
 /*Admin or author only can update details */
 router.put('/details/:id', (req, res) => {
-	if(!req.params.id || !req.body.id || req.body.id !== req.params.id) {
+	if (!req.params.id || !req.body.id || req.body.id !== req.params.id) {
 		let msg = `Incomplete credentials!`
-					console.error(msg)
-					return res.status(400).json(msg).end()
+		console.error(msg)
+		return res.status(400).json(msg).end()
 	}
 
 	const { text, userId } = req.body
 	const newDetails = {
-        text,
-        userId
+		text,
+		userId
 	}
-	CommentPost.findByIdAndUpdate(userIdd, {$set: newDetails}, {new: true})
-	.then(updatedComment => {
-		return res.json(updatedComment).status(203).end()
-	})
-	.catch(err => console.log(err, 27))
+	CommentPost.findByIdAndUpdate(userIdd, { $set: newDetails }, { new: true })
+		.then(updatedComment => {
+			return res.json(updatedComment).status(203).end()
+		})
+		.catch(err => console.log(err, 27))
 })
 
 
