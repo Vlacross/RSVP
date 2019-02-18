@@ -15,23 +15,25 @@ const failedLogin =
 /*Main app home page- left-side nav bar */
 const homePage =
 	`
-<section class="homePageView">
-    <nav>
-			<a class="eventDetailsLink"></a>
-			<a class="usersListLink"></a>
-			<a class="eventNewsfeedLink"></a>
-			<a class="accountLink"></a>
-		</nav>
-		
-		<section class="eventFeed">
-			<span>viewing some of all topic posts</span>
-				<ul class="updatePosts">
-				
-				</ul>
-			<span>viewing some of all topic posts</span>
-		</section>
+	<section class="homePageView">
+
+	<nav class="siteNav">
+		<a class="eventDetailsLink">Event Details</a>
+		<a class="usersListLink">Event Users</a>
+		<a class="eventNewsfeedLink">Event News Feed</a>
+		<a class="accountLink">Account</a>
+	</nav>
+
+	<section class="eventFeed">
+		<span>viewing some of all topic posts</span>
+		<ul class="updatePosts">
+
+		</ul>
+		<span>viewing some of all topic posts</span>
+	</section>
 
 </section>
+
 `;
 
 /*template for event topic posts */
