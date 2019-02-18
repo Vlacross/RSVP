@@ -21,21 +21,39 @@ function renderSignUp() {
 	promptAuth(route);
 };
 
-function watchIntro() {
+function watchIntro() {function logs(arr) {
+	console.log('made it to logs file')
+	};
+	
 		console.log('watchintro')
 	$('body').on('click', '.introPageFieldset', function(e) {
 		e.preventDefault();
+		$('body').off()
 		// console.log('triggered', event.target.name)
 		if(event.target.name !== 'getLogIn') {
 			renderSignUp()}
 		else {renderSignIn()}
 	})
 };
+var token;
 
+function nekst(token) {
+console.log('nekst', token)
+}
+
+function handleFail() {
+	$('.accessView').replaceWith(failedLogin);
+
+	$('body').on('click', '.failedReturn', function(e) {
+		e.preventDefault();
+		console.log('hoi')
+	})
+	$('.introView').addClass('hidden')
+}
 
 function promptAuth(route) {
 	console.log(route, 222)
-	var token;
+	
 		$('body').on('submit', '.authForm', function(e) {
 			e.preventDefault();
 			const fullname = document.getElementsByClassName('fullNameInput')[0];
@@ -56,11 +74,13 @@ function promptAuth(route) {
 				body: JSON.stringify(logIn)
 			})
 			.then(res => res.json())
-			.then(function(resj) {
-				token = resj;
-				console.log(resj)
+			.then(resj => console.log(resj))
+				
+			
+			.catch(err => {
+				console.log('loginFail')
+				handleFail()
 			})
-			.catch(err => console.log(err))
 		})
 };
 
@@ -68,6 +88,7 @@ function promptAuth(route) {
 $(document).ready(function() {
 	console.log('hittingJQscript!')
 	watchIntro()
+	
 
 		
 })

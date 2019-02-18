@@ -63,6 +63,12 @@ main {
     margin: 4px
 }
 
+.failedReturn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .hidden {
     display: none;
 }

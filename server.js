@@ -3,19 +3,14 @@ const bodyParser = require('body-parser')
 const jsonParser = bodyParser.json()
 const mongoose = require('mongoose')
 
+const app = express()
 
 const { MONGODB_URI, PORT } = require('./config')
-// const { User, UserRoutes } = require('./users')
-// const { Post, PostRoutes } = require('./posts')
-// const { Comment, CommentRoutes } = require('./comments')
-
 const { CommentRoutes, UserRoutes, PostRoutes } = require('./routes')
-
 const { localStrategy, jwtStrategy, AuthRoute } = require('./passport');
 
 const { rsvpRouter } = require('./appHome')
 
-const app = express()
 
 const passport = require('passport');
 passport.use('JWT', jwtStrategy)

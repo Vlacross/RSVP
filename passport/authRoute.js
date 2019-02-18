@@ -7,6 +7,7 @@ const jwt = require('jsonwebtoken')
 
 const jwtStrategy = require('./jwt')
 const localStrategy = require('./local')
+
 const passport = require('passport');
 passport.use('local', localStrategy)
 passport.use('JWT', jwtStrategy)
@@ -40,6 +41,7 @@ router.get('/check', jwtAuth, (req, res) => {
 
 
 router.post('/', localAuth, (req, res) => {
+	if(!req) {console.log('err')}
 	console.log('maider This farm!')
 	let token = buildToken(req.user.username)
 	res.json({ token })
