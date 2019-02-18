@@ -31,6 +31,28 @@ function watchIntro() {
 	})
 };
 
+function buildUsers(usrs) {
+	let listings = [];
+	usrs.forEach(usr => {
+		listings.push(usersListing(usr))
+	})
+	
+	let list = `<section class="eventFeed">${listings.join(' ')}</section>`;
+	return list
+}
+
+function showUsers(token) {
+	let route = 'users/find';
+	let method = 'GET';
+	quickFetch(route, method, token)
+	.then(res => res.json())
+	.then(resj => {
+		let users = buildUsers(resj)
+		$('.eventFeed').replaceWith(users)
+		
+	})
+	console.log('showing users list')
+};
 
 function buildFeed(arr) {
 
@@ -39,7 +61,6 @@ function buildFeed(arr) {
 		let postBody = eventPost(post)
 		feed.push(postBody)
 	})
-	
 	return feed.join(' ');
 };
 
@@ -49,32 +70,24 @@ function buildHome(token) {
 	$('body').prepend(homePage);
 	$('main').addClass('sinkBack')
 
-	fetch('posts/find', {
-		method: 'GET',
-		headers: {
-			'Authorization': 'Bearer' + ' ' + token
-		}
-	})
+	let route = 'posts/find';
+	let method = 'GET'
+	quickFetch(route, method, token)
 	.then(res => res.json())
 	.then(resj => {
 		let thread = buildFeed(resj)
 		$('.updatePosts').append(thread)
 	})
 	.catch(err => {console.log(err)})
-
-	
 };
-
-// function nekst(token) {
-// console.log('nekst', token)
-// buildHome(token)
-// }
 
 function handleFail() {
 	$('.accessView').addClass('hidden')
 	$('main').append(failedLogin);
 
-	$(this).one('click', function(e) {
+	
+
+	$('.failedResponseButton').one('click', function(e) {
 		e.preventDefault();
 		routeFail()
 	})
@@ -115,6 +128,7 @@ function promptAuth(route) {
 				console.log(resj)
 				token = resj.token
 				buildHome(token)
+				handleNav(token)
 			})
 				
 			
@@ -124,6 +138,17 @@ function promptAuth(route) {
 			})
 		})
 };
+
+function handleNav(token) {
+	$('a').on('click', function(e) {
+		e.preventDefault();
+		if(event.target.name === 'eventDetailsLink') {showDetails(token)}
+		if(event.target.name === 'usersListLink') {showUsers(token)}
+		if(event.target.name === 'eventNewsfeedLink') {}
+		if(event.target.name === 'accountLink') {}
+	})
+
+}
 
 // function watchIntro() {
 // 	$('.failedResponseButton').on('click', function(e) {

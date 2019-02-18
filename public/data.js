@@ -4,7 +4,19 @@ let comments;
 let title;
 let date;
 
+let fullname;
 
+
+function quickFetch(route, method, token) {
+
+	return fetch(route, {
+	method: method,
+	headers: {
+		'Authorization': 'Bearer' + ' ' + token
+	}
+})
+
+}
 
 /*popup with details on returned fail */
  var failedLogin =
@@ -24,10 +36,10 @@ let homePage =
 	<section class="homePageView">
 
 	<nav class="siteNav">
-		<a class="eventDetailsLink">Event Details</a>
-		<a class="usersListLink">Event Users</a>
-		<a class="eventNewsfeedLink">Event News Feed</a>
-		<a class="accountLink">Account</a>
+		<a class="eventDetailsLink" name="eventDetailsLink">Event Details</a>
+		<a class="usersListLink" name="usersListLink">Event Users</a>
+		<a class="eventNewsfeedLink" name="eventNewsfeedLink">Event News Feed</a>
+		<a class="accountLink" name="accountLink">Account</a>
 	</nav>
 
 	<section class="eventFeed">
@@ -71,9 +83,23 @@ return eventPost
 
 
 /*List of users in DB with role="atendee" */
-usersList = 
-`
 
-`;
+function usersListing(usr) {
+let { fullname } = usr
+let usersListing =
+
+`
+<li>
+	<p>${fullname}</p>
+</li>
+`
+return usersListing
+};
+
+/*Simple user account info card for current user to update details */
+
+function accountProfile() {
+	
+}
 
 

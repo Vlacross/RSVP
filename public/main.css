@@ -10,6 +10,10 @@ body {
     /* background-color: rgb(251, 251, 251); */
 }
 
+ul {
+    text-decoration: none;
+}
+
 main {
     display: flex;
     flex-direction: column;
@@ -121,11 +125,11 @@ main {
     border: solid 1px white;
     background: rgb(0, 0, 0, 0.2);
     background: rgb(255, 255, 255, 0.2);
-    position: fixed;
+    position: absolute;
     right: 0;
     width: 80%;
     max-width: 80%;
-    overflow: hidden;
+    overflow: auto;
 }
 
 .updatePosts {
