@@ -1,8 +1,13 @@
+let author; 
+let body; 
+let comments; 
+let title;
+let date;
 
 
 
 /*popup with details on returned fail */
-const failedLogin =
+ var failedLogin =
 	`<section class="failedResponse" >
     <h1>Woops!</h1>
     <h3>Looks like something went wrong!</h3>
@@ -12,8 +17,9 @@ const failedLogin =
 
 
 
+
 /*Main app home page- left-side nav bar */
-const homePage =
+let homePage =
 	`
 	<section class="homePageView">
 
@@ -36,21 +42,36 @@ const homePage =
 
 `;
 
-/*template for event topic posts */
-// const topicPost =
-// `
-// <li>
-// 	<h1 class="postTitle">${postTitle}</h1>
-// 	<h3>${postAuthor}</h3>
-// 	<h3>${postDate}</h3>
-// 	<p>${postContent}</p>
-// </li>
+function tester(title) {
 
-// `;
+let test =
+`
+<li>${title}</li>
+`
+return test;
+}
+
+/*template for event topic posts */
+
+function eventPost(post) {
+	let { title, author, body, comments } = post
+	let eventPost =
+`
+<li>
+	<h1 class="postTitle">${title}</h1>
+	<h3>${author}</h3>
+	<h3>${date}</h3>
+	<p>${body}</p>
+	<p>${comments}</p>
+</li>
+
+`
+return eventPost
+}
 
 
 /*List of users in DB with role="atendee" */
-const usersList = 
+usersList = 
 `
 
 `;

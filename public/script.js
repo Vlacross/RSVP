@@ -1,9 +1,8 @@
 
-
-
-
+var token;
 
 function renderSignIn() {
+
 	console.log('Signing In!')
 	const route = 'login'
 	$('.introView').addClass('hidden')
@@ -13,6 +12,7 @@ function renderSignIn() {
 
 
 function renderSignUp() {
+
 	console.log('Signing Up!')
 	const route = 'users/create'
 	$('.introView').addClass('hidden')
@@ -22,23 +22,33 @@ function renderSignUp() {
 };
 
 function watchIntro() {
-	
+
 	$('body').on('click', '.introPageFieldset', function(e) {
 		e.preventDefault();
 		if(event.target.name !== 'getLogIn') {
 			renderSignUp()}
 		else {renderSignIn()}
 	})
-
 };
 
+
 function buildFeed(arr) {
-arr.forEach(post => console.log(post))
+
+	let feed = [];
+	arr.forEach(post => {
+		let postBody = eventPost(post)
+		feed.push(postBody)
+	})
+	
+	return feed.join(' ');
 };
 
 function buildHome(token) {
-	
-	let list = 
+
+	$('.accessView').addClass('hidden')
+	$('body').prepend(homePage);
+	$('main').addClass('sinkBack')
+
 	fetch('posts/find', {
 		method: 'GET',
 		headers: {
@@ -47,22 +57,18 @@ function buildHome(token) {
 	})
 	.then(res => res.json())
 	.then(resj => {
-		buildFeed(resj)
+		let thread = buildFeed(resj)
+		$('.updatePosts').append(thread)
 	})
 	.catch(err => {console.log(err)})
-	
-	
-	
 
-	$('.accessView').addClass('hidden')
+	
 };
 
-var token;
-
-function nekst(token) {
-console.log('nekst', token)
-buildHome(token)
-}
+// function nekst(token) {
+// console.log('nekst', token)
+// buildHome(token)
+// }
 
 function handleFail() {
 	$('.accessView').addClass('hidden')
@@ -108,7 +114,7 @@ function promptAuth(route) {
 			.then(resj => {
 				console.log(resj)
 				token = resj.token
-				nekst(token)
+				buildHome(token)
 			})
 				
 			
