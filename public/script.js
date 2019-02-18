@@ -21,50 +21,81 @@ function renderSignUp() {
 	promptAuth(route);
 };
 
-function watchIntro() {function logs(arr) {
-	console.log('made it to logs file')
-	};
+function watchIntro() {
 	
-		console.log('watchintro')
 	$('body').on('click', '.introPageFieldset', function(e) {
 		e.preventDefault();
-		$('body').off()
-		// console.log('triggered', event.target.name)
 		if(event.target.name !== 'getLogIn') {
 			renderSignUp()}
 		else {renderSignIn()}
 	})
+
 };
+
+function buildFeed(arr) {
+arr.forEach(post => console.log(post))
+};
+
+function buildHome(token) {
+	
+	let list = 
+	fetch('posts/find', {
+		method: 'GET',
+		headers: {
+			'Authorization': 'Bearer' + ' ' + token
+		}
+	})
+	.then(res => res.json())
+	.then(resj => {
+		buildFeed(resj)
+	})
+	.catch(err => {console.log(err)})
+	
+	
+	
+
+	$('.accessView').addClass('hidden')
+};
+
 var token;
 
 function nekst(token) {
 console.log('nekst', token)
+buildHome(token)
 }
 
 function handleFail() {
-	$('.accessView').replaceWith(failedLogin);
+	$('.accessView').addClass('hidden')
+	$('main').append(failedLogin);
 
-	$('body').on('click', '.failedReturn', function(e) {
+	$(this).one('click', function(e) {
 		e.preventDefault();
-		console.log('hoi')
+		routeFail()
 	})
-	$('.introView').addClass('hidden')
 }
 
+function routeFail() {
+	console.log('reroute')
+	$('.failedResponse').remove()
+	$('.userNameInput').val('');
+	$('.userPassInput').val('');
+	$('.accessView').removeClass('hidden')
+};
+
 function promptAuth(route) {
-	console.log(route, 222)
+	console.log(`sending fetch to ${route}`)
 	
 		$('body').on('submit', '.authForm', function(e) {
 			e.preventDefault();
-			const fullname = document.getElementsByClassName('fullNameInput')[0];
-			const id = document.getElementsByClassName('userNameInput')[0];
-			const pwd = document.getElementsByClassName('userPassInput')[0];
+			const fullname = $('.fullNameInput').val();
+			const id = $('.userNameInput').val();
+			const pwd = $('.userPassInput').val();
 			const logIn = {
-					fullname: fullname.value,
-					username: id.value,
-					password: pwd.value
+					fullname: fullname,
+					username: id,
+					password: pwd
 				};
-				console.log(fullname, 'preauth send')
+				console.log(logIn, 'preauth send')
 			fetch(route, {
 				method: 'post',
 				headers: {
@@ -74,7 +105,11 @@ function promptAuth(route) {
 				body: JSON.stringify(logIn)
 			})
 			.then(res => res.json())
-			.then(resj => console.log(resj))
+			.then(resj => {
+				console.log(resj)
+				token = resj.token
+				nekst(token)
+			})
 				
 			
 			.catch(err => {
@@ -84,11 +119,29 @@ function promptAuth(route) {
 		})
 };
 
+// function watchIntro() {
+// 	$('.failedResponseButton').on('click', function(e) {
+// 		e.preventDefault();
+// 		routeFail()
+// 	})
+	
+// 	$('body').on('click', function(e) {
+// 		e.preventDefault();
+// 		console.log(event.target.name)
+// 		if(event.target.name === 'getLogIn') { renderSignIn()};
+// 		if(event.target.name === 'getRegister')	{renderSignUp()};
+// 		if(event.target.name === 'failedResponse') {routeFail()}
+// 	})
+
+// };
 
 $(document).ready(function() {
+
 	console.log('hittingJQscript!')
 	watchIntro()
 	
 
 		
 })
+
+

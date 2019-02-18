@@ -5,11 +5,19 @@ const jsonParser = bodyParser.json()
 
 const mongoose = require('mongoose')
 
+const jwtStrategy = require('../passport')
+
+const passport = require('passport');
+passport.use('JWT', jwtStrategy)
+const jwtAuth = passport.authenticate('JWT', { session: false})
+
 const Post = require('../models/postsModel')
 
 router.use(bodyParser.json())
+router.use('*', jwtAuth)
 
 router.get('/', (req, res) => {
+	console.log(req.headers)
 	console.log('got to the posts!')
 })
 

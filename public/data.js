@@ -3,11 +3,11 @@
 
 /*popup with details on returned fail */
 const failedLogin =
-	`<section class="failedReturn" role="">
+	`<section class="failedResponse" >
     <h1>Woops!</h1>
     <h3>Looks like something went wrong!</h3>
 		<p>Log in failed! Check your username and password and try again! </p>
-		<button type="submit" class="failedReturn">Retry</button>
+		<button class="failedResponseButton" name="failedResponse">Retry</button>
  </section>`;
 
 
@@ -15,17 +15,37 @@ const failedLogin =
 /*Main app home page- left-side nav bar */
 const homePage =
 	`
-<section class="homePageView" role="main">
+<section class="homePageView">
     <nav>
 			<a class="eventDetailsLink"></a>
 			<a class="usersListLink"></a>
 			<a class="eventNewsfeedLink"></a>
 			<a class="accountLink"></a>
-    </nav>
+		</nav>
+		
+		<section class="eventFeed">
+			<span>viewing some of all topic posts</span>
+				<ul class="updatePosts">
+				
+				</ul>
+			<span>viewing some of all topic posts</span>
+		</section>
+
 </section>
-
-
 `;
+
+/*template for event topic posts */
+// const topicPost =
+// `
+// <li>
+// 	<h1 class="postTitle">${postTitle}</h1>
+// 	<h3>${postAuthor}</h3>
+// 	<h3>${postDate}</h3>
+// 	<p>${postContent}</p>
+// </li>
+
+// `;
+
 
 /*List of users in DB with role="atendee" */
 const usersList = 

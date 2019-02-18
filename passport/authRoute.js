@@ -12,7 +12,7 @@ const passport = require('passport');
 passport.use('local', localStrategy)
 passport.use('JWT', jwtStrategy)
 const localAuth = passport.authenticate('local', { session: false });
-const jwtAuth = passport.authenticate('JWT', { session: false, failureRedirect: '/lowball' })
+const jwtAuth = passport.authenticate('JWT', { session: false})
 
 const { JWT_SECRET, ALG, EXP } = require('../config')
 
@@ -32,8 +32,9 @@ router.use(bodyParser.json())
 router.use(express.static('./passport/views'))
 
 
-router.get('/check', jwtAuth, (req, res) => {
-	console.log('got to the Loggin Rodeo sun!')
+router.post('/check', jwtAuth, (req, res) => {
+	console.log('got to the Loggin Rodeo sun!', req.rawHeaders)
+
 	// console.log(req.headers, req.rawHeaders)
 	res.status(201)
 })
