@@ -13,7 +13,13 @@ Accounts -
         for postings, but write permissions for commenting(to ask questions 
          or give feedback)
 
-    Potentially implement 'Magic Links' as a Token distrobution feature
+    -Maybe add a simple check feature for each user schema to say whether they are 
+        committed to attending or not.
+
+
+
+
+     *Too intensive for size of project*Potentially implement 'Magic Links' as a Token distrobution feature
 
      *Too intensive for size of project*  Custom schema(ie: create new schema/model based on user inputs and create collection)
 

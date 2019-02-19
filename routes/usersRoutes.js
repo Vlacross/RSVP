@@ -5,9 +5,23 @@ const jsonParser = bodyParser.json()
 
 const mongoose = require('mongoose')
 
+const localStrategy = require('../passport')
+const jwtStrategy = require('../passport');
+
+const passport = require('passport');
+passport.use('JWT', jwtStrategy)
+passport.use('local', localStrategy)
+
+const jwtAuth = passport.authenticate('JWT', { session: false})
+const localAuth = passport.authenticate('local', { session: false });
+
 const User = require('../models/usersModel')
 
+
+
+
 router.use(bodyParser.json())
+router.use('*', jwtAuth)
 
 router.get('/', (req, res) => {
 	console.log('got to the users!')
@@ -30,8 +44,15 @@ router.get('/find', (req, res) => {
 	res.status(200)
 })
 
+/*find current account in use/ find own accout details */
+
+router.get('/findme', (req, res) => {
+	console.log(req.user)
+	res.send(req.user).status(200).end()
+})
+
 /*Can create a new user account */
-router.post('/create', jsonParser, (req, res) => {
+router.post('/create', (req, res) => {
 
 	/*forEach wasn't handling err - allowed to pass to create */
 	const requiredFields = ['fullname', 'username', 'password']

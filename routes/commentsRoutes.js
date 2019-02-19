@@ -5,9 +5,16 @@ const jsonParser = bodyParser.json()
 
 const mongoose = require('mongoose')
 
+const jwtStrategy = require('../passport')
+
+const passport = require('passport');
+passport.use('JWT', jwtStrategy)
+const jwtAuth = passport.authenticate('JWT', { session: false})
+
 const CommentPost = require('../models/commentsModel')
 
 router.use(bodyParser.json())
+router.use('*', jwtAuth)
 
 router.get('/', (req, res) => {
 	console.log('got to the Comments!')

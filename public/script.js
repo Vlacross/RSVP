@@ -31,29 +31,50 @@ function watchIntro() {
 	})
 };
 
+/*********ACCOUNT*********** */
+
+// function buildAccount(usr) {
+// 	accountProfile(user) 
+// }
+
+function getAccount(token) {
+	let route = 'users/findme';
+	let method = 'GET';
+	quickFetch(route, method, token)
+	.then(res => res.json())
+	.then(resj => {
+		let acc = viewSwitch(accountProfile(resj));
+		$('.viewWrapper').replaceWith(acc)
+	})
+
+};
+
+/*********USERLIST*********** */
 function buildUsers(usrs) {
 	let listings = [];
 	usrs.forEach(usr => {
 		listings.push(usersListing(usr))
 	})
 	
-	let list = `<section class="eventFeed">${listings.join(' ')}</section>`;
-	return list
+	let list = listings.join(' ')
+	return viewSwitch(list)
 }
 
 function showUsers(token) {
+
 	let route = 'users/find';
 	let method = 'GET';
 	quickFetch(route, method, token)
 	.then(res => res.json())
 	.then(resj => {
 		let users = buildUsers(resj)
-		$('.eventFeed').replaceWith(users)
+		$('.viewWrapper').replaceWith(users)
 		
 	})
 	console.log('showing users list')
 };
 
+/*********POSTFEED*********** */
 function buildFeed(arr) {
 
 	let feed = [];
@@ -61,26 +82,34 @@ function buildFeed(arr) {
 		let postBody = eventPost(post)
 		feed.push(postBody)
 	})
-	return feed.join(' ');
+	let food = feed.join(' ')
+	return viewSwitch(food);
 };
 
-function buildHome(token) {
-
-	$('.accessView').addClass('hidden')
-	$('body').prepend(homePage);
-	$('main').addClass('sinkBack')
+function getFeed(token) {
 
 	let route = 'posts/find';
-	let method = 'GET'
+	let method = 'GET';
+
 	quickFetch(route, method, token)
 	.then(res => res.json())
 	.then(resj => {
 		let thread = buildFeed(resj)
-		$('.updatePosts').append(thread)
+		$('.viewWrapper').replaceWith(thread)
 	})
 	.catch(err => {console.log(err)})
+
 };
 
+
+function buildHome(token) {
+
+	$('body').prepend(homePage);
+	getFeed(token)
+	
+}
+
+/*********LOGINFAIL*********** */
 function handleFail() {
 	$('.accessView').addClass('hidden')
 	$('main').append(failedLogin);
@@ -101,6 +130,7 @@ function routeFail() {
 	$('.accessView').removeClass('hidden')
 };
 
+/*********LOGIN*********** */
 function promptAuth(route) {
 	console.log(`sending fetch to ${route}`)
 	
@@ -126,12 +156,12 @@ function promptAuth(route) {
 			.then(res => res.json())
 			.then(resj => {
 				console.log(resj)
+				$('.accessView').addClass('hidden')
+				$('main').addClass('sinkBack')
 				token = resj.token
 				buildHome(token)
 				handleNav(token)
 			})
-				
-			
 			.catch(err => {
 				console.log('loginFail')
 				handleFail()
@@ -139,40 +169,23 @@ function promptAuth(route) {
 		})
 };
 
+/*********NAVBAR*********** */
 function handleNav(token) {
 	$('a').on('click', function(e) {
 		e.preventDefault();
 		if(event.target.name === 'eventDetailsLink') {showDetails(token)}
 		if(event.target.name === 'usersListLink') {showUsers(token)}
-		if(event.target.name === 'eventNewsfeedLink') {}
-		if(event.target.name === 'accountLink') {}
+		if(event.target.name === 'eventNewsfeedLink') {getFeed(token)}
+		if(event.target.name === 'accountLink') {getAccount(token)}
 	})
 
 }
-
-// function watchIntro() {
-// 	$('.failedResponseButton').on('click', function(e) {
-// 		e.preventDefault();
-// 		routeFail()
-// 	})
-	
-// 	$('body').on('click', function(e) {
-// 		e.preventDefault();
-// 		console.log(event.target.name)
-// 		if(event.target.name === 'getLogIn') { renderSignIn()};
-// 		if(event.target.name === 'getRegister')	{renderSignUp()};
-// 		if(event.target.name === 'failedResponse') {routeFail()}
-// 	})
-
-// };
 
 $(document).ready(function() {
 
 	console.log('hittingJQscript!')
 	watchIntro()
 	
-
-		
 })
 
 

@@ -1,5 +1,6 @@
 * {
     box-sizing: border-box;
+    transition: all 500ms;
 }
 
 body {
@@ -11,7 +12,11 @@ body {
 }
 
 ul {
-    text-decoration: none;
+    list-style-type: none;
+}
+
+li {
+    list-style-type: none;
 }
 
 main {
@@ -109,7 +114,7 @@ main {
     justify-content: flex-start;
     align-items: center;
     padding: 20px;
-    background: rgb(255, 255, 255, 0.2);
+    background: rgb(255, 255, 255, 0.7);
     height: 100%;
     left: 0;
     max-width: 18%;
@@ -118,17 +123,18 @@ main {
     
 }
 
-.eventFeed {
+.viewWrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
     border: solid 1px white;
     background: rgb(0, 0, 0, 0.2);
-    background: rgb(255, 255, 255, 0.2);
+    background: rgb(255, 255, 255, 0.7);
     position: absolute;
     right: 0;
     width: 80%;
     max-width: 80%;
+    padding: 14px;
     overflow: auto;
 }
 
@@ -141,10 +147,20 @@ a {
     border: solid 1px goldenrod;
     margin: 20px;
     padding: 12px;
+    transition-duration: 500ms;
 }
 
 a:hover {
+    
+    background-color: white;
     color: rebeccapurple;
+}
+
+.accountProfile {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    border: solid 1px silver;
 }
 
 

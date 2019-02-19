@@ -32,4 +32,7 @@ const jwtStrategy = new JwtStrategy(opt, function (jwt_payload, done) {
 	});
 });
 
+
+
 module.exports = jwtStrategy
+
