@@ -1,5 +1,5 @@
 
-var token;
+
 
 function renderSignIn() {
 
@@ -30,12 +30,23 @@ function watchIntro() {
 		else {renderSignIn()}
 	})
 };
+/**********LOGOUT*********** */
+
+function logOut() {
+	console.log('loggingOut!')
+	localStorage.removeItem('token')
+	$('.homePageView').remove()
+	$('.introView').removeClass('hidden')
+	$('main').removeClass('sinkBack')
+}
 
 /*********ACCOUNT*********** */
 
-// function buildAccount(usr) {
-// 	accountProfile(user) 
-// }
+function editAccount(user, token) {
+	let editForm = viewSwitch(editProfile(user))
+	$('.viewWrapper').replaceWith(editForm)
+	
+}
 
 function getAccount(token) {
 	let route = 'users/findme';
@@ -45,6 +56,10 @@ function getAccount(token) {
 	.then(resj => {
 		let acc = viewSwitch(accountProfile(resj));
 		$('.viewWrapper').replaceWith(acc)
+		// TODO: move these to document.ready at bottom of file
+	watchEdit(token, resj)
+	watchForm(token, resj)
+
 	})
 
 };
@@ -86,12 +101,12 @@ function buildFeed(arr) {
 	return viewSwitch(food);
 };
 
-function getFeed(token) {
+function getFeed() {
 
 	let route = 'posts/find';
 	let method = 'GET';
 
-	quickFetch(route, method, token)
+	quickFetch(route, method)
 	.then(res => res.json())
 	.then(resj => {
 		let thread = buildFeed(resj)
@@ -102,10 +117,12 @@ function getFeed(token) {
 };
 
 
-function buildHome(token) {
-
+function buildHome() {
+	$('.accessView').addClass('hidden')
+	$('main').addClass('sinkBack')
 	$('body').prepend(homePage);
-	getFeed(token)
+	getFeed()
+	handleNav()
 	
 }
 
@@ -133,6 +150,11 @@ function routeFail() {
 /*********LOGIN*********** */
 function promptAuth(route) {
 	console.log(`sending fetch to ${route}`)
+			const fullname = $('.fullNameInput').val('');
+			const id = $('.userNameInput').val('');
+			const pwd = $('.userPassInput').val('');
+
+
 	
 		$('body').on('submit', '.authForm', function(e) {
 			e.preventDefault();
@@ -156,11 +178,9 @@ function promptAuth(route) {
 			.then(res => res.json())
 			.then(resj => {
 				console.log(resj)
-				$('.accessView').addClass('hidden')
-				$('main').addClass('sinkBack')
-				token = resj.token
-				buildHome(token)
-				handleNav(token)
+				localStorage.setItem('token', `${resj.token}`)
+			
+				buildHome()
 			})
 			.catch(err => {
 				console.log('loginFail')
@@ -170,21 +190,66 @@ function promptAuth(route) {
 };
 
 /*********NAVBAR*********** */
-function handleNav(token) {
-	$('a').on('click', function(e) {
+function handleNav() {
+	$('nav').on('click', 'button.eventDetailsLink', function(e) {
 		e.preventDefault();
-		if(event.target.name === 'eventDetailsLink') {showDetails(token)}
-		if(event.target.name === 'usersListLink') {showUsers(token)}
-		if(event.target.name === 'eventNewsfeedLink') {getFeed(token)}
-		if(event.target.name === 'accountLink') {getAccount(token)}
-	})
+		showDetails()
+	});
+	$('nav').on('click', 'button.usersListLink', function(e) {
+		e.preventDefault();
+		showUsers()
+	});
+	$('nav').on('click', 'button.eventNewsfeedLink', function(e) {
+		e.preventDefault();
+		getFeed()
+	});
+	$('nav').on('click', 'button.accountLink', function(e) {
+		e.preventDefault();
+		getAccount()
+	});
+	$('nav').on('click', 'button.logOut', function(e) {
+		e.preventDefault();
+		logOut()
+	});
+		// if(event.target.name === 'eventDetailsLink') {showDetails()}
+		// if(event.target.name === 'usersListLink') {showUsers()}
+		// if(event.target.name === 'eventNewsfeedLink') {getFeed()}
+		// if(event.target.name === 'accountLink') {getAccount()}
+		// if(event.target.name === 'Logout') {logOut()}
+};
 
-}
+
+
+function watchEdit(user, token) {
+$('form').on('click', 'button.profileEditButton', function(e) {
+	e.preventDefault();
+	editAccount(user);
+});
+$('form').on('click', 'button.editSubmitButton', function(e) {
+	e.preventDefault();
+	console.log('editsubmitworx')
+})
+	// if(event.target.name === 'profileEditButton') {editAccount(user, token)}
+	// if(event.target.name === 'editSubmitButton') {console.log('editsubmitworx')}
+};
+
+// function watchForm(user, token) {
+// 	$('body').on('submit', 'form.accountEditForm', function(e) {
+// 		e.preventDefault();
+// 		console.log('editsubmitworx')
+// 		});
+// 	};
 
 $(document).ready(function() {
-
+	let token = localStorage.getItem('token');
 	console.log('hittingJQscript!')
-	watchIntro()
+	handleNav()
+	if(token === null) {
+		watchIntro()
+	}
+	else {
+		buildHome()
+	}
 	
 })
 

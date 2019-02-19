@@ -9,8 +9,9 @@ let username;
 let password;
 
 
-function quickFetch(route, method, token) {
-
+function quickFetch(route, method) {
+	
+	token = localStorage.getItem('token')
 	return fetch(route, {
 	method: method,
 	headers: {
@@ -40,10 +41,12 @@ let homePage =
 	<section class="homePageView">
 
 	<nav class="siteNav">
-		<a class="eventDetailsLink" name="eventDetailsLink">Event Details</a>
-		<a class="usersListLink" name="usersListLink">Event Users</a>
-		<a class="eventNewsfeedLink" name="eventNewsfeedLink">Event News Feed</a>
-		<a class="accountLink" name="accountLink">Account</a>
+		
+		<button type="submit" class="usersListLink" name="usersListLink">Event Users</button>
+		<button type="submit" class="eventDetailsLink" name="eventDetailsLink">Event Details</button>
+		<button type="submit" class="eventNewsfeedLink" name="eventNewsfeedLink">Event News Feed</button>
+		<button type="submit" class="accountLink" name="accountLink">Account</button>
+		<button type="submit" class="logOut" name="Logout">Logout</button>
 	</nav>
 
 	<section class="viewWrapper">
@@ -106,15 +109,43 @@ function accountProfile(user) {
 let { fullname, username } = user;
 let accountDetails = 
 `
-<form class="accountProfile">
-	<span class="fullnameSpan">${fullname}</span>
-	<span class="usernameSpan">${username}</span>
-	<span class="passwordSpan">${password}</span>
-</form>
+<div class="accountProfile">
+	<span class="fullnameSpan">Fullname: ${fullname}</span>
+	<span class="usernameSpan">Username: ${username}</span>
+	<span class="passwordSpan">Password: ${password}</span>
+		<button class="profileEditButton" name="profileEditButton">Edit profile</button>
+</div>
 `
 return accountDetails
 
-
 }
 
+function editProfile(user) {
+	let { fullname, username } = user
 
+	const editForm =
+`
+				<form class="accountEditForm" autocomplete="off">
+					<fieldset class="accessFieldset">		
+						<input autocomplete="false" name="hidden" type="text" style="display:none;">
+	
+						<label for="fullNameInput" class="fullNameLabel" >FullName
+							<input id="fullNameInput" name="fullNameInput" class="fullNameInput" type="text" value="${fullname}">
+						</label>
+	
+						<label for="userNameInput">Username
+							<input id="userNameInput" name="userNameInput" class="userNameInput" type="text" value="${username}" required>
+						</label>
+	
+						<label for="userPassInput">New PassWord
+							<input id="userPassInput" name="userPassInput" class="userPassInput" type="text" placeholder="Enter new password here" required>
+						</label>
+						
+						<button class="submit" type="submit" name="editSubmitButton">Submit</button>
+					</fieldset>
+				</form>
+
+
+`
+return editForm;
+};
