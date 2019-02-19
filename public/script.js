@@ -14,7 +14,7 @@ function renderSignIn() {
 function renderSignUp() {
 
 	console.log('Signing Up!')
-	const route = 'users/create'
+	const route = 'login/create'
 	$('.introView').addClass('hidden')
 	$('.accessView').removeClass('hidden')
 	$('.fullNameLabel').removeClass('hidden').attr('required', true)

@@ -15,6 +15,7 @@ const localAuth = passport.authenticate('local', { session: false });
 const jwtAuth = passport.authenticate('JWT', { session: false})
 
 const { JWT_SECRET, ALG, EXP } = require('../config')
+const { User } = require('../models')
 
 
 const opts = {
@@ -47,5 +48,47 @@ router.post('/', localAuth, (req, res) => {
 	let token = buildToken(req.user.username)
 	res.json({ token })
 })
+
+/*moved here to bypass jwt check(ternary middleware was consuming time and magic links for future release) */
+// const hallPass = (req, res, next) => {return req.method !== 'POST' ? jwtAuth : next()}
+/*Can create a new user account */
+router.post('/create', (req, res) => {
+	console.log(req.body)
+
+	/*forEach wasn't handling err - allowed to pass to create */
+	const requiredFields = ['fullname', 'username', 'password']
+	let missing = requiredFields.filter(field => (!req.body[field]))
+	if (missing.length > 0) {
+		msg = `Missing ${missing} in header!`
+		console.error(msg)
+		return res.status(400).json(msg).end()
+	}
+	console.log(missing)
+	
+	const { fullname: full, username: user, password: pass } = req.body
+
+	console.log('haswhatneeds')
+	User.checkUniquity(user)
+	console.log('made it to create!')
+
+	User.create({
+		fullname: full,
+		username: user,
+		role: 'attendee',
+		password: pass
+	})
+		.then(newUser => {
+
+			res.json(newUser.serialize())
+			res.status(202)
+		})
+		.catch(err => {
+			return res.json(err.message).status(400)
+		})
+
+})
+
+
+
 
 module.exports = router;

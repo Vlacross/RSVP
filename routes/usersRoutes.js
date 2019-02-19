@@ -17,7 +17,7 @@ const localAuth = passport.authenticate('local', { session: false });
 
 const User = require('../models/usersModel')
 
-
+// const hallPass = (req, res, next) => {return req.method !== 'POST' ? jwtAuth : next()}
 
 
 router.use(bodyParser.json())
@@ -25,8 +25,6 @@ router.use('*', jwtAuth)
 
 router.get('/', (req, res) => {
 	console.log('got to the users!')
-
-
 })
 
 
@@ -53,6 +51,7 @@ router.get('/findme', (req, res) => {
 
 /*Can create a new user account */
 router.post('/create', (req, res) => {
+	console.log(req.body)
 
 	/*forEach wasn't handling err - allowed to pass to create */
 	const requiredFields = ['fullname', 'username', 'password']
@@ -63,15 +62,7 @@ router.post('/create', (req, res) => {
 		return res.status(400).json(msg).end()
 	}
 	console.log(missing)
-
-	// requiredFields.forEach(field => {
-	// 	if (!req.body[field]) {
-	// 		msg = `Missing ${field} in header!`
-	// 		console.error(msg)
-	// 		return res.status(400).json(msg).end()
-	// 	}
-	// })
-
+	
 	const { fullname: full, username: user, password: pass } = req.body
 
 	console.log('haswhatneeds')
