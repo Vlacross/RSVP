@@ -105,22 +105,25 @@ return usersListing
 
 /*Simple user account info card for current user to update details */
 
-function accountProfile(user) {
-let { fullname, username } = user;
+function accountProfile() {
+	let user = JSON.parse(localStorage.getItem('user'))
+	console.log(user, "inprof")
+let { fullname, username } = user
 let accountDetails = 
 `
-<div class="accountProfile">
+<section class="accountProfile">
 	<span class="fullnameSpan">Fullname: ${fullname}</span>
 	<span class="usernameSpan">Username: ${username}</span>
-	<span class="passwordSpan">Password: ${password}</span>
-		<button class="profileEditButton" name="profileEditButton">Edit profile</button>
-</div>
+	<span  class="passwordSpan">Password: ${password}</span>
+	<button type="submit" class="profileEditButton" name="profileEditButton">Edit profile</button>
+</section>
 `
 return accountDetails
 
 }
 
-function editProfile(user) {
+function editProfile() {
+	let user = JSON.parse(localStorage.getItem('user'))
 	let { fullname, username } = user
 
 	const editForm =

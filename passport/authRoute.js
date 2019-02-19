@@ -46,7 +46,11 @@ router.post('/', localAuth, (req, res) => {
 	if(!req) {console.log('err')}
 	console.log('maider This farm!')
 	let token = buildToken(req.user.username)
-	res.json({ token })
+	let user = {
+		fullname: req.user.fullname,
+		username: req.user.username
+	}
+	res.json({ token, user })
 })
 
 /*moved here to bypass jwt check(ternary middleware was consuming time and magic links for future release) */

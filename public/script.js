@@ -21,20 +21,21 @@ function renderSignUp() {
 	promptAuth(route);
 };
 
-function watchIntro() {
+// function watchIntro() {
 
-	$('body').on('click', '.introPageFieldset', function(e) {
-		e.preventDefault();
-		if(event.target.name !== 'getLogIn') {
-			renderSignUp()}
-		else {renderSignIn()}
-	})
-};
+// 	$('body').on('click', '.introPageFieldset', function(e) {
+// 		e.preventDefault();
+// 		if(event.target.name !== 'getLogIn') {
+// 			renderSignUp()}
+// 		else {renderSignIn()}
+// 	})
+// };
 /**********LOGOUT*********** */
 
 function logOut() {
 	console.log('loggingOut!')
 	localStorage.removeItem('token')
+	localStorage.clear()
 	$('.homePageView').remove()
 	$('.introView').removeClass('hidden')
 	$('main').removeClass('sinkBack')
@@ -42,23 +43,26 @@ function logOut() {
 
 /*********ACCOUNT*********** */
 
-function editAccount(user, token) {
+function editAccount() {
+	let user = JSON.parse(localStorage.getItem('user'))
 	let editForm = viewSwitch(editProfile(user))
 	$('.viewWrapper').replaceWith(editForm)
 	
 }
 
-function getAccount(token) {
+function getAccount() {
+	let user = JSON.parse(localStorage.getItem('user'))
 	let route = 'users/findme';
 	let method = 'GET';
-	quickFetch(route, method, token)
+	quickFetch(route, method)
 	.then(res => res.json())
 	.then(resj => {
-		let acc = viewSwitch(accountProfile(resj));
+		console.log('reckled', user)
+		let acc = viewSwitch(accountProfile(user));
+		console.log(acc)
 		$('.viewWrapper').replaceWith(acc)
 		// TODO: move these to document.ready at bottom of file
-	watchEdit(token, resj)
-	watchForm(token, resj)
+	// watchEdit(resj)
 
 	})
 
@@ -79,7 +83,7 @@ function showUsers(token) {
 
 	let route = 'users/find';
 	let method = 'GET';
-	quickFetch(route, method, token)
+	quickFetch(route, method)
 	.then(res => res.json())
 	.then(resj => {
 		let users = buildUsers(resj)
@@ -122,7 +126,7 @@ function buildHome() {
 	$('main').addClass('sinkBack')
 	$('body').prepend(homePage);
 	getFeed()
-	handleNav()
+	
 	
 }
 
@@ -177,9 +181,11 @@ function promptAuth(route) {
 			})
 			.then(res => res.json())
 			.then(resj => {
-				console.log(resj)
+				console.log(resj, resj.user)
+				localStorage.setItem('user', JSON.stringify(resj.user))
 				localStorage.setItem('token', `${resj.token}`)
-			
+				// let user = JSON.parse(localStorage.getItem('user'))
+	
 				buildHome()
 			})
 			.catch(err => {
@@ -191,23 +197,24 @@ function promptAuth(route) {
 
 /*********NAVBAR*********** */
 function handleNav() {
-	$('nav').on('click', 'button.eventDetailsLink', function(e) {
+	console.log('handlinNAV')
+	$('body').on('click', 'button.eventDetailsLink', function(e) {
 		e.preventDefault();
 		showDetails()
 	});
-	$('nav').on('click', 'button.usersListLink', function(e) {
+	$('body').on('click', 'button.usersListLink', function(e) {
 		e.preventDefault();
 		showUsers()
 	});
-	$('nav').on('click', 'button.eventNewsfeedLink', function(e) {
+	$('body').on('click', 'button.eventNewsfeedLink', function(e) {
 		e.preventDefault();
 		getFeed()
 	});
-	$('nav').on('click', 'button.accountLink', function(e) {
+	$('body').on('click', 'button.accountLink', function(e) {
 		e.preventDefault();
 		getAccount()
 	});
-	$('nav').on('click', 'button.logOut', function(e) {
+	$('body').on('click', 'button.logOut', function(e) {
 		e.preventDefault();
 		logOut()
 	});
@@ -220,12 +227,14 @@ function handleNav() {
 
 
 
-function watchEdit(user, token) {
-$('form').on('click', 'button.profileEditButton', function(e) {
+function watchEdit() {
+	console.log('watchingEdit')
+$('body').on('click', 'button.profileEditButton', function(e) {
 	e.preventDefault();
-	editAccount(user);
+	console.log('editedit')
+	editAccount();
 });
-$('form').on('click', 'button.editSubmitButton', function(e) {
+$('body').on('click', 'button.editSubmitButton', function(e) {
 	e.preventDefault();
 	console.log('editsubmitworx')
 })
@@ -233,24 +242,28 @@ $('form').on('click', 'button.editSubmitButton', function(e) {
 	// if(event.target.name === 'editSubmitButton') {console.log('editsubmitworx')}
 };
 
-// function watchForm(user, token) {
-// 	$('body').on('submit', 'form.accountEditForm', function(e) {
-// 		e.preventDefault();
-// 		console.log('editsubmitworx')
-// 		});
-// 	};
+function watchIntro() {
+
+	$('body').on('click', 'button.introLoginButton', function(e) {
+		e.preventDefault();
+		renderSignIn();
+	});
+	$('body').on('click', 'button.introRegisterButton', function(e) {
+		e.preventDefault();
+		renderSignUp();
+	});
+}
+		
 
 $(document).ready(function() {
 	let token = localStorage.getItem('token');
 	console.log('hittingJQscript!')
+	watchEdit()
 	handleNav()
-	if(token === null) {
-		watchIntro()
-	}
-	else {
+	watchIntro()
+	if(token !== null) {
 		buildHome()
 	}
 	
+	
 })
-
-
