@@ -23,6 +23,19 @@ function quickFetch(route, method) {
 
 }
 
+
+/*Let user know update success */
+const successPrompt = 
+`
+<section class="successResponse" >
+	<h1>Success!</h1>
+	<h3>details successfully updated!</h3>
+	<p>Click home to go back to main post feed! </p>
+	<button class="successResponseButton" name="successResponse">Home</button>
+</section>
+`;
+
+
 /*popup with details on returned fail */
  var failedLogin =
 	`<section class="failedResponse" >
@@ -30,6 +43,15 @@ function quickFetch(route, method) {
     <h3>Looks like something went wrong!</h3>
 		<p>Log in failed! Check your username and password and try again! </p>
 		<button class="failedResponseButton" name="failedResponse">Retry</button>
+ </section>`;
+
+ /*popup with details on returned fail */
+ var failedUpdate =
+	`<section class="failedUpdate" >
+    <h1>Woops!</h1>
+    <h3>Looks like something went wrong!</h3>
+		<p>Update failed! Check your username and password and try again! </p>
+		<button class="failedUpdateButton" name="failedUpdate">Retry</button>
  </section>`;
 
 
@@ -129,8 +151,8 @@ function editProfile() {
 	const editForm =
 `
 				<form class="accountEditForm" autocomplete="off">
-					<fieldset class="accessFieldset">		
-						<input autocomplete="false" name="hidden" type="text" style="display:none;">
+					<fieldset class="updateFieldset">		
+						
 	
 						<label for="fullNameInput" class="fullNameLabel" >FullName
 							<input id="fullNameInput" name="fullNameInput" class="fullNameInput" type="text" value="${fullname}">
@@ -144,7 +166,8 @@ function editProfile() {
 							<input id="userPassInput" name="userPassInput" class="userPassInput" type="text" placeholder="Enter new password here" required>
 						</label>
 						
-						<button class="submit" type="submit" name="editSubmitButton">Submit</button>
+						<button class="editSubmitButton" type="submit" name="editSubmitButton">Submit</button>
+
 					</fieldset>
 				</form>
 
