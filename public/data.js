@@ -104,25 +104,6 @@ let viewWrap =
 return viewWrap;
 }
 
-/*template for event topic posts */
-
-function eventPost(post) {
-	let { title, author, body, comments } = post
-	let eventPost =
-`
-<li>
-	<h1 class="postTitle">Title: ${title}</h1>
-	<h3>By: ${author}</h3>
-	<h3>Posted on ${date}</h3>
-	<p>${body}</p>
-	<p>${comments} Comments</p>
-</li>
-
-`
-return eventPost
-}
-
-
 /*List of users in DB with role="atendee" */
 
 function usersListing(usr) {
@@ -216,6 +197,97 @@ function constructPost() {
 `
 return newPostForm;
 };
+
+/*template for event topic posts */
+
+function eventPost(post, count) {
+	let { title, author, body, comments, id } = post
+	let eventPost =
+`
+<li  class="eventPost">
+	<div class="subPostTitle">
+		<a tabindex="${count}" class="postTitle" id="${id}">Title: ${title}</a>
+	</div>
+
+	<div class="subPost">
+		<h3>By: ${author}</h3>
+		<h3>Posted on ${date}</h3>
+	</div>
+	<p>${body}</p>
+	<p>${comments} Comments</p>
+</li>
+
+`
+return eventPost
+};
+
+/* compile comment Data into DOM content*/
+
+function buildComment(comment) {
+let { listing, text } = comment
+
+
+let remark = 
+`
+<li class="commentListing">
+<h3>${listing}</h3>
+<p>${text}</p>
+</li>
+`
+return remark;
+
+}
+
+function generateRemarks(comments) {
+
+	if(comments.length === 0) {
+		let noComments = 
+	`
+	<li>
+	<p>No Comments Yet!</p>
+	</li>
+	`
+	return noComments
+	}
+
+
+	let commentList = []
+	comments.forEach(comment => {
+										let readable = buildComment(comment)
+										commentList.push(readable)
+	})
+
+	
+	return commentList.join(' ')
+};
+
+
+/*template for single-topic posts */
+
+function buildPost(post) {
+	let { title, author, body, comments, id } = post
+	let remarks = generateRemarks(comments)
+	
+	let eventPost =
+
+
+`
+<li  class="eventPost">
+	<div class="subPostTitle">
+		<a class="postTitle" id="${id}">Title: ${title}</a>
+	</div>
+
+	<div class="subPost">
+		<h3>By: ${author}</h3>
+		<h3>Posted on ${date}</h3>
+	</div>
+	<p>${body}</p>
+	<ul class="comments">${remarks} </ul>
+</li>
+
+`
+return eventPost
+}
 
 
 

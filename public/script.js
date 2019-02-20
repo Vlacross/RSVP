@@ -125,7 +125,7 @@ function showUsers(token) {
 };
 /*********POSTFEED-BUILD*********** */
 
-function buildPost() {
+function createPost() {
 
 	let postForm = viewSwitch(constructPost())
 	$('.viewWrapper').replaceWith(postForm)
@@ -174,10 +174,11 @@ function shipPost(route) {
 
 /*********POSTFEED-SHOW********** */
 function buildFeed(arr) {
-
+	let count = 0;
 	let feed = [];
 	arr.forEach(post => {
-		let postBody = eventPost(post)
+		count++
+		let postBody = eventPost(post, count)
 		feed.push(postBody)
 	})
 	let food = feed.join(' ')
@@ -198,6 +199,21 @@ function getFeed() {
 		.catch(err => { console.log(err) })
 
 };
+/*********SINGLE*POST*SHOW********** */
+	function getPost(postId) {
+		let route = `posts/find/${postId}`;
+		let method = 'GET';
+
+		quickFetch(route, method)
+		.then(res => res.json())
+		.then(resj => {
+			console.log('sinlinouts', resj)
+			let singlePost = buildPost(resj)
+			$('.viewWrapper').replaceWith(viewSwitch(singlePost))
+		})
+		.catch(err => { console.log(err) })
+
+	}
 
 /*********BUILDHOME*********** */
 function buildHome() {
@@ -250,9 +266,7 @@ function promptAuth() {
 
 
 function logIn(route, newUser) {
-	// let payLoad = !newUser ? login : newUser
 	console.log(`sending fetch to ${route}`)
-	console.log('hitting the IN')
 	const fullname = $('.fullNameInput').val();
 	const id = $('.userNameInput').val();
 	const pwd = $('.userPassInput').val();
@@ -316,7 +330,7 @@ function handleNav() {
 	});
 	$('body').on('click', 'button.addPost', function (e) {
 		e.preventDefault();
-		buildPost()
+		createPost()
 	});
 
 	// if(event.target.name === 'eventDetailsLink') {showDetails()}
@@ -379,13 +393,21 @@ function watchFetchActions() {
 }
 
 
+
 function watchPageActions() {
 	$('body').on('click', 'button.successResponseButton', function (e) {
 		e.preventDefault();
 		console.log('going to home page!')
 		buildHome();
 	});
+	$('body').on('click', 'a.postTitle', function (e) {
+		e.preventDefault();
+		console.log('Just Building a home for the console dwarves!')
+		let postId = $(this).attr('id')
+		getPost(postId)
+	});
 }
+
 
 function evalPageState() {
 	/*makes use of stored data on refresh */

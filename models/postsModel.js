@@ -23,6 +23,7 @@ postSchema.set('toJSON', {
 /*maybe make two serialize one for listing all posts, another for individual post selection */
 postSchema.methods.serialize = function () {
   return {
+    id: this.id,
     title: this.title,
     author: this.author.fullname,
     body: this.body,
