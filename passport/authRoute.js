@@ -83,8 +83,13 @@ router.post('/create', (req, res) => {
 		password: pass
 	})
 		.then(newUser => {
-
-			res.json(newUser.serialize())
+			let token = buildToken(newUser.username)
+			let user = {
+				id: newUser._id,
+				fullname: newUser.fullname,
+				username: newUser.username
+			}
+			res.json({ token, user })
 			res.status(202)
 		})
 		.catch(err => {

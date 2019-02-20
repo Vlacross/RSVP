@@ -210,11 +210,15 @@ function logIn(route, newUser) {
 	const id = $('.userNameInput').val();
 	const pwd = $('.userPassInput').val();
 	const logIn = {
-		fullname: fullname,
 		username: id,
 		password: pwd
 	};
-	let payLoad = !newUser ? logIn : newUser
+	const createNew = {
+			fullname: fullname,
+			username: id,
+			password: pwd
+	};
+	let payLoad = !fullname ? logIn : createNew
 		console.log(payLoad, 'preauth send')
 		fetch(route, {
 			method: 'post',
@@ -329,7 +333,7 @@ $(document).ready(function () {
 	handleNav()
 	watchFetchActions()
 	watchPageActions()
-	if (token !== null) {
+	if (token !== null || undefined) {
 		buildHome()
 	}
 	
