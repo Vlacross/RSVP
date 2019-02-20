@@ -300,14 +300,16 @@ function buildPost(post) {
 return eventPost
 };
 
+const toggleButton =
+`
+	<button class="cancelActionButton">Cancel</button>
+`;
 
-// function commentWrap(commentView) {
-// 	let viewWrap =
-// `
-// <section class="viewWrapper">${commentView}</section>
-// `
-// return viewWrap;
-// }
+const commentButton =
+`
+<button class="addComment">Comment</button>
+`;
+
 
 
 function commentPalette() {

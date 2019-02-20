@@ -270,7 +270,7 @@ function getPost(postId) {
 function createComment() {
 	// let commentPalette = commentPalette() 
 	$('.commentsList').append(commentPalette)
-
+		
 };
 
 function postComment(route, postId) {
@@ -295,10 +295,7 @@ function postComment(route, postId) {
 	})
 		.then(res => res.json())
 		.then(resj => {
-			console.log(resj)
-			/*************************************************************************** */
 			let route = `posts/comment/${postId}`
-			// updatePost(route, resj.id)
 			let populateNew = {
 				postId: postId,
 				commentId: resj.id
@@ -523,8 +520,17 @@ function watchPageActions() {
 		postId = $(this).attr('id')
 		getPost(postId)
 	});
+
+	$('body').on('click', 'button.cancelActionButton', function (e) {
+		e.preventDefault();
+		console.log('backing out, huh?')
+		$('.cancelActionButton').replaceWith(commentButton)
+		$('.palette').remove()
+	});
+
 	$('body').on('click', 'button.addComment', function (e) {
 		e.preventDefault();
+		$('.addComment').replaceWith(toggleButton)
 		console.log('You may just be a bag full of soil', $(this).siblings())
 		createComment()
 	});
