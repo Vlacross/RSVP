@@ -25,11 +25,22 @@ function quickFetch(route, method) {
 
 
 /*Let user know update success */
-const successPrompt = 
+const updateSuccessPrompt = 
 `
 <section class="successResponse" >
 	<h1>Success!</h1>
 	<h3>details successfully updated!</h3>
+	<p>Click home to go back to main post feed! </p>
+	<button class="successResponseButton" name="successResponse">Home</button>
+</section>
+`;
+
+/*Let user know on post success */
+const postSuccessPrompt = 
+`
+<section class="successResponse" >
+	<h1>Success!</h1>
+	<h3>Content Posted!</h3>
 	<p>Click home to go back to main post feed! </p>
 	<button class="successResponseButton" name="successResponse">Home</button>
 </section>
@@ -69,6 +80,7 @@ let homePage =
 		<button type="submit" class="eventNewsfeedLink" name="eventNewsfeedLink">Event News Feed</button>
 		<button type="submit" class="accountLink" name="accountLink">Account</button>
 		<button type="submit" class="logOut" name="Logout">Logout</button>
+		<button type="submit" class="addPost" name="addPost">AddPost</button>
 	</nav>
 
 	<section class="viewWrapper">
@@ -175,3 +187,40 @@ function editProfile() {
 `
 return editForm;
 };
+
+
+function constructPost() {
+
+	const newPostForm =
+`
+	<form class="postForm">
+		<fieldset class="eventPost">
+		
+			<div class="form-inputs">
+
+				<label for="title-input">Title: 
+					<input id="title-input" class="eventPostTitleInput" name="title-input" type="text" required>
+				</label>
+
+				<label for="content-input">Content: 
+					<textarea id="content-input" class="eventPostContentInput" cols="40" rows="10" type="text" name="content-input"></textarea>
+				</label>
+
+				<button class="postFormSubmit" type ="submit">Post</button>
+
+			</div>
+
+		</fieldset>
+	</form>
+
+`
+return newPostForm;
+};
+
+
+
+
+
+
+
+

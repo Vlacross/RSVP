@@ -69,8 +69,8 @@ function submitEdit(route) {
 			console.log('update suxess!', resj)
 			localStorage.removeItem('user')
 			localStorage.setItem('user', JSON.stringify(resj.user))
-			
-				promptSuccess()
+				let type = 'update'
+				promptSuccess(type)
 				
 				
 				// buildHome()
@@ -123,8 +123,56 @@ function showUsers(token) {
 		})
 	console.log('showing users list')
 };
+/*********POSTFEED-BUILD*********** */
 
-/*********POSTFEED*********** */
+function buildPost() {
+
+	let postForm = viewSwitch(constructPost())
+	$('.viewWrapper').replaceWith(postForm)
+};
+
+
+function shipPost(route) {
+
+	let user = JSON.parse(localStorage.getItem('user'))
+	let token = localStorage.getItem('token')
+
+	let title = $('.eventPostTitleInput').val();
+	let content = $('.eventPostContentInput').val();
+	
+	let newPost = {
+		author: user.id,
+		title: title,
+		body: content
+	};
+		console.log(newPost, 'prePost shipment')
+		fetch(route, {
+			method: 'post',
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json',
+				'Authorization': 'Bearer' + ' ' + token
+			},
+			body: JSON.stringify(newPost)
+		})
+		.then(res => res.json())
+		.then(resj => {
+			console.log('update suxess!', resj)
+			let type = 'post'
+				promptSuccess(type)
+				
+				
+				// buildHome()
+			})
+			.catch(err => {
+				console.log('updateFail', err)
+				let type = 'update'
+				handleFail(type)
+			})
+
+};
+
+/*********POSTFEED-SHOW********** */
 function buildFeed(arr) {
 
 	let feed = [];
@@ -151,9 +199,9 @@ function getFeed() {
 
 };
 
-
+/*********BUILDHOME*********** */
 function buildHome() {
-	$('.accessView').addClass('hidden')
+	
 	$('main').addClass('sinkBack')
 	$('body').prepend(homePage);
 	getFeed()
@@ -162,12 +210,11 @@ function buildHome() {
 }
 
 /********SHOW*SUCCESS*********** */
-function promptSuccess() {
+function promptSuccess(type) {
 
-	
-	$('.viewWrapper').replaceWith(viewSwitch(successPrompt))
+	let msg = type === 'update' ? updateSuccessPrompt : postSuccessPrompt
 
-	
+	$('.viewWrapper').replaceWith(viewSwitch(msg))
 }
 
 /*********HANDLEFAIL*********** */
@@ -234,7 +281,7 @@ function logIn(route, newUser) {
 				localStorage.setItem('user', JSON.stringify(resj.user))
 				localStorage.setItem('token', `${resj.token}`)
 				// let user = JSON.parse(localStorage.getItem('user'))
-				
+				$('.accessView').addClass('hidden')
 				buildHome()
 			})
 			.catch(err => {
@@ -267,6 +314,11 @@ function handleNav() {
 		e.preventDefault();
 		logOut()
 	});
+	$('body').on('click', 'button.addPost', function (e) {
+		e.preventDefault();
+		buildPost()
+	});
+
 	// if(event.target.name === 'eventDetailsLink') {showDetails()}
 	// if(event.target.name === 'usersListLink') {showUsers()}
 	// if(event.target.name === 'eventNewsfeedLink') {getFeed()}
@@ -278,7 +330,17 @@ function handleNav() {
 function watchFetchActions() {
 	let route;
 
-	/*START EDIT */
+				/*START POST */
+	$('body').on('click', 'button.postFormSubmit', function (e) {
+		e.preventDefault();
+		console.log('shipping newPost!')
+		route = 'posts/create'
+		shipPost(route);
+	});
+							/*STOP POST */
+						/************************ */
+							/*START EDIT */
+	
 	$('body').on('click', 'button.profileEditButton', function (e) {
 		e.preventDefault();
 		console.log('switching route for update')
@@ -287,7 +349,6 @@ function watchFetchActions() {
 	});
 	$('body').on('click', 'button.editSubmitButton', function (e) {
 		e.preventDefault();
-		
 		submitEdit(route)
 	})
 							/*STOP EDIT */
@@ -314,8 +375,9 @@ function watchFetchActions() {
 		e.preventDefault();
 		toggleIntro()
 	});
-	/*STOP INTRO */
+							/*STOP INTRO */
 }
+
 
 function watchPageActions() {
 	$('body').on('click', 'button.successResponseButton', function (e) {
@@ -325,17 +387,23 @@ function watchPageActions() {
 	});
 }
 
+function evalPageState() {
+	/*makes use of stored data on refresh */
+	let token = localStorage.getItem('token');
+	if (token !== null || undefined) {
+		buildHome()
+		$('.introView').addClass('hidden')
+	}
+}
+
 
 $(document).ready(function () {
-	let token = localStorage.getItem('token');
 	console.log('hittingJQscript!')
 	// watchEdit()
 	handleNav()
 	watchFetchActions()
 	watchPageActions()
-	if (token !== null || undefined) {
-		buildHome()
-	}
+	evalPageState()
 	
 	
 })

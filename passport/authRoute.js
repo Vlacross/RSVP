@@ -49,8 +49,10 @@ router.post('/', localAuth, (req, res) => {
 	let user = {
 		id: req.user._id,
 		fullname: req.user.fullname,
-		username: req.user.username
+		username: req.user.username,
+		role: req.user.role
 	}
+	
 	res.json({ token, user })
 })
 
