@@ -54,32 +54,32 @@ function submitEdit(route) {
 		username: userName,
 		password: pwd
 	};
-		console.log(updatedUser, 'preUpdate send')
-		fetch(route, {
-			method: 'put',
-			headers: {
-				'Accept': 'application/json',
-				'Content-Type': 'application/json',
-				'Authorization': 'Bearer' + ' ' + token
-			},
-			body: JSON.stringify(updatedUser)
-		})
+	console.log(updatedUser, 'preUpdate send')
+	fetch(route, {
+		method: 'put',
+		headers: {
+			'Accept': 'application/json',
+			'Content-Type': 'application/json',
+			'Authorization': 'Bearer' + ' ' + token
+		},
+		body: JSON.stringify(updatedUser)
+	})
 		.then(res => res.json())
 		.then(resj => {
 			console.log('update suxess!', resj)
 			localStorage.removeItem('user')
 			localStorage.setItem('user', JSON.stringify(resj.user))
-				let type = 'update'
-				promptSuccess(type)
-				
-				
-				// buildHome()
-			})
-			.catch(err => {
-				console.log('updateFail', err)
-				let type = 'update'
-				handleFail(type)
-			})
+			let type = 'update'
+			promptSuccess(type)
+
+
+			// buildHome()
+		})
+		.catch(err => {
+			console.log('updateFail', err)
+			let type = 'update'
+			handleFail(type)
+		})
 };
 
 function editAccount() {
@@ -94,8 +94,8 @@ function getAccount() {
 	let user = JSON.parse(localStorage.getItem('user'))
 
 	let acc = viewSwitch(accountProfile(user));
-	
-			$('.viewWrapper').replaceWith(acc)
+
+	$('.viewWrapper').replaceWith(acc)
 
 };
 
@@ -139,36 +139,36 @@ function shipPost(route) {
 
 	let title = $('.eventPostTitleInput').val();
 	let content = $('.eventPostContentInput').val();
-	
+
 	let newPost = {
 		author: user.id,
 		title: title,
 		body: content
 	};
-		console.log(newPost, 'prePost shipment')
-		fetch(route, {
-			method: 'post',
-			headers: {
-				'Accept': 'application/json',
-				'Content-Type': 'application/json',
-				'Authorization': 'Bearer' + ' ' + token
-			},
-			body: JSON.stringify(newPost)
-		})
+	console.log(newPost, 'prePost shipment')
+	fetch(route, {
+		method: 'post',
+		headers: {
+			'Accept': 'application/json',
+			'Content-Type': 'application/json',
+			'Authorization': 'Bearer' + ' ' + token
+		},
+		body: JSON.stringify(newPost)
+	})
 		.then(res => res.json())
 		.then(resj => {
 			console.log('update suxess!', resj)
 			let type = 'post'
-				promptSuccess(type)
-				
-				
-				// buildHome()
-			})
-			.catch(err => {
-				console.log('updateFail', err)
-				let type = 'update'
-				handleFail(type)
-			})
+			promptSuccess(type)
+
+
+			// buildHome()
+		})
+		.catch(err => {
+			console.log('updateFail', err)
+			let type = 'update'
+			handleFail(type)
+		})
 
 };
 
@@ -199,28 +199,63 @@ function getFeed() {
 		.catch(err => { console.log(err) })
 
 };
+/*********SINGLE*POST*EDIT********** */
+function editPost() {
+
+}
+
+function updatePost(route, commentId) {
+
+	console.log(`sending update to ${route}`)
+	let user = JSON.parse(localStorage.getItem('user'))
+	let token = localStorage.getItem('token')
+
+	let fullName = $('.fullNameInput').val();
+	let userName = $('.userNameInput').val();
+	let pwd = $('.userPassInput').val();
+	let updatedUser = {
+		id: user.id,
+		fullname: fullName,
+		username: userName,
+		password: pwd
+	};
+	console.log(updatedUser, 'preUpdate send')
+	fetch(route, {
+		method: 'put',
+		headers: {
+			'Accept': 'application/json',
+			'Content-Type': 'application/json',
+			'Authorization': 'Bearer' + ' ' + token
+		},
+		body: JSON.stringify(updatedUser)
+	})
+		.then(res => res.json())
+		.then(resj => {
+			console.log('update suxess!', resj)
+			localStorage.removeItem('user')
+			localStorage.setItem('user', JSON.stringify(resj.user))
+			let type = 'update'
+			promptSuccess(type)
+
+
+			// buildHome()
+		})
+		.catch(err => {
+			console.log('updateFail', err)
+			let type = 'update'
+			handleFail(type)
+		})
+}
+
+
 /*********SINGLE*POST*SHOW********** */
 
 
-							/*********HANDLE*COMMENTS********** */
+function getPost(postId) {
+	let route = `posts/find/${postId}`;
+	let method = 'GET';
 
-function createComment() {
-	// let commentPalette = commentPalette() 
-	$('.commentsList').append(commentPalette)
-
-}
-
-function addComment() {
-
-}
-
-
-							/*********END*COMMENTS********** */
-	function getPost(postId) {
-		let route = `posts/find/${postId}`;
-		let method = 'GET';
-
-		quickFetch(route, method)
+	quickFetch(route, method)
 		.then(res => res.json())
 		.then(resj => {
 			console.log('sinlinouts', resj)
@@ -229,11 +264,73 @@ function addComment() {
 		})
 		.catch(err => { console.log(err) })
 
-	}
+}
+/*********HANDLE*COMMENTS********** */
+
+function createComment() {
+	// let commentPalette = commentPalette() 
+	$('.commentsList').append(commentPalette)
+
+};
+
+function postComment(route, postId) {
+	let user = JSON.parse(localStorage.getItem('user'))
+	let token = localStorage.getItem('token')
+
+	let text = $('.commentContentInput').val();
+
+	let newComment = {
+		userId: user.id,
+		text: text
+	};
+	console.log(newComment, 'preSnark remark')
+	fetch(route, {
+		method: 'post',
+		headers: {
+			'Accept': 'application/json',
+			'Content-Type': 'application/json',
+			'Authorization': 'Bearer' + ' ' + token
+		},
+		body: JSON.stringify(newComment)
+	})
+		.then(res => res.json())
+		.then(resj => {
+			console.log(resj)
+			/*************************************************************************** */
+			let route = `posts/comment/${postId}`
+			// updatePost(route, resj.id)
+			let populateNew = {
+				postId: postId,
+				commentId: resj.id
+			}
+			fetch(route, {
+				method: 'put',
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json',
+					'Authorization': 'Bearer' + ' ' + token
+				},
+				body: JSON.stringify(populateNew)
+			})
+			console.log('update suxess!', resj)
+			let type = 'post'
+			promptSuccess(type)
+
+
+		})
+		.catch(err => {
+			console.log('updateFail', err)
+			let type = 'update'
+			handleFail(type)
+		})
+}
+
+
+/*********END*COMMENTS********** */
 
 /*********BUILDHOME*********** */
 function buildHome() {
-	
+
 	$('main').addClass('sinkBack')
 	$('body').prepend(homePage);
 	getFeed()
@@ -251,7 +348,7 @@ function promptSuccess(type) {
 
 /*********HANDLEFAIL*********** */
 function handleFail(type) {
-	let msg = type === 'login' ? failedLogin : failedUpdate 
+	let msg = type === 'login' ? failedLogin : failedUpdate
 	console.log(type)
 	$('.accessView').addClass('hidden')
 	$('main').append(msg);
@@ -274,7 +371,7 @@ function routeFail() {
 
 /*********LOGIN*********** */
 function promptAuth() {
-	
+
 	const fullname = $('.fullNameInput').val('');
 	const id = $('.userNameInput').val('');
 	const pwd = $('.userPassInput').val('');
@@ -291,37 +388,37 @@ function logIn(route, newUser) {
 		password: pwd
 	};
 	const createNew = {
-			fullname: fullname,
-			username: id,
-			password: pwd
+		fullname: fullname,
+		username: id,
+		password: pwd
 	};
 	let payLoad = !fullname ? logIn : createNew
-		console.log(payLoad, 'preauth send')
-		fetch(route, {
-			method: 'post',
-			headers: {
-				'Accept': 'application/json',
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(payLoad)
-		})
+	console.log(payLoad, 'preauth send')
+	fetch(route, {
+		method: 'post',
+		headers: {
+			'Accept': 'application/json',
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(payLoad)
+	})
 		.then(res => res.json())
 		.then(resj => {
 			console.log(resj, resj.user)
-				localStorage.setItem('user', JSON.stringify(resj.user))
-				localStorage.setItem('token', `${resj.token}`)
-				// let user = JSON.parse(localStorage.getItem('user'))
-				$('.accessView').addClass('hidden')
-				buildHome()
-			})
-			.catch(err => {
-				console.log('loginFail')
-				let type = 'login'
-				handleFail(type)
-			})
+			localStorage.setItem('user', JSON.stringify(resj.user))
+			localStorage.setItem('token', `${resj.token}`)
+			// let user = JSON.parse(localStorage.getItem('user'))
+			$('.accessView').addClass('hidden')
+			buildHome()
+		})
+		.catch(err => {
+			console.log('loginFail')
+			let type = 'login'
+			handleFail(type)
+		})
 };
-		
-		/*********NAVBAR*********** */
+
+/*********NAVBAR*********** */
 function handleNav() {
 	console.log('handlinNAV')
 	$('body').on('click', 'button.eventDetailsLink', function (e) {
@@ -355,22 +452,22 @@ function handleNav() {
 	// if(event.target.name === 'accountLink') {getAccount()}
 	// if(event.target.name === 'Logout') {logOut()}
 };
-	
+
 
 function watchFetchActions() {
 	let route;
 
-				/*START POST */
+	/*START POST */
 	$('body').on('click', 'button.postFormSubmit', function (e) {
 		e.preventDefault();
 		console.log('shipping newPost!')
 		route = 'posts/create'
 		shipPost(route);
 	});
-							/*STOP POST */
-						/************************ */
-							/*START EDIT */
-	
+	/*STOP POST */
+	/************************ */
+	/*START EDIT */
+
 	$('body').on('click', 'button.profileEditButton', function (e) {
 		e.preventDefault();
 		console.log('switching route for update')
@@ -381,9 +478,9 @@ function watchFetchActions() {
 		e.preventDefault();
 		submitEdit(route)
 	})
-							/*STOP EDIT */
-						/************************ */
-							/*START INTRO */
+	/*STOP EDIT */
+	/************************ */
+	/*START INTRO */
 
 	$('body').on('click', 'button.introLoginButton', function (e) {
 		e.preventDefault();
@@ -405,13 +502,16 @@ function watchFetchActions() {
 		e.preventDefault();
 		toggleIntro()
 	});
-							/*STOP INTRO */
+	/*STOP INTRO */
 }
 
 
 
 
 function watchPageActions() {
+
+	let postId;
+
 	$('body').on('click', 'button.successResponseButton', function (e) {
 		e.preventDefault();
 		console.log('going to home page!')
@@ -420,7 +520,7 @@ function watchPageActions() {
 	$('body').on('click', 'a.postTitle', function (e) {
 		e.preventDefault();
 		console.log('Just Building a home for the console dwarves!')
-		let postId = $(this).attr('id')
+		postId = $(this).attr('id')
 		getPost(postId)
 	});
 	$('body').on('click', 'button.addComment', function (e) {
@@ -431,7 +531,8 @@ function watchPageActions() {
 	$('body').on('click', 'button.commentFormSubmit', function (e) {
 		e.preventDefault();
 		console.log('DirtBag', $(this))
-		addComment()
+		route = 'comments/create'
+		postComment(route, postId)
 	});
 
 
@@ -439,7 +540,7 @@ function watchPageActions() {
 		e.preventDefault();
 		console.log('Just Building a home for the console dwarves!')
 		let postId = $(this).attr('id')
-		
+
 	});
 
 
@@ -464,6 +565,6 @@ $(document).ready(function () {
 	watchFetchActions()
 	watchPageActions()
 	evalPageState()
-	
-	
+
+
 })

@@ -321,7 +321,7 @@ function commentPalette() {
 		<div class="form-inputs">
 
 			<label for="content-input">
-				<textarea id="content-input" class="CommentContentInput" cols="60" rows="8" type="text" name="content-input" placeholder="Enter your comment here"></textarea>
+				<textarea id="content-input" class="commentContentInput" cols="60" rows="8" type="text" name="content-input" placeholder="Enter your comment here"></textarea>
 			</label>
 
 			<button class="commentFormSubmit" type ="submit">Post</button>

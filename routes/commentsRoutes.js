@@ -12,6 +12,7 @@ passport.use('JWT', jwtStrategy)
 const jwtAuth = passport.authenticate('JWT', { session: false})
 
 const CommentPost = require('../models/commentsModel')
+const Post = require('./../models/postsModel')
 
 router.use(bodyParser.json())
 router.use('*', jwtAuth)
@@ -42,6 +43,7 @@ router.get('/', (req, res) => {
 /*Can create a new CommentPost */
 /*Access to All */
 router.post('/create', jsonParser, (req, res) => {
+	console.log('buddy', req.body)
 
 	/*forEach wasn't handling err - allowed to pass to create */
 	const requiredFields = ['text', 'userId']
@@ -58,20 +60,22 @@ router.post('/create', jsonParser, (req, res) => {
 	const { text, userId } = req.body
 
 	console.log('made it to create!')
-	console.log(userId)
-
-	CommentPost.create({
+	const comment = {
 		text,
 		userId
-	})
+	};
+
+	CommentPost.create(comment)
 		.then(newComment => {
-			res.json(newComment)
-			res.status(202)
+			console.log('new commentsial', newComment)
+			res.json(newComment).status(202)	
+			
 		})
 		.catch(err => {
 			return res.json(err.message).status(400)
-		})
-
+		});
+		
+		
 })
 
 /*Admin or author only can update details */
