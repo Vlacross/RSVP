@@ -1,35 +1,30 @@
 
 
 
+function toggleIntro() {
+	$('.introView').removeClass('hidden')
+	$('.accessView').addClass('hidden')
+	$('.fullNameLabel').addClass('hidden').attr('required', false)
+}
+
 function renderSignIn() {
 
 	console.log('Signing In!')
-	const route = 'login'
 	$('.introView').addClass('hidden')
 	$('.accessView').removeClass('hidden')
-	promptAuth(route);
+	promptAuth();
 };
 
 
 function renderSignUp() {
 
 	console.log('Signing Up!')
-	const route = 'login/create'
 	$('.introView').addClass('hidden')
 	$('.accessView').removeClass('hidden')
 	$('.fullNameLabel').removeClass('hidden').attr('required', true)
-	promptAuth(route);
+	promptAuth();
 };
 
-// function watchIntro() {
-
-// 	$('body').on('click', '.introPageFieldset', function(e) {
-// 		e.preventDefault();
-// 		if(event.target.name !== 'getLogIn') {
-// 			renderSignUp()}
-// 		else {renderSignIn()}
-// 	})
-// };
 /**********LOGOUT*********** */
 
 function logOut() {
@@ -43,28 +38,64 @@ function logOut() {
 
 /*********ACCOUNT*********** */
 
+function submitEdit(route) {
+
+	console.log(`sending update to ${route}`)
+
+	let user = JSON.parse(localStorage.getItem('user'))
+	console.log(user.id)
+	let token = localStorage.getItem('token')
+	let fullName = $('.fullNameInput').val();
+	let userName = $('.userNameInput').val();
+	let pwd = $('.userPassInput').val();
+	let updatedUser = {
+		id: user.id,
+		fullname: fullName,
+		username: userName,
+		password: pwd
+	};
+		console.log(updatedUser, 'preUpdate send')
+		fetch(route, {
+			method: 'put',
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json',
+				'Authorization': 'Bearer' + ' ' + token
+			},
+			body: JSON.stringify(updatedUser)
+		})
+		.then(res => res.json())
+		.then(resj => {
+			console.log('update suxess!', resj)
+			localStorage.removeItem('user')
+			localStorage.setItem('user', JSON.stringify(resj.user))
+			
+				promptSuccess()
+				
+				
+				// buildHome()
+			})
+			.catch(err => {
+				console.log('updateFail', err)
+				let type = 'update'
+				handleFail(type)
+			})
+};
+
 function editAccount() {
 	let user = JSON.parse(localStorage.getItem('user'))
 	let editForm = viewSwitch(editProfile(user))
+	console.log(user, editForm)
 	$('.viewWrapper').replaceWith(editForm)
-	
+
 }
 
 function getAccount() {
 	let user = JSON.parse(localStorage.getItem('user'))
-	let route = 'users/findme';
-	let method = 'GET';
-	quickFetch(route, method)
-	.then(res => res.json())
-	.then(resj => {
-		console.log('reckled', user)
-		let acc = viewSwitch(accountProfile(user));
-		console.log(acc)
-		$('.viewWrapper').replaceWith(acc)
-		// TODO: move these to document.ready at bottom of file
-	// watchEdit(resj)
 
-	})
+	let acc = viewSwitch(accountProfile(user));
+	
+			$('.viewWrapper').replaceWith(acc)
 
 };
 
@@ -74,7 +105,7 @@ function buildUsers(usrs) {
 	usrs.forEach(usr => {
 		listings.push(usersListing(usr))
 	})
-	
+
 	let list = listings.join(' ')
 	return viewSwitch(list)
 }
@@ -84,12 +115,12 @@ function showUsers(token) {
 	let route = 'users/find';
 	let method = 'GET';
 	quickFetch(route, method)
-	.then(res => res.json())
-	.then(resj => {
-		let users = buildUsers(resj)
-		$('.viewWrapper').replaceWith(users)
-		
-	})
+		.then(res => res.json())
+		.then(resj => {
+			let users = buildUsers(resj)
+			$('.viewWrapper').replaceWith(users)
+
+		})
 	console.log('showing users list')
 };
 
@@ -111,12 +142,12 @@ function getFeed() {
 	let method = 'GET';
 
 	quickFetch(route, method)
-	.then(res => res.json())
-	.then(resj => {
-		let thread = buildFeed(resj)
-		$('.viewWrapper').replaceWith(thread)
-	})
-	.catch(err => {console.log(err)})
+		.then(res => res.json())
+		.then(resj => {
+			let thread = buildFeed(resj)
+			$('.viewWrapper').replaceWith(thread)
+		})
+		.catch(err => { console.log(err) })
 
 };
 
@@ -126,18 +157,29 @@ function buildHome() {
 	$('main').addClass('sinkBack')
 	$('body').prepend(homePage);
 	getFeed()
+
+
+}
+
+/********SHOW*SUCCESS*********** */
+function promptSuccess() {
+
 	
+	$('.viewWrapper').replaceWith(viewSwitch(successPrompt))
+
 	
 }
 
-/*********LOGINFAIL*********** */
-function handleFail() {
+/*********HANDLEFAIL*********** */
+function handleFail(type) {
+	let msg = type === 'login' ? failedLogin : failedUpdate 
+	console.log(type)
 	$('.accessView').addClass('hidden')
-	$('main').append(failedLogin);
+	$('main').append(msg);
 
-	
 
-	$('.failedResponseButton').one('click', function(e) {
+
+	$('.failedResponseButton').one('click', function (e) {
 		e.preventDefault();
 		routeFail()
 	})
@@ -152,116 +194,142 @@ function routeFail() {
 };
 
 /*********LOGIN*********** */
-function promptAuth(route) {
-	console.log(`sending fetch to ${route}`)
-			const fullname = $('.fullNameInput').val('');
-			const id = $('.userNameInput').val('');
-			const pwd = $('.userPassInput').val('');
-
-
+function promptAuth() {
 	
-		$('body').on('submit', '.authForm', function(e) {
-			e.preventDefault();
-			const fullname = $('.fullNameInput').val();
-			const id = $('.userNameInput').val();
-			const pwd = $('.userPassInput').val();
-			const logIn = {
-					fullname: fullname,
-					username: id,
-					password: pwd
-				};
-				console.log(logIn, 'preauth send')
-			fetch(route, {
-				method: 'post',
-				headers: {
-					'Accept': 'application/json',
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(logIn)
-			})
-			.then(res => res.json())
-			.then(resj => {
-				console.log(resj, resj.user)
+	const fullname = $('.fullNameInput').val('');
+	const id = $('.userNameInput').val('');
+	const pwd = $('.userPassInput').val('');
+}
+
+
+function logIn(route, newUser) {
+	// let payLoad = !newUser ? login : newUser
+	console.log(`sending fetch to ${route}`)
+	console.log('hitting the IN')
+	const fullname = $('.fullNameInput').val();
+	const id = $('.userNameInput').val();
+	const pwd = $('.userPassInput').val();
+	const logIn = {
+		fullname: fullname,
+		username: id,
+		password: pwd
+	};
+	let payLoad = !newUser ? logIn : newUser
+		console.log(payLoad, 'preauth send')
+		fetch(route, {
+			method: 'post',
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(payLoad)
+		})
+		.then(res => res.json())
+		.then(resj => {
+			console.log(resj, resj.user)
 				localStorage.setItem('user', JSON.stringify(resj.user))
 				localStorage.setItem('token', `${resj.token}`)
 				// let user = JSON.parse(localStorage.getItem('user'))
-	
+				
 				buildHome()
 			})
 			.catch(err => {
 				console.log('loginFail')
-				handleFail()
+				let type = 'login'
+				handleFail(type)
 			})
-		})
 };
-
-/*********NAVBAR*********** */
+		
+		/*********NAVBAR*********** */
 function handleNav() {
 	console.log('handlinNAV')
-	$('body').on('click', 'button.eventDetailsLink', function(e) {
+	$('body').on('click', 'button.eventDetailsLink', function (e) {
 		e.preventDefault();
 		showDetails()
 	});
-	$('body').on('click', 'button.usersListLink', function(e) {
+	$('body').on('click', 'button.usersListLink', function (e) {
 		e.preventDefault();
 		showUsers()
 	});
-	$('body').on('click', 'button.eventNewsfeedLink', function(e) {
+	$('body').on('click', 'button.eventNewsfeedLink', function (e) {
 		e.preventDefault();
 		getFeed()
 	});
-	$('body').on('click', 'button.accountLink', function(e) {
+	$('body').on('click', 'button.accountLink', function (e) {
 		e.preventDefault();
 		getAccount()
 	});
-	$('body').on('click', 'button.logOut', function(e) {
+	$('body').on('click', 'button.logOut', function (e) {
 		e.preventDefault();
 		logOut()
 	});
-		// if(event.target.name === 'eventDetailsLink') {showDetails()}
-		// if(event.target.name === 'usersListLink') {showUsers()}
-		// if(event.target.name === 'eventNewsfeedLink') {getFeed()}
-		// if(event.target.name === 'accountLink') {getAccount()}
-		// if(event.target.name === 'Logout') {logOut()}
+	// if(event.target.name === 'eventDetailsLink') {showDetails()}
+	// if(event.target.name === 'usersListLink') {showUsers()}
+	// if(event.target.name === 'eventNewsfeedLink') {getFeed()}
+	// if(event.target.name === 'accountLink') {getAccount()}
+	// if(event.target.name === 'Logout') {logOut()}
 };
+	
 
+function watchFetchActions() {
+	let route;
 
-
-function watchEdit() {
-	console.log('watchingEdit')
-$('body').on('click', 'button.profileEditButton', function(e) {
-	e.preventDefault();
-	console.log('editedit')
-	editAccount();
-});
-$('body').on('click', 'button.editSubmitButton', function(e) {
-	e.preventDefault();
-	console.log('editsubmitworx')
-})
-	// if(event.target.name === 'profileEditButton') {editAccount(user, token)}
-	// if(event.target.name === 'editSubmitButton') {console.log('editsubmitworx')}
-};
-
-function watchIntro() {
-
-	$('body').on('click', 'button.introLoginButton', function(e) {
+	/*START EDIT */
+	$('body').on('click', 'button.profileEditButton', function (e) {
 		e.preventDefault();
+		console.log('switching route for update')
+		route = 'users/details'
+		editAccount();
+	});
+	$('body').on('click', 'button.editSubmitButton', function (e) {
+		e.preventDefault();
+		
+		submitEdit(route)
+	})
+							/*STOP EDIT */
+						/************************ */
+							/*START INTRO */
+
+	$('body').on('click', 'button.introLoginButton', function (e) {
+		e.preventDefault();
+		console.log('switching route for login')
+		route = 'login'
 		renderSignIn();
 	});
-	$('body').on('click', 'button.introRegisterButton', function(e) {
+	$('body').on('click', 'button.introRegisterButton', function (e) {
 		e.preventDefault();
+		console.log('switching route for create')
+		route = 'login/create'
 		renderSignUp();
 	});
+	$('body').on('click', 'button.loginSubmit', function (e) {
+		e.preventDefault();
+		logIn(route);
+	});
+	$('body').on('click', 'button.toggleIntro', function (e) {
+		e.preventDefault();
+		toggleIntro()
+	});
+	/*STOP INTRO */
 }
-		
 
-$(document).ready(function() {
+function watchPageActions() {
+	$('body').on('click', 'button.successResponseButton', function (e) {
+		e.preventDefault();
+		console.log('going to home page!')
+		buildHome();
+	});
+}
+
+
+$(document).ready(function () {
 	let token = localStorage.getItem('token');
 	console.log('hittingJQscript!')
-	watchEdit()
+	// watchEdit()
 	handleNav()
-	watchIntro()
-	if(token !== null) {
+	watchFetchActions()
+	watchPageActions()
+	if (token !== null) {
 		buildHome()
 	}
 	
