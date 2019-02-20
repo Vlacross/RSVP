@@ -169,6 +169,7 @@ a:hover {
     border: solid 1px black;
     padding: 12px;
     margin: 8px;
+   
 }
 
 .subPostTitle {
@@ -188,6 +189,12 @@ a:hover {
 }
 
 .commentListing {
+    border: solid 1px black;
+    padding: 12px;
+    margin: 8px;
+}
+
+.palette {
     border: solid 1px black;
     padding: 12px;
     margin: 8px;

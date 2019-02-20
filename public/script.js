@@ -200,6 +200,22 @@ function getFeed() {
 
 };
 /*********SINGLE*POST*SHOW********** */
+
+
+							/*********HANDLE*COMMENTS********** */
+
+function createComment() {
+	// let commentPalette = commentPalette() 
+	$('.commentsList').append(commentPalette)
+
+}
+
+function addComment() {
+
+}
+
+
+							/*********END*COMMENTS********** */
 	function getPost(postId) {
 		let route = `posts/find/${postId}`;
 		let method = 'GET';
@@ -394,6 +410,7 @@ function watchFetchActions() {
 
 
 
+
 function watchPageActions() {
 	$('body').on('click', 'button.successResponseButton', function (e) {
 		e.preventDefault();
@@ -406,6 +423,27 @@ function watchPageActions() {
 		let postId = $(this).attr('id')
 		getPost(postId)
 	});
+	$('body').on('click', 'button.addComment', function (e) {
+		e.preventDefault();
+		console.log('You may just be a bag full of soil', $(this).siblings())
+		createComment()
+	});
+	$('body').on('click', 'button.commentFormSubmit', function (e) {
+		e.preventDefault();
+		console.log('DirtBag', $(this))
+		addComment()
+	});
+
+
+	$('body').on('click', 'button.removeComment', function (e) {
+		e.preventDefault();
+		console.log('Just Building a home for the console dwarves!')
+		let postId = $(this).attr('id')
+		
+	});
+
+
+
 }
 
 

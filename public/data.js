@@ -205,6 +205,7 @@ function eventPost(post, count) {
 	let eventPost =
 `
 <li  class="eventPost">
+
 	<div class="subPostTitle">
 		<a tabindex="${count}" class="postTitle" id="${id}">Title: ${title}</a>
 	</div>
@@ -213,10 +214,11 @@ function eventPost(post, count) {
 		<h3>By: ${author}</h3>
 		<h3>Posted on ${date}</h3>
 	</div>
+
 	<p>${body}</p>
 	<p>${comments} Comments</p>
+	
 </li>
-
 `
 return eventPost
 };
@@ -230,8 +232,10 @@ let { listing, text } = comment
 let remark = 
 `
 <li class="commentListing">
-<h3>${listing}</h3>
-<p>${text}</p>
+
+	<h3>${listing}</h3>
+	<p>${text}</p>
+	<button class="removeComment">remove</button>
 </li>
 `
 return remark;
@@ -273,23 +277,66 @@ function buildPost(post) {
 
 `
 <li  class="eventPost">
+
 	<div class="subPostTitle">
-		<a class="postTitle" id="${id}">Title: ${title}</a>
+		<h1 class="postTitle" id="${id}">Title: ${title}</h1>
 	</div>
 
 	<div class="subPost">
 		<h3>By: ${author}</h3>
 		<h3>Posted on ${date}</h3>
 	</div>
+
 	<p>${body}</p>
-	<ul class="comments">${remarks} </ul>
+
+	<div class="subPostComment">
+			<button class="addComment">Comment</button>
+		<ul class="commentsList">${remarks} </ul>
+	</div>
+
 </li>
 
 `
 return eventPost
-}
+};
 
 
+// function commentWrap(commentView) {
+// 	let viewWrap =
+// `
+// <section class="viewWrapper">${commentView}</section>
+// `
+// return viewWrap;
+// }
+
+
+function commentPalette() {
+
+	let palette = 
+`
+<li class="palette">
+
+	<form class="commentForm">
+		
+		<div class="form-inputs">
+
+			<label for="content-input">
+				<textarea id="content-input" class="CommentContentInput" cols="60" rows="8" type="text" name="content-input" placeholder="Enter your comment here"></textarea>
+			</label>
+
+			<button class="commentFormSubmit" type ="submit">Post</button>
+
+		</div>
+
+		
+	</form>
+
+</li>
+
+
+`
+return palette
+};
 
 
 
