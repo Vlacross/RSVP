@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const bodyParser = require('body-parser')
 const jsonParser = bodyParser.json()
+const bcrypt = require('bcryptjs')
 
 const mongoose = require('mongoose')
 
@@ -30,7 +31,7 @@ router.get('/', (req, res) => {
 
 /*can search user*/
 router.get('/find', (req, res) => {
-	console.log('tried to find')
+	console.log('tried to find all users')
 	User.find()
 		.then(users => {
 			let list = [];
@@ -45,13 +46,13 @@ router.get('/find', (req, res) => {
 /*find current account in use/ find own accout details */
 
 router.get('/findme', (req, res) => {
-	console.log(req.user)
+	console.log('finding', req.user.username)
 	res.send(req.user).status(200).end()
 })
 
 /*Can create a new user account */
 router.post('/create', (req, res) => {
-	console.log(req.body)
+	console.log('hitting the doors of creation')
 
 	/*forEach wasn't handling err - allowed to pass to create */
 	const requiredFields = ['fullname', 'username', 'password']
@@ -98,26 +99,43 @@ router.post('/test', function (req, res) {
 		.catch(err => console.log(err))
 })
 
+// (!req.params.id || !req.body.id || req.body.id !== req.params.id) 
+
 /*Admin or own User only can update details */
-router.put('/details/:id', (req, res) => {
-	if (!req.params.id || !req.body.id || req.body.id !== req.params.id) {
+router.put('/details/', (req, res) => {
+	console.log('updateCentrals', req.body)
+	if (!req.body.id) {
 		let msg = `Incomplete credentials!`
 		console.error(msg)
 		return res.status(400).json(msg).end()
 	}
 
-	const { fullname, username, password, id } = req.body
+	let { fullname, username, password, id } = req.body
+	
 	const newDetails = {
 		fullname,
 		username,
 		password
 	}
+
 	User.findByIdAndUpdate(id, { $set: newDetails }, { new: true })
 		.then(updatedUser => {
-			return res.json(updatedUser.serialize()).status(203).end()
+			 updatedUser.save(function(err) {
+				if(err) throw new Error(err)
+			})
+			return updatedUser
+		})
+		.then(updatedUser => {
+			let obj = {user: 
+				{id: updatedUser.id,
+				fullname: updatedUser.fullname,
+				username: updatedUser.username}
+			}
+			return res.json(obj).status(203).end()
 		})
 		.catch(err => console.log(err, 22))
 })
+
 
 
 
