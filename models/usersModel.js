@@ -9,7 +9,8 @@ const userSchema = new Schema({
   fullname: { type: String, require: true },
   username: { type: String, require: true, index: { unique: true } },
   password: { type: String, required: true },
-  role: { type: String, require: true }
+  role: { type: String, require: true },
+  attendanceVerdict: { type: String, require: true }
 })
 
 userSchema.set('toJSON', {
@@ -42,6 +43,19 @@ userSchema.pre('save', function (next) {
       next()
     })
   })
+})
+
+userSchema.pre('findOneAndUpdate', function(next) {
+  const password = this.getUpdate().$set.password;
+  if(!password) {
+    return next(err)
+  }
+  const salt = bcrypt.genSaltSync();
+  const hash = bcrypt.hashSync(password, salt);
+  this.getUpdate().$set.password = hash
+  console.log(password, hash, 'hookHittin')
+  next()
+/*https://github.com/Automattic/mongoose/issues/4575 */
 })
 
 userSchema.methods.comparePassword = function (pwd, done) {
