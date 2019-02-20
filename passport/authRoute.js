@@ -44,9 +44,10 @@ router.post('/check', jwtAuth, (req, res) => {
 
 router.post('/', localAuth, (req, res) => {
 	if(!req) {console.log('err')}
-	console.log('maider This farm!')
+	console.log('maider This farm!', req.user)
 	let token = buildToken(req.user.username)
 	let user = {
+		id: req.user._id,
 		fullname: req.user.fullname,
 		username: req.user.username
 	}
