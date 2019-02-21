@@ -41,9 +41,7 @@ function logOut() {
 function submitEdit(route) {
 
 	console.log(`sending update to ${route}`)
-
 	let user = JSON.parse(localStorage.getItem('user'))
-	console.log(user.id)
 	let token = localStorage.getItem('token')
 	let fullName = $('.fullNameInput').val();
 	let userName = $('.userNameInput').val();
@@ -71,9 +69,6 @@ function submitEdit(route) {
 			localStorage.setItem('user', JSON.stringify(resj.user))
 			let type = 'update'
 			promptSuccess(type)
-
-
-			// buildHome()
 		})
 		.catch(err => {
 			console.log('updateFail', err)
@@ -160,9 +155,6 @@ function shipPost(route) {
 			console.log('update suxess!', resj)
 			let type = 'post'
 			promptSuccess(type)
-
-
-			// buildHome()
 		})
 		.catch(err => {
 			console.log('updateFail', err)
@@ -199,6 +191,7 @@ function getFeed() {
 		.catch(err => { console.log(err) })
 
 };
+/*******************************************************************************************************incomplete*************************************/
 /*********SINGLE*POST*EDIT********** */
 function editPost() {
 
@@ -265,6 +258,16 @@ function getPost(postId) {
 		.catch(err => { console.log(err) })
 
 }
+
+/*********SINGLE*POST*DELETE********** */
+
+function deletePost() {
+
+
+}
+
+
+
 /*********HANDLE*COMMENTS********** */
 
 function createComment() {
@@ -295,6 +298,7 @@ function postComment(route, postId) {
 	})
 		.then(res => res.json())
 		.then(resj => {
+			console.log('middleFetch', resj)
 			let route = `posts/comment/${postId}`
 			let populateNew = {
 				postId: postId,
@@ -321,6 +325,52 @@ function postComment(route, postId) {
 			handleFail(type)
 		})
 }
+/******************************************************************************************************************************************************* */
+/**********COMMENTS**DELETE********** */
+function deleteComment(removalId, postId) {
+	let route = `comments/delete/${removalId}`
+	console.log('...theres just nothing left to say...')
+	console.log('route', route)
+	fetch(route, {
+		method: 'delete',
+		headers: {
+			'Accept': 'application/json',
+			'Content-Type': 'application/json',
+			'Authorization': 'Bearer' + ' ' + token
+		}
+	})
+		.then(res => console.log(res.status))
+		
+			console.log('middleFetch', removalId)
+			route = `posts/decomment/${removalId}`
+			let unPopulate = {
+				postId: postId,
+				commentId: removalId
+			}
+			fetch(route, {
+				method: 'put',
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json',
+					'Authorization': 'Bearer' + ' ' + token
+				},
+				body: JSON.stringify(unPopulate)
+			})
+			.then(res => res.json())
+			.then(resj => {
+			console.log('depopulation suxess!', resj)
+			let type = 'post'
+			promptSuccess(type)
+
+
+		})
+		.catch(err => {
+			console.log('updateFail', err)
+			let type = 'update'
+			handleFail(type)
+		})
+}
+
 
 
 /*********END*COMMENTS********** */
@@ -349,6 +399,8 @@ function handleFail(type) {
 	console.log(type)
 	$('.accessView').addClass('hidden')
 	$('main').append(msg);
+
+	// $('.viewWrapper').replaceWith(viewSwitch(msg))
 
 
 
@@ -512,6 +564,7 @@ function watchPageActions() {
 	$('body').on('click', 'button.successResponseButton', function (e) {
 		e.preventDefault();
 		console.log('going to home page!')
+		$('.homePageView').remove()
 		buildHome();
 	});
 	$('body').on('click', 'a.postTitle', function (e) {
@@ -541,12 +594,12 @@ function watchPageActions() {
 		postComment(route, postId)
 	});
 
-
+																			/*************************************DELETE */
 	$('body').on('click', 'button.removeComment', function (e) {
 		e.preventDefault();
-		console.log('Just Building a home for the console dwarves!')
-		let postId = $(this).attr('id')
-
+		console.log('Just put the Ants in the drawer!')
+		let removalId = $(this).parent().attr('id')
+		deleteComment(removalId, postId)
 	});
 
 

@@ -120,6 +120,24 @@ router.put('/comment/:id', (req, res) => {
 		.catch(err => console.log(err, 23))
 })
 
+router.put('/decomment/:id', (req, res) => {
+	console.log('bodySon', req.body)
+	if (!req.params.id) {
+		let msg = `Incomplete credentials!`
+		console.error(msg)
+		return res.status(400).json(msg).end()
+	}
+
+	const { postId, commentId } = req.body
+	
+	Post.findByIdAndUpdate(postId, { $pull: {'comments': commentId} }, { new: true })
+		.then(updatedPost => {
+			return res.json(updatedPost.serialize()).status(203).end()
+		})
+		.catch(err => console.log(err, 23))
+})
+
+
 
 
 module.exports = router

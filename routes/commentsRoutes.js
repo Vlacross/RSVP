@@ -100,4 +100,19 @@ router.put('/details/:id', (req, res) => {
 
 
 
+
+router.delete('/delete/:id', (req, res) => {
+	console.log('hit the removal wall')
+    if (!req.params.id) {
+        console.error('missing \'id\'!!')
+        return res.status(400)
+	};
+	console.log('getting to delete!!')
+    CommentPost.findByIdAndDelete(req.params.id)
+        .then(res.status(204).end()
+        )
+});
+
+
+
 module.exports = router

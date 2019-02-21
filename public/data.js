@@ -184,7 +184,7 @@ function constructPost() {
 				</label>
 
 				<label for="content-input">Content: 
-					<textarea id="content-input" class="eventPostContentInput" cols="40" rows="10" type="text" name="content-input"></textarea>
+					<textarea class="eventPostContentInput" cols="40" rows="10" type="text" name="content-input"></textarea>
 				</label>
 
 				<button class="postFormSubmit" type ="submit">Post</button>
@@ -226,12 +226,11 @@ return eventPost
 /* compile comment Data into DOM content*/
 
 function buildComment(comment) {
-let { listing, text } = comment
-
+let { listing, text, id } = comment
 
 let remark = 
 `
-<li class="commentListing">
+<li class="commentListing" id="${id}">
 
 	<h3>${listing}</h3>
 	<p>${text}</p>
@@ -270,6 +269,7 @@ function generateRemarks(comments) {
 
 function buildPost(post) {
 	let { title, author, body, comments, id } = post
+	console.log('commies', comments)
 	let remarks = generateRemarks(comments)
 	
 	let eventPost =
@@ -323,7 +323,7 @@ function commentPalette() {
 		<div class="form-inputs">
 
 			<label for="content-input">
-				<textarea id="content-input" class="commentContentInput" cols="60" rows="8" type="text" name="content-input" placeholder="Enter your comment here"></textarea>
+				<textarea class="commentContentInput" cols="60" rows="8" type="text" name="content-input" placeholder="Enter your comment here"></textarea>
 			</label>
 
 			<button class="commentFormSubmit" type ="submit">Post</button>
