@@ -183,6 +183,12 @@ a:hover {
     justify-content: space-between;
 }
 
+.postButtons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
 .postTitle {
     font-size: 1.6em;
     text-decoration: bold;

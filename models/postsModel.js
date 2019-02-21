@@ -29,16 +29,6 @@ postSchema.methods.serialize = function () {
     title: this.title,
     author: this.author.fullname,
     body: this.body,
-    comments: this.comments.length,
-    createdAt: this.createdAt
-  }
-}
-
-postSchema.methods.serializeSingle = function () {
-  return {
-    title: this.title,
-    author: this.author.fullname,
-    body: this.body,
     comments: this.comments,
     createdAt: this.createdAt
   }

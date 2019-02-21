@@ -217,7 +217,7 @@ function eventPost(post, count) {
 	</div>
 
 	<p>${body}</p>
-	<p>${comments} Comments</p>
+	<p>${comments.length} Comments</p>
 	
 </li>
 `
@@ -285,8 +285,10 @@ function buildPost(post) {
 <li  class="eventPost">
 
 	<div class="subPostTitle">
-		<h1 class="postTitle" id="${id}">Title: ${title}</h1>
+		<h1 class="postTitle">Title: ${title}</h1>
 	</div>
+
+	
 
 	<div class="subPost">
 		<h3>By: ${author}</h3>
@@ -296,7 +298,11 @@ function buildPost(post) {
 	<p>${body}</p>
 
 	<div class="subPostComment">
-			<button class="addComment">Comment</button>
+
+			<div class="postButtons">
+				<button class="addComment">Comment</button>
+				<button class="postDeleteButton" data="${id}">Remove Post</button>
+			</div>
 		<ul class="commentsList">${remarks} </ul>
 	</div>
 

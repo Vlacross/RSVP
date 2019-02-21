@@ -41,7 +41,7 @@ router.get('/find/:id', (req, res) => {
 	Post.findOne({ _id: req.params.id })
 		.then(post => {
 
-			res.json(post.serializeSingle())
+			res.json(post.serialize())
 		});
 	res.status(200);
 })
@@ -134,6 +134,19 @@ router.put('/decomment/:id', (req, res) => {
 		.then(updatedPost => {
 			return res.json(updatedPost.serialize()).status(203).end()
 		})
+		.catch(err => console.log(err, 23))
+})
+
+router.delete('/delete/:id', (req, res) => {
+	console.log('delPoSon')
+	if (!req.params.id) {
+		let msg = `Incomplete credentials!`
+		console.error(msg)
+		return res.status(400).json(msg).end()
+	}
+
+	Post.findByIdAndDelete(req.params.id)
+		.then(res.status(204).end())
 		.catch(err => console.log(err, 23))
 })
 

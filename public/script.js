@@ -259,11 +259,20 @@ function getPost(postId) {
 
 }
 
+/******************************************************************************************************************************************************* */
 /*********SINGLE*POST*DELETE********** */
 
-function deletePost() {
+function deletePost(route) {
+	let method = 'delete'
 
-
+	quickFetch(route, method)
+		
+		.then(res => {
+			console.log('deposter Out', res.status)
+			let type = 'post'
+			promptSuccess(type)
+		})
+		.catch(err => { console.log(err) })
 }
 
 
@@ -600,6 +609,12 @@ function watchPageActions() {
 		console.log('Just put the Ants in the drawer!')
 		let removalId = $(this).parent().attr('id')
 		deleteComment(removalId, postId)
+	});
+	$('body').on('click', 'button.postDeleteButton', function (e) {
+		e.preventDefault();
+		console.log('Just drop the ship then...')
+		route = `posts/delete/${postId}`
+		deletePost(route)
 	});
 
 
