@@ -157,8 +157,8 @@ function shipPost(route) {
 			promptSuccess(type)
 		})
 		.catch(err => {
-			console.log('updateFail', err)
-			let type = 'update'
+			console.log('postFail', err)
+			let type = 'post'
 			handleFail(type)
 		})
 
@@ -269,7 +269,7 @@ function deletePost(route) {
 		
 		.then(res => {
 			console.log('deposter Out', res.status)
-			let type = 'post'
+			let type = 'delete'
 			promptSuccess(type)
 		})
 		.catch(err => { console.log(err) })
@@ -330,7 +330,7 @@ function postComment(route, postId) {
 		})
 		.catch(err => {
 			console.log('updateFail', err)
-			let type = 'update'
+			let type = 'post'
 			handleFail(type)
 		})
 }
@@ -368,14 +368,14 @@ function deleteComment(removalId, postId) {
 			.then(res => res.json())
 			.then(resj => {
 			console.log('depopulation suxess!', resj)
-			let type = 'post'
+			let type = 'delete'
 			promptSuccess(type)
 
 
 		})
 		.catch(err => {
 			console.log('updateFail', err)
-			let type = 'update'
+			let type = 'delete'
 			handleFail(type)
 		})
 }
@@ -396,17 +396,38 @@ function buildHome() {
 
 /********SHOW*SUCCESS*********** */
 function promptSuccess(type) {
-
-	let msg = type === 'update' ? updateSuccessPrompt : postSuccessPrompt
-
+  let msg;
+	switch(type) {
+		case 'update':
+			msg = updateSuccessPrompt;
+			break;
+		case 'post':
+			msg = postSuccessPrompt;
+			break;
+		case 'delete':
+			msg = deleteSuccessPrompt;
+		};
+		
 	$('.viewWrapper').replaceWith(viewSwitch(msg))
 }
 
 /*********HANDLEFAIL*********** */
 function handleFail(type) {
-	let msg = type === 'login' ? failedLogin : failedUpdate
-	console.log(type)
-	$('.accessView').addClass('hidden')
+	let msg;
+	switch(type) {
+		case 'update':
+			msg = failedUpdate;
+			break;
+		case 'post':
+			msg = failedPost;
+			break;
+		case 'delete':
+			msg = failedDelete;
+		case 'login':
+			msg = failedLogin;
+		$('.accessView').addClass('hidden')	
+		};
+
 	$('main').append(msg);
 
 	// $('.viewWrapper').replaceWith(viewSwitch(msg))
@@ -503,12 +524,6 @@ function handleNav() {
 		e.preventDefault();
 		createPost()
 	});
-
-	// if(event.target.name === 'eventDetailsLink') {showDetails()}
-	// if(event.target.name === 'usersListLink') {showUsers()}
-	// if(event.target.name === 'eventNewsfeedLink') {getFeed()}
-	// if(event.target.name === 'accountLink') {getAccount()}
-	// if(event.target.name === 'Logout') {logOut()}
 };
 
 

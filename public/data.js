@@ -24,6 +24,18 @@ function quickFetch(route, method) {
 }
 
 
+/*Let user know delete success */
+const deleteSuccessPrompt = 
+`
+<section class="deleteResponse" >
+	<h1>Success!</h1>
+	<h3>details successfully deleted!</h3>
+	<p>Click home to go back to main post feed! </p>
+	<button class="successResponseButton" name="successResponse">Home</button>
+</section>
+`;
+
+
 /*Let user know update success */
 const updateSuccessPrompt = 
 `
@@ -32,7 +44,6 @@ const updateSuccessPrompt =
 	<h3>details successfully updated!</h3>
 	<p>Click home to go back to main post feed! </p>
 	<button class="successResponseButton" name="successResponse">Home</button>
-	<button class="successResponseReturnButton" name="successResponseReturn">Back</button>
 </section>
 `;
 
@@ -67,6 +78,23 @@ const postSuccessPrompt =
 		<button class="failedUpdateButton" name="failedUpdate">Retry</button>
  </section>`;
 
+/*popup with details on returned fail */
+	var failedPost =
+	`<section class="failedUpdate" >
+    <h1>Woops!</h1>
+    <h3>Looks like something went wrong!</h3>
+		<p>Update failed! Check your username and password and try again! </p>
+		<button class="failedUpdateButton" name="failedUpdate">Retry</button>
+ </section>`;
+
+/*popup with details on returned fail */
+	var failedDelete =
+	`<section class="failedUpdate" >
+    <h1>Woops!</h1>
+    <h3>Looks like something went wrong!</h3>
+		<p>Update failed! Check your username and password and try again! </p>
+		<button class="failedUpdateButton" name="failedUpdate">Retry</button>
+ </section>`;
 
 /*eventFeed */
 
