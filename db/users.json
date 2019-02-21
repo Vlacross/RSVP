@@ -3,24 +3,18 @@
     "_id": "333333333333333333333300",
     "fullname": "User Zero",
     "username": "user0",
-    "password": "password0",
-    "createdAt" : ISODate("2019-02-21T16:18:26.125Z"),
-    "updatedAt" : ISODate("2019-02-21T16:18:26.125Z")  
+    "password": "password0" 
   },
   {
     "_id": "333333333333333333333301",
     "fullname": "User One",
     "username": "user1",
-    "password": "password1",
-    "createdAt" : ISODate("2019-02-21T16:18:26.125Z"),
-    "updatedAt" : ISODate("2019-02-21T16:18:26.125Z")  
+    "password": "password1" 
   },
   {
     "_id": "333333333333333333333302",
     "fullname": "User Two",
     "username": "user2",
-    "password": "password2",
-    "createdAt" : ISODate("2019-02-21T16:18:26.125Z"),
-    "updatedAt" : ISODate("2019-02-21T16:18:26.125Z")  
+    "password": "password2"  
   }  
 ]
