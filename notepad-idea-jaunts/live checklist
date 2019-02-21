@@ -1,0 +1,21 @@
+- Finish deletes
+        -user deletes
+        -post deletes 
+        -eventually find more elequant way to populate comment Ids into post data without double fetching
+
+-Fix handle Fail
+    -intro view(login&signup) buttons visible in background
+
+-Timestamps
+    -just added:
+        -would like to be able to give subtle representatio of posted dates
+
+-Newly created posts visual:
+        -not filling display div/section
+
+-Fully implement user (attending) data in schema
+        -change userlist to project categories
+
+-Build Event Details data and render sheet and link to nav tab
+
+-Add button to handle success to go back to post after adding a comment

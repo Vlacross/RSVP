@@ -10,6 +10,8 @@ const postSchema = new Schema({
   author: { type: ObjectId, ref: 'User' },
   body: String,
   comments: [{ type: ObjectId, ref: 'Comment' }]
+}, {
+  timestamps: true
 });
 
 postSchema.set('toJSON', {

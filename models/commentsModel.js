@@ -8,6 +8,8 @@ const ObjectId = Schema.Types.ObjectId
 const commentSchema = new Schema({
 	userId: { type: ObjectId, ref: 'User' },
 	text: String
+}, {
+	timestamps: true
 })
 
 commentSchema.set('toJSON', {

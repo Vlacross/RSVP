@@ -11,6 +11,8 @@ const userSchema = new Schema({
   password: { type: String, required: true },
   role: { type: String, require: true },
   attendanceVerdict: { type: String, require: true }
+}, {
+  timestamps: true
 })
 
 userSchema.set('toJSON', {
