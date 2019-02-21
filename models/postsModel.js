@@ -29,7 +29,8 @@ postSchema.methods.serialize = function () {
     title: this.title,
     author: this.author.fullname,
     body: this.body,
-    comments: this.comments.length
+    comments: this.comments.length,
+    createdAt: this.createdAt
   }
 }
 
@@ -38,7 +39,8 @@ postSchema.methods.serializeSingle = function () {
     title: this.title,
     author: this.author.fullname,
     body: this.body,
-    comments: this.comments
+    comments: this.comments,
+    createdAt: this.createdAt
   }
 }
 

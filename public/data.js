@@ -201,7 +201,8 @@ return newPostForm;
 /*template for event topic posts */
 
 function eventPost(post, count) {
-	let { title, author, body, comments, id } = post
+	let { title, author, body, comments, id, createdAt } = post
+	let date =  new Date(createdAt).toDateString();
 	let eventPost =
 `
 <li  class="eventPost">
@@ -212,7 +213,7 @@ function eventPost(post, count) {
 
 	<div class="subPost">
 		<h3>By: ${author}</h3>
-		<h3>Posted on ${date}</h3>
+		<p>Posted on ${date}</p>
 	</div>
 
 	<p>${body}</p>
@@ -226,12 +227,14 @@ return eventPost
 /* compile comment Data into DOM content*/
 
 function buildComment(comment) {
-let { listing, text, id } = comment
+let { listing, text, id, createdAt } = comment
 
+let date =  new Date(createdAt).toDateString()
 let remark = 
 `
 <li class="commentListing" id="${id}">
 
+	<p>posted: ${date}</p>
 	<h3>${listing}</h3>
 	<p>${text}</p>
 	<button class="removeComment">remove</button>
@@ -268,10 +271,13 @@ function generateRemarks(comments) {
 /*template for single-topic posts */
 
 function buildPost(post) {
-	let { title, author, body, comments, id } = post
-	console.log('commies', comments)
+	let { title, author, body, comments, id, createdAt } = post
+	console.log('commies')
 	let remarks = generateRemarks(comments)
+	let date =  new Date(createdAt).toDateString();
 	
+	
+
 	let eventPost =
 
 
@@ -339,9 +345,5 @@ function commentPalette() {
 `
 return palette
 };
-
-
-
-
 
 
