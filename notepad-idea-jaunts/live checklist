@@ -1,14 +1,12 @@
 - Finish deletes
         -user deletes
-        -post deletes 
         -eventually find more elequant way to populate comment Ids into post data without double fetching
 
--Fix handle Fail
-    -intro view(login&signup) buttons visible in background
 
 -Timestamps
     -just added:
-        -would like to be able to give subtle representatio of posted dates
+        -set up for account page to show join date 
+        -same for users list maybe?
 
 -Newly created posts visual:
         -not filling display div/section
@@ -18,4 +16,6 @@
 
 -Build Event Details data and render sheet and link to nav tab
 
--Add button to handle success to go back to post after adding a comment
+-Clean up listeners at bottom
+
+-Build seperate success for update, post and delete(delete shouldn't be able to go back)

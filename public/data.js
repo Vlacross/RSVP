@@ -32,6 +32,7 @@ const updateSuccessPrompt =
 	<h3>details successfully updated!</h3>
 	<p>Click home to go back to main post feed! </p>
 	<button class="successResponseButton" name="successResponse">Home</button>
+	<button class="successResponseReturnButton" name="successResponseReturn">Back</button>
 </section>
 `;
 
@@ -43,6 +44,7 @@ const postSuccessPrompt =
 	<h3>Content Posted!</h3>
 	<p>Click home to go back to main post feed! </p>
 	<button class="successResponseButton" name="successResponse">Home</button>
+	<button class="successResponseReturnButton" name="successResponseReturn">Back</button>
 </section>
 `;
 

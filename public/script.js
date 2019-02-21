@@ -582,7 +582,11 @@ function watchPageActions() {
 		postId = $(this).attr('id')
 		getPost(postId)
 	});
-
+	$('body').on('click', 'button.successResponseReturnButton', function (e) {
+		e.preventDefault();
+		console.log('lets double check what we did...!')
+		getPost(postId);
+	});
 	$('body').on('click', 'button.cancelActionButton', function (e) {
 		e.preventDefault();
 		console.log('backing out, huh?')
