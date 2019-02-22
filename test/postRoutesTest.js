@@ -4,8 +4,9 @@ const expect = chai.expect;
 const mongoose = require('mongoose');
 const faker = require('faker');
 const DB = mongoose.connection;
+const bcrypt = require('bcryptjs')
 
-const MONGODB_URI_TEST = require('../config');
+const { MONGODB_URI_TEST } = require('../config');
 
 const Post = require('../models/postsModel');
 const User = require('../models/usersModel');
@@ -16,37 +17,82 @@ const seedUsers = require('../db/users');
 const seedComments = require('../db/comments');
 
 
-// chai.use(chaiHttp)
+chai.use(chaiHttp)
 
 
 const { app } = require('../server');
 
+
+
+
 function testHooks() {
 	
+	before(function() {
+		console.log('mounting DB: ', MONGODB_URI_TEST)
+		return	mongoose.connect(MONGODB_URI_TEST, { useNewUrlParser: true })
+		
+	})
 	beforeEach(function () {
-		mongoose.connect(MONGODB_URI_TEST, { useNewUrlParser: true })
-			.then(() => {
-				console.info('Dropping Database');
-				return DB.db.dropDatabase();
-			})
-			.then(() => {
-				return Promise.all(seedUsers.map(user => bcrypt.hash(user.password, 10)));
-			})
-			.then((digests) => {
-				seedUsers.forEach((user, i) => user.password = digests[i]);
-				console.log('Seeding database')
-				return Promise.all([
-					Post.insertMany(seedPosts),
-					User.insertMany(seedUsers),
-					Comments.insertMany(seedComments),
-				]);
-			})
-			.catch(err => {
-				console.error(`ERROR: ${err.message}`);
-				console.error(err);
-			});
+		
+		console.info('Dropping Database');
+	return	mongoose.connection.db.dropDatabase()	
+		.then(() => {
+			return Promise.all(seedUsers.map(user => bcrypt.hash(user.password, 10)));
+		})
+		.then((digests) => {
+			seedUsers.forEach((user, i) => user.password = digests[i]);
+			console.log('Seeding database')
+			return Promise.all([
+				Post.insertMany(seedPosts),
+				User.insertMany(seedUsers),
+				Comments.insertMany(seedComments),
+			]);
+		})
+		.catch(err => {
+			console.error(`ERROR: ${err.message}`);
+			console.error(err);
+		});
 	});
 	after(function () {
 		return mongoose.disconnect();
 	});
 }
+
+
+
+describe('user login', function() {
+
+	testHooks()
+
+	it('should perform a Unit test', function() {
+
+		return User.find()
+		.then(function(res) {
+			expect(res).to.be.an('array')
+		})
+	})
+
+	it.only('should perform an integration test', function() {
+		return chai.request(app)
+		.get('/users')
+		.then(function(res) {
+			console.log(res.text)
+			expect(res.text).to.be.eql('Unauthorized')
+		})
+	})
+
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+

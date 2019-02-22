@@ -22,11 +22,13 @@ chai.use(chaiHttp)
 
 const { app } = require('../server');
 
+
+
+
 function testHooks() {
 	
-console.log(MONGODB_URI_TEST)
 	before(function() {
-		console.log('mounting DB')
+		console.log('mounting DB: ', MONGODB_URI_TEST)
 		return	mongoose.connect(MONGODB_URI_TEST, { useNewUrlParser: true })
 		
 	})
@@ -55,6 +57,8 @@ console.log(MONGODB_URI_TEST)
 		return mongoose.disconnect();
 	});
 }
+
+
 
 describe('user login', function() {
 

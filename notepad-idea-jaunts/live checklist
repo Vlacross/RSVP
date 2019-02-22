@@ -1,11 +1,16 @@
 -Build Tests!!
     -should have been done since the project started to practice integration testing
+        -Test each routes folder
+        -
 
 
+-Admin Dashboard?
+        -enables edits and deletes on all posts and comments
 
 - Finish deletes
         -user deletes
-        -eventually find more elequant way to populate comment Ids into post data without double fetching
+        -allow user to delete self
+        -eventually find more elequant way to populate/depopulate comment Ids into post data without double fetching
 
 
 -Timestamps
@@ -13,20 +18,20 @@
         -set up for account page to show join date 
         -same for users list maybe?
 
--Newly created posts visual:
-        -not filling display div/section
-
 -Fully implement user (attending) data in schema
+        -add checkbox on sign up
         -change userlist to project categories
 
--Build Event Details data and render sheet and link to nav tab
+-Build Event Details data and render sheet with link on nav tab
 
--Clean up listeners at bottom
-
--Build seperate success for update, post and delete(delete shouldn't be able to go back)
+-Maybe regroup listeners?
 
 -Finish username and password validation
     -create min-max length
     -refuse whitespace
 
+-Build delete "double-check"
+        -prompts "are you sure" on delete
+
+-
 
