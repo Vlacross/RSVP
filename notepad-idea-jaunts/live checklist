@@ -1,3 +1,8 @@
+-Build Tests!!
+    -should have been done since the project started to practice integration testing
+
+
+
 - Finish deletes
         -user deletes
         -eventually find more elequant way to populate comment Ids into post data without double fetching

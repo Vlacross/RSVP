@@ -13,15 +13,15 @@ function quickFetch(route, method) {
 	
 	token = localStorage.getItem('token')
 	return fetch(route, {
-	method: method,
-	headers: {
-		'Accept': 'application/json',
-		'Content-Type': 'application/json',
-		'Authorization': 'Bearer' + ' ' + token
-	}
-})
+		method: method,
+		headers: {
+			'Accept': 'application/json',
+			'Content-Type': 'application/json',
+			'Authorization': 'Bearer' + ' ' + token
+		}
+	})
 
-}
+};
 
 
 /*Let user know delete success */
@@ -67,7 +67,8 @@ const postSuccessPrompt =
     <h3>Looks like something went wrong!</h3>
 		<p>Log in failed! Check your username and password and try again! </p>
 		<button class="failedResponseButton" name="failedResponse">Retry</button>
- </section>`;
+ </section>
+ `;
 
  /*popup with details on returned fail */
  var failedUpdate =
@@ -76,7 +77,8 @@ const postSuccessPrompt =
     <h3>Looks like something went wrong!</h3>
 		<p>Update failed! Check your username and password and try again! </p>
 		<button class="failedUpdateButton" name="failedUpdate">Retry</button>
- </section>`;
+ </section>
+ `;
 
 /*popup with details on returned fail */
 	var failedPost =
@@ -85,7 +87,8 @@ const postSuccessPrompt =
     <h3>Looks like something went wrong!</h3>
 		<p>Update failed! Check your username and password and try again! </p>
 		<button class="failedUpdateButton" name="failedUpdate">Retry</button>
- </section>`;
+ </section>
+ `;
 
 /*popup with details on returned fail */
 	var failedDelete =
@@ -94,7 +97,8 @@ const postSuccessPrompt =
     <h3>Looks like something went wrong!</h3>
 		<p>Update failed! Check your username and password and try again! </p>
 		<button class="failedUpdateButton" name="failedUpdate">Retry</button>
- </section>`;
+ </section>
+ `;
 
 /*eventFeed */
 
@@ -130,30 +134,31 @@ function viewSwitch(currentView) {
 let viewWrap =
 `
 <section class="viewWrapper">${currentView}</section>
-`
+`;
 return viewWrap;
 }
 
 /*List of users in DB with role="atendee" */
 
 function usersListing(usr) {
-let { fullname } = usr
+let { fullname } = usr;
 let usersListing =
 
 `
 <li>
 	<p>${fullname}</p>
 </li>
-`
-return usersListing
+`;
+return usersListing;
 };
+
 
 /*Simple user account info card for current user to update details */
 
 function accountProfile() {
-	let user = JSON.parse(localStorage.getItem('user'))
-	console.log(user, "inprof")
-let { fullname, username } = user
+	let user = JSON.parse(localStorage.getItem('user'));
+	console.log(user, "inprof");
+let { fullname, username } = user;
 let accountDetails = 
 `
 <section class="accountProfile">
@@ -162,14 +167,14 @@ let accountDetails =
 	<span  class="passwordSpan">Password: ${password}</span>
 	<button type="submit" class="profileEditButton" name="profileEditButton">Edit profile</button>
 </section>
-`
-return accountDetails
+`;
+return accountDetails;
 
-}
+};
 
 function editProfile() {
-	let user = JSON.parse(localStorage.getItem('user'))
-	let { fullname, username } = user
+	let user = JSON.parse(localStorage.getItem('user'));
+	let { fullname, username } = user;
 
 	const editForm =
 `
@@ -195,7 +200,7 @@ function editProfile() {
 				</form>
 
 
-`
+`;
 return editForm;
 };
 
@@ -224,14 +229,14 @@ function constructPost() {
 		</fieldset>
 	</form>
 
-`
+`;
 return newPostForm;
 };
 
 /*template for event topic posts */
 
 function eventPost(post, count) {
-	let { title, author, body, comments, id, createdAt } = post
+	let { title, author, body, comments, id, createdAt } = post;
 	let date =  new Date(createdAt).toDateString();
 	let eventPost =
 `
@@ -250,14 +255,14 @@ function eventPost(post, count) {
 	<p>${comments.length} Comments</p>
 	
 </li>
-`
-return eventPost
+`;
+return eventPost;
 };
 
 /* compile comment Data into DOM content*/
 
 function buildComment(comment) {
-let { listing, text, id, createdAt } = comment
+let { listing, text, id, createdAt } = comment;
 
 let date =  new Date(createdAt).toDateString()
 let remark = 
@@ -269,9 +274,8 @@ let remark =
 	<p>${text}</p>
 	<button class="removeComment">remove</button>
 </li>
-`
+`;
 return remark;
-
 }
 
 function generateRemarks(comments) {
@@ -282,28 +286,28 @@ function generateRemarks(comments) {
 	<li>
 	<p>No Comments Yet!</p>
 	</li>
-	`
-	return noComments
-	}
+	`;
+	return noComments;
+	};
 
 
 	let commentList = []
 	comments.forEach(comment => {
 										let readable = buildComment(comment)
 										commentList.push(readable)
-	})
+	});
 
 	
-	return commentList.join(' ')
+	return commentList.join(' ');
 };
 
 
 /*template for single-topic posts */
 
 function buildPost(post) {
-	let { title, author, body, comments, id, createdAt } = post
-	console.log('commies')
-	let remarks = generateRemarks(comments)
+	let { title, author, body, comments, id, createdAt } = post;
+	console.log('commies');
+	let remarks = generateRemarks(comments);
 	let date =  new Date(createdAt).toDateString();
 	
 	
@@ -338,8 +342,8 @@ function buildPost(post) {
 
 </li>
 
-`
-return eventPost
+`;
+return eventPost;
 };
 
 const toggleButton =
@@ -378,8 +382,8 @@ function commentPalette() {
 </li>
 
 
-`
-return palette
+`;
+return palette;
 };
 
 

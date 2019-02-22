@@ -1,48 +1,40 @@
 
 
-
+/*allows toggle between signing in and creating a new user */
 function toggleIntro() {
-	$('.introView').removeClass('hidden')
-	$('.accessView').addClass('hidden')
-	$('.fullNameLabel').addClass('hidden').attr('required', false)
-}
+	$('.introView').removeClass('hidden');
+	$('.accessView').addClass('hidden');
+	$('.fullNameLabel').addClass('hidden').attr('required', false);
+};
 
+/*changes the view and prompts login */
 function renderSignIn() {
 
-	console.log('Signing In!')
-	$('.introView').addClass('hidden')
-	$('.accessView').removeClass('hidden')
+	console.log('Signing In!');
+	$('.introView').addClass('hidden');
+	$('.accessView').removeClass('hidden');
 	promptAuth();
 };
 
-
+/*changes the view and prompts for details to create a new user */
 function renderSignUp() {
 
-	console.log('Signing Up!')
-	$('.introView').addClass('hidden')
-	$('.accessView').removeClass('hidden')
-	$('.fullNameLabel').removeClass('hidden').attr('required', true)
+	console.log('Signing Up!');
+	$('.introView').addClass('hidden');
+	$('.accessView').removeClass('hidden');
+	$('.fullNameLabel').removeClass('hidden').attr('required', true);
 	promptAuth();
 };
 
-/**********LOGOUT*********** */
-
-function logOut() {
-	console.log('loggingOut!')
-	localStorage.removeItem('token')
-	localStorage.clear()
-	$('.homePageView').remove()
-	$('.introView').removeClass('hidden')
-	$('main').removeClass('sinkBack')
-}
 
 /*********ACCOUNT*********** */
+/*********updates current user details and info*********** */
 
 function submitEdit(route) {
 
-	console.log(`sending update to ${route}`)
-	let user = JSON.parse(localStorage.getItem('user'))
-	let token = localStorage.getItem('token')
+	console.log(`sending update to ${route}`);
+	let user = JSON.parse(localStorage.getItem('user'));
+	let token = localStorage.getItem('token');
 	let fullName = $('.fullNameInput').val();
 	let userName = $('.userNameInput').val();
 	let pwd = $('.userPassInput').val();
@@ -52,7 +44,7 @@ function submitEdit(route) {
 		username: userName,
 		password: pwd
 	};
-	console.log(updatedUser, 'preUpdate send')
+	console.log(updatedUser, 'preUpdate send');
 	fetch(route, {
 		method: 'put',
 		headers: {
@@ -74,38 +66,39 @@ function submitEdit(route) {
 			console.log('updateFail', err)
 			let type = 'update'
 			handleFail(type)
-		})
+		});
 };
 
+/*renders form with user info ready to edit - password not shown(needs attention) */
 function editAccount() {
-	let user = JSON.parse(localStorage.getItem('user'))
-	let editForm = viewSwitch(editProfile(user))
-	console.log(user, editForm)
-	$('.viewWrapper').replaceWith(editForm)
-
-}
-
-function getAccount() {
-	let user = JSON.parse(localStorage.getItem('user'))
-
-	let acc = viewSwitch(accountProfile(user));
-
-	$('.viewWrapper').replaceWith(acc)
-
+	let user = JSON.parse(localStorage.getItem('user'));
+	let editForm = viewSwitch(editProfile(user));
+	console.log(user, editForm);
+	$('.viewWrapper').replaceWith(editForm);
 };
+
+/*uses stored user id to render user account details */
+function getAccount() {
+	let user = JSON.parse(localStorage.getItem('user'));
+	let acc = viewSwitch(accountProfile(user));
+	$('.viewWrapper').replaceWith(acc);
+};
+
 
 /*********USERLIST*********** */
+/*Builds content with user data */
 function buildUsers(usrs) {
 	let listings = [];
 	usrs.forEach(usr => {
 		listings.push(usersListing(usr))
-	})
+	});
 
-	let list = listings.join(' ')
-	return viewSwitch(list)
-}
+	let list = listings.join(' ');
+	return viewSwitch(list);
+};
 
-function showUsers(token) {
+/*Gets a list of registered users and displays their name(eventually want role, join date, and attending or not) */
+function showUsers() {
 
 	let route = 'users/find';
 	let method = 'GET';
@@ -114,24 +107,27 @@ function showUsers(token) {
 		.then(resj => {
 			let users = buildUsers(resj)
 			$('.viewWrapper').replaceWith(users)
-
-		})
-	console.log('showing users list')
+		});
+	console.log('showing users list');
 };
+
+/*******************************************************************************************************************USER*ACTIONS************************ */
+/*******************************************************************************************************************POST*ACTIONS************************ */
 /*********POSTFEED-BUILD*********** */
+
+/*Builds form for post data and renders to user to create post */
 
 function createPost() {
 
-	let postForm = viewSwitch(constructPost())
-	$('.viewWrapper').replaceWith(postForm)
+	let postForm = viewSwitch(constructPost());
+	$('.viewWrapper').replaceWith(postForm);
 };
 
-
+/*sends form to server with stored userId and token */
 function shipPost(route) {
 
-	let user = JSON.parse(localStorage.getItem('user'))
-	let token = localStorage.getItem('token')
-
+	let user = JSON.parse(localStorage.getItem('user'));
+	let token = localStorage.getItem('token');
 	let title = $('.eventPostTitleInput').val();
 	let content = $('.eventPostContentInput').val();
 
@@ -140,7 +136,7 @@ function shipPost(route) {
 		title: title,
 		body: content
 	};
-	console.log(newPost, 'prePost shipment')
+	console.log(newPost, 'prePost shipment');
 	fetch(route, {
 		method: 'post',
 		headers: {
@@ -160,11 +156,14 @@ function shipPost(route) {
 			console.log('postFail', err)
 			let type = 'post'
 			handleFail(type)
-		})
+		});
 
 };
 
+
 /*********POSTFEED-SHOW********** */
+
+/*Builds content with post data and renders in a viewable list */
 function buildFeed(arr) {
 	let count = 0;
 	let feed = [];
@@ -172,32 +171,53 @@ function buildFeed(arr) {
 		count++
 		let postBody = eventPost(post, count)
 		feed.push(postBody)
-	})
+	});
 	let food = feed.join(' ')
 	return viewSwitch(food);
 };
 
+/*Gets list of post data from server */
 function getFeed() {
 
 	let route = 'posts/find';
 	let method = 'GET';
-
 	quickFetch(route, method)
 		.then(res => res.json())
 		.then(resj => {
 			let thread = buildFeed(resj)
 			$('.viewWrapper').replaceWith(thread)
 		})
-		.catch(err => { console.log(err) })
+		.catch(err => { console.log(err) });
 
 };
+/*********SINGLE*POST*SHOW********** */
+
+/*gets post data from server and builds content then renders to viewer */
+function getPost(postId) {
+	let route = `posts/find/${postId}`;
+	let method = 'GET';
+	
+	quickFetch(route, method)
+	.then(res => res.json())
+	.then(resj => {
+		console.log('sinlinouts', resj)
+		let singlePost = buildPost(resj)
+		$('.viewWrapper').replaceWith(viewSwitch(singlePost))
+	})
+	.catch(err => { console.log(err) });
+	
+}
+
 /*******************************************************************************************************incomplete*************************************/
 /*********SINGLE*POST*EDIT********** */
+
+/*user(admin or lead) can edit post */
 function editPost() {
 
 }
 
-function updatePost(route, commentId) {
+/* */
+function updatePost(route) {
 
 	console.log(`sending update to ${route}`)
 	let user = JSON.parse(localStorage.getItem('user'))
@@ -230,8 +250,6 @@ function updatePost(route, commentId) {
 			let type = 'update'
 			promptSuccess(type)
 
-
-			// buildHome()
 		})
 		.catch(err => {
 			console.log('updateFail', err)
@@ -240,62 +258,40 @@ function updatePost(route, commentId) {
 		})
 }
 
-
-/*********SINGLE*POST*SHOW********** */
-
-
-function getPost(postId) {
-	let route = `posts/find/${postId}`;
-	let method = 'GET';
-
-	quickFetch(route, method)
-		.then(res => res.json())
-		.then(resj => {
-			console.log('sinlinouts', resj)
-			let singlePost = buildPost(resj)
-			$('.viewWrapper').replaceWith(viewSwitch(singlePost))
-		})
-		.catch(err => { console.log(err) })
-
-}
-
-/******************************************************************************************************************************************************* */
+/*******************************************************************************************************incomplete*************************************/
 /*********SINGLE*POST*DELETE********** */
 
+/*removes a post(eventually would like only the author and admin) */
 function deletePost(route) {
-	let method = 'delete'
+	let method = 'delete';
 
 	quickFetch(route, method)
-		
 		.then(res => {
 			console.log('deposter Out', res.status)
 			let type = 'delete'
 			promptSuccess(type)
 		})
-		.catch(err => { console.log(err) })
-}
-
-
-
+		.catch(err => { console.log(err) });
+};
+/*******************************************************************************************************POST*ACTIONS********************************** */
+/*******************************************************************************************************COMMENT*ACTIONS*********************************** */
 /*********HANDLE*COMMENTS********** */
 
 function createComment() {
-	// let commentPalette = commentPalette() 
-	$('.commentsList').append(commentPalette)
-		
+	
+	$('.commentsList').append(commentPalette);	
 };
 
 function postComment(route, postId) {
-	let user = JSON.parse(localStorage.getItem('user'))
-	let token = localStorage.getItem('token')
-
+	let user = JSON.parse(localStorage.getItem('user'));
+	let token = localStorage.getItem('token');
 	let text = $('.commentContentInput').val();
 
 	let newComment = {
 		userId: user.id,
 		text: text
 	};
-	console.log(newComment, 'preSnark remark')
+	console.log(newComment, 'preSnark remark');
 	fetch(route, {
 		method: 'post',
 		headers: {
@@ -326,20 +322,20 @@ function postComment(route, postId) {
 			let type = 'post'
 			promptSuccess(type)
 
-
 		})
 		.catch(err => {
 			console.log('updateFail', err)
 			let type = 'post'
 			handleFail(type)
-		})
-}
-/******************************************************************************************************************************************************* */
+		});
+};
+
+
 /**********COMMENTS**DELETE********** */
 function deleteComment(removalId, postId) {
-	let route = `comments/delete/${removalId}`
-	console.log('...theres just nothing left to say...')
-	console.log('route', route)
+	let route = `comments/delete/${removalId}`;
+	console.log('...theres just nothing left to say...');
+	console.log('route', route);
 	fetch(route, {
 		method: 'delete',
 		headers: {
@@ -348,51 +344,47 @@ function deleteComment(removalId, postId) {
 			'Authorization': 'Bearer' + ' ' + token
 		}
 	})
-		.then(res => console.log(res.status))
-		
-			console.log('middleFetch', removalId)
-			route = `posts/decomment/${removalId}`
-			let unPopulate = {
-				postId: postId,
-				commentId: removalId
-			}
-			fetch(route, {
-				method: 'put',
-				headers: {
-					'Accept': 'application/json',
-					'Content-Type': 'application/json',
-					'Authorization': 'Bearer' + ' ' + token
-				},
-				body: JSON.stringify(unPopulate)
-			})
-			.then(res => res.json())
-			.then(resj => {
-			console.log('depopulation suxess!', resj)
-			let type = 'delete'
-			promptSuccess(type)
-
+	.then(res => console.log(res.status))
+	
+		console.log('middleFetch', removalId)
+		route = `posts/decomment/${removalId}`
+		let unPopulate = {
+			postId: postId,
+			commentId: removalId
+		}
+		fetch(route, {
+			method: 'put',
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json',
+				'Authorization': 'Bearer' + ' ' + token
+			},
+			body: JSON.stringify(unPopulate)
+		})
+		.then(res => res.json())
+		.then(resj => {
+		console.log('depopulation suxess!', resj)
+		let type = 'delete'
+		promptSuccess(type)
 
 		})
 		.catch(err => {
 			console.log('updateFail', err)
 			let type = 'delete'
 			handleFail(type)
-		})
-}
+		});
+};
 
-
-
-/*********END*COMMENTS********** */
+/*******************************************************************************************************COMMENT*ACTIONS************************************/
+/*******************************************************************************************************SITE*FLOW*ACTIONS***********************************/
 
 /*********BUILDHOME*********** */
 function buildHome() {
 
-	$('main').addClass('sinkBack')
+	$('main').addClass('sinkBack');
 	$('body').prepend(homePage);
-	getFeed()
-
-
-}
+	getFeed();
+};
 
 /********SHOW*SUCCESS*********** */
 function promptSuccess(type) {
@@ -406,10 +398,11 @@ function promptSuccess(type) {
 			break;
 		case 'delete':
 			msg = deleteSuccessPrompt;
+			break;
 		};
 		
-	$('.viewWrapper').replaceWith(viewSwitch(msg))
-}
+	$('.viewWrapper').replaceWith(viewSwitch(msg));
+};
 
 /*********HANDLEFAIL*********** */
 function handleFail(type) {
@@ -425,40 +418,54 @@ function handleFail(type) {
 			msg = failedDelete;
 		case 'login':
 			msg = failedLogin;
-		$('.accessView').addClass('hidden')	
+			$('.accessView').addClass('hidden');
+			break;	
 		};
 
 	$('main').append(msg);
 
-	// $('.viewWrapper').replaceWith(viewSwitch(msg))
-
-
-
 	$('.failedResponseButton').one('click', function (e) {
 		e.preventDefault();
-		routeFail()
-	})
-}
-
-function routeFail() {
-	console.log('reroute')
-	$('.failedResponse').remove()
-	$('.userNameInput').val('');
-	$('.userPassInput').val('');
-	$('.accessView').removeClass('hidden')
+		routeFail();
+	});
 };
 
-/*********LOGIN*********** */
+function routeFail() {
+	console.log('reroute');
+	$('.failedResponse').remove();
+	$('.userNameInput').val('');
+	$('.userPassInput').val('');
+	$('.accessView').removeClass('hidden');
+};
+
+/*******************************************************************************************************SITE*FLOW*ACTIONS***********************************/
+
+/**********LOGOUT*****************************************************************************************************LOGOUT************************ */
+/*********clear stored data*********** */
+
+function logOut() {
+
+	console.log('loggingOut!');
+	localStorage.removeItem('token');
+	localStorage.clear();
+	$('.homePageView').remove();
+	$('.introView').removeClass('hidden');
+	$('main').removeClass('sinkBack');
+};
+/**********LOGOUT*****************************************************************************************************LOGOUT************************ */
+
+
+/**********LOGIN*****************************************************************************************************LOGIN************************ */
 function promptAuth() {
 
 	const fullname = $('.fullNameInput').val('');
 	const id = $('.userNameInput').val('');
 	const pwd = $('.userPassInput').val('');
-}
+};
 
-
+/*Initial User Login */
 function logIn(route, newUser) {
-	console.log(`sending fetch to ${route}`)
+	console.log(`sending fetch to ${route}`);
 	const fullname = $('.fullNameInput').val();
 	const id = $('.userNameInput').val();
 	const pwd = $('.userPassInput').val();
@@ -494,10 +501,12 @@ function logIn(route, newUser) {
 			console.log('loginFail')
 			let type = 'login'
 			handleFail(type)
-		})
+		});
 };
+/**********LOGIN*****************************************************************************************************LOGIN************************ */
 
-/*********NAVBAR*********** */
+
+/**********NAVBAR*****************************************************************************************************NAVBAR************************ */
 function handleNav() {
 	console.log('handlinNAV')
 	$('body').on('click', 'button.eventDetailsLink', function (e) {
@@ -525,21 +534,25 @@ function handleNav() {
 		createPost()
 	});
 };
+/********^*NAVBAR*^**************************************************************************************************^*NAVBAR*^********************** */
 
+/********V*LISTENERS*V**************************************************************************************************V*LISTENERS*V********************** */
+/********^*LISTENERS*^**************************************************************************************************^*LISTENERS*^********************** */
 
 function watchFetchActions() {
 	let route;
 
-	/*START POST */
+/*START POST */
+
 	$('body').on('click', 'button.postFormSubmit', function (e) {
 		e.preventDefault();
 		console.log('shipping newPost!')
 		route = 'posts/create'
 		shipPost(route);
 	});
-	/*STOP POST */
+/*STOP POST */
 	/************************ */
-	/*START EDIT */
+/*START EDIT */
 
 	$('body').on('click', 'button.profileEditButton', function (e) {
 		e.preventDefault();
@@ -551,9 +564,9 @@ function watchFetchActions() {
 		e.preventDefault();
 		submitEdit(route)
 	})
-	/*STOP EDIT */
+/*STOP EDIT */
 	/************************ */
-	/*START INTRO */
+/*START INTRO */
 
 	$('body').on('click', 'button.introLoginButton', function (e) {
 		e.preventDefault();
@@ -575,60 +588,65 @@ function watchFetchActions() {
 		e.preventDefault();
 		toggleIntro()
 	});
-	/*STOP INTRO */
+/*STOP INTRO */
 }
 
 
 
 
 function watchPageActions() {
-
+	
 	let postId;
-
+	/*success response to home */
 	$('body').on('click', 'button.successResponseButton', function (e) {
 		e.preventDefault();
 		console.log('going to home page!')
 		$('.homePageView').remove()
 		buildHome();
 	});
+	/*post title from list view to select single post */
 	$('body').on('click', 'a.postTitle', function (e) {
 		e.preventDefault();
 		console.log('Just Building a home for the console dwarves!')
 		postId = $(this).attr('id')
 		getPost(postId)
 	});
+	/*success response back to post */
 	$('body').on('click', 'button.successResponseReturnButton', function (e) {
 		e.preventDefault();
 		console.log('lets double check what we did...!')
 		getPost(postId);
 	});
+	/*toggle remove create comment form */
 	$('body').on('click', 'button.cancelActionButton', function (e) {
 		e.preventDefault();
 		console.log('backing out, huh?')
 		$('.cancelActionButton').replaceWith(commentButton)
 		$('.palette').remove()
 	});
-
+	/*toggle create comment form */
 	$('body').on('click', 'button.addComment', function (e) {
 		e.preventDefault();
 		$('.addComment').replaceWith(toggleButton)
 		console.log('You may just be a bag full of soil', $(this).siblings())
 		createComment()
 	});
+	/*submit new comment */
 	$('body').on('click', 'button.commentFormSubmit', function (e) {
 		e.preventDefault();
 		console.log('DirtBag', $(this))
-		route = 'comments/create'
+		let route = 'comments/create'
 		postComment(route, postId)
 	});
 
-																			/*************************************DELETE */
+		/*comment remove */							/*************************************DELETE */
 	$('body').on('click', 'button.removeComment', function (e) {
 		e.preventDefault();
 		console.log('Just put the Ants in the drawer!')
 		let removalId = $(this).parent().attr('id')
 		deleteComment(removalId, postId)
 	});
+	/*post remove */
 	$('body').on('click', 'button.postDeleteButton', function (e) {
 		e.preventDefault();
 		console.log('Just drop the ship then...')
@@ -637,8 +655,10 @@ function watchPageActions() {
 	});
 
 
-
 }
+/********^*LISTENERS*^**************************************************************************************************^*LISTENERS*^********************** */
+
+
 
 
 function evalPageState() {
@@ -653,11 +673,10 @@ function evalPageState() {
 
 $(document).ready(function () {
 	console.log('hittingJQscript!')
-	// watchEdit()
 	handleNav()
 	watchFetchActions()
 	watchPageActions()
 	evalPageState()
 
-
 })
+
