@@ -2,11 +2,9 @@ const express = require('express')
 const router = express.Router()
 const bodyParser = require('body-parser')
 const jsonParser = bodyParser.json()
-
 const mongoose = require('mongoose')
 
 const jwtStrategy = require('../passport')
-
 const passport = require('passport');
 passport.use('JWT', jwtStrategy)
 const jwtAuth = passport.authenticate('JWT', { session: false})

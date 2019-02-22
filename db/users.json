@@ -16,5 +16,11 @@
     "fullname": "User Two",
     "username": "user2",
     "password": "password2"  
+  },
+  {
+    "_id": "333333333333333333333007",
+    "fullname": "Benji",
+    "username": "big",
+    "password": "ben"  
   }  
 ]
