@@ -24,3 +24,9 @@
 -Clean up listeners at bottom
 
 -Build seperate success for update, post and delete(delete shouldn't be able to go back)
+
+-Finish username and password validation
+    -create min-max length
+    -refuse whitespace
+
+
