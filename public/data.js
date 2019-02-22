@@ -1,6 +1,6 @@
-let author; 
-let body; 
-let comments; 
+let author;
+let body;
+let comments;
 let title;
 let date;
 
@@ -10,7 +10,7 @@ let password;
 
 
 function quickFetch(route, method) {
-	
+
 	token = localStorage.getItem('token')
 	return fetch(route, {
 		method: method,
@@ -25,8 +25,8 @@ function quickFetch(route, method) {
 
 
 /*Let user know delete success */
-const deleteSuccessPrompt = 
-`
+const deleteSuccessPrompt =
+	`
 <section class="deleteResponse" >
 	<h1>Success!</h1>
 	<h3>details successfully deleted!</h3>
@@ -37,8 +37,8 @@ const deleteSuccessPrompt =
 
 
 /*Let user know update success */
-const updateSuccessPrompt = 
-`
+const updateSuccessPrompt =
+	`
 <section class="successResponse" >
 	<h1>Success!</h1>
 	<h3>details successfully updated!</h3>
@@ -48,8 +48,8 @@ const updateSuccessPrompt =
 `;
 
 /*Let user know on post success */
-const postSuccessPrompt = 
-`
+const postSuccessPrompt =
+	`
 <section class="successResponse" >
 	<h1>Success!</h1>
 	<h3>Content Posted!</h3>
@@ -61,7 +61,7 @@ const postSuccessPrompt =
 
 
 /*popup with details on returned fail */
- var failedLogin =
+var failedLogin =
 	`<section class="failedResponse" >
     <h1>Woops!</h1>
     <h3>Looks like something went wrong!</h3>
@@ -70,8 +70,8 @@ const postSuccessPrompt =
  </section>
  `;
 
- /*popup with details on returned fail */
- var failedUpdate =
+/*popup with details on returned fail */
+var failedUpdate =
 	`<section class="failedUpdate" >
     <h1>Woops!</h1>
     <h3>Looks like something went wrong!</h3>
@@ -81,7 +81,7 @@ const postSuccessPrompt =
  `;
 
 /*popup with details on returned fail */
-	var failedPost =
+var failedPost =
 	`<section class="failedUpdate" >
     <h1>Woops!</h1>
     <h3>Looks like something went wrong!</h3>
@@ -91,7 +91,7 @@ const postSuccessPrompt =
  `;
 
 /*popup with details on returned fail */
-	var failedDelete =
+var failedDelete =
 	`<section class="failedUpdate" >
     <h1>Woops!</h1>
     <h3>Looks like something went wrong!</h3>
@@ -131,25 +131,25 @@ let homePage =
 
 function viewSwitch(currentView) {
 
-let viewWrap =
-`
+	let viewWrap =
+		`
 <section class="viewWrapper">${currentView}</section>
 `;
-return viewWrap;
+	return viewWrap;
 }
 
 /*List of users in DB with role="atendee" */
 
 function usersListing(usr) {
-let { fullname } = usr;
-let usersListing =
+	let { fullname } = usr;
+	let usersListing =
 
-`
+		`
 <li>
 	<p>${fullname}</p>
 </li>
 `;
-return usersListing;
+	return usersListing;
 };
 
 
@@ -158,9 +158,9 @@ return usersListing;
 function accountProfile() {
 	let user = JSON.parse(localStorage.getItem('user'));
 	console.log(user, "inprof");
-let { fullname, username } = user;
-let accountDetails = 
-`
+	let { fullname, username } = user;
+	let accountDetails =
+		`
 <section class="accountProfile">
 	<span class="fullnameSpan">Fullname: ${fullname}</span>
 	<span class="usernameSpan">Username: ${username}</span>
@@ -168,7 +168,7 @@ let accountDetails =
 	<button type="submit" class="profileEditButton" name="profileEditButton">Edit profile</button>
 </section>
 `;
-return accountDetails;
+	return accountDetails;
 
 };
 
@@ -177,7 +177,7 @@ function editProfile() {
 	let { fullname, username } = user;
 
 	const editForm =
-`
+		`
 				<form class="accountEditForm" autocomplete="off">
 					<fieldset class="updateFieldset">		
 						
@@ -201,14 +201,14 @@ function editProfile() {
 
 
 `;
-return editForm;
+	return editForm;
 };
 
 
 function constructPost() {
 
 	const newPostForm =
-`
+		`
 	<form class="postForm">
 		<fieldset class="eventPost">
 		
@@ -230,16 +230,16 @@ function constructPost() {
 	</form>
 
 `;
-return newPostForm;
+	return newPostForm;
 };
 
 /*template for event topic posts */
 
 function eventPost(post, count) {
 	let { title, author, body, comments, id, createdAt } = post;
-	let date =  new Date(createdAt).toDateString();
+	let date = new Date(createdAt).toDateString();
 	let eventPost =
-`
+		`
 <li  class="eventPost">
 
 	<div class="subPostTitle">
@@ -256,17 +256,17 @@ function eventPost(post, count) {
 	
 </li>
 `;
-return eventPost;
+	return eventPost;
 };
 
 /* compile comment Data into DOM content*/
 
 function buildComment(comment) {
-let { listing, text, id, createdAt } = comment;
+	let { listing, text, id, createdAt } = comment;
 
-let date =  new Date(createdAt).toDateString()
-let remark = 
-`
+	let date = new Date(createdAt).toDateString()
+	let remark =
+		`
 <li class="commentListing" id="${id}">
 
 	<p>posted: ${date}</p>
@@ -275,29 +275,29 @@ let remark =
 	<button class="removeComment">remove</button>
 </li>
 `;
-return remark;
+	return remark;
 }
 
 function generateRemarks(comments) {
 
-	if(comments.length === 0) {
-		let noComments = 
-	`
+	if (comments.length === 0) {
+		let noComments =
+			`
 	<li>
 	<p>No Comments Yet!</p>
 	</li>
 	`;
-	return noComments;
+		return noComments;
 	};
 
 
 	let commentList = []
 	comments.forEach(comment => {
-										let readable = buildComment(comment)
-										commentList.push(readable)
+		let readable = buildComment(comment)
+		commentList.push(readable)
 	});
 
-	
+
 	return commentList.join(' ');
 };
 
@@ -308,14 +308,14 @@ function buildPost(post) {
 	let { title, author, body, comments, id, createdAt } = post;
 	console.log('commies');
 	let remarks = generateRemarks(comments);
-	let date =  new Date(createdAt).toDateString();
-	
-	
+	let date = new Date(createdAt).toDateString();
+
+
 
 	let eventPost =
 
 
-`
+		`
 <li  class="eventPost">
 
 	<div class="subPostTitle">
@@ -343,16 +343,16 @@ function buildPost(post) {
 </li>
 
 `;
-return eventPost;
+	return eventPost;
 };
 
 const toggleButton =
-`
+	`
 	<button class="cancelActionButton">Cancel</button>
 `;
 
 const commentButton =
-`
+	`
 <button class="addComment">Comment</button>
 `;
 
@@ -360,8 +360,8 @@ const commentButton =
 
 function commentPalette() {
 
-	let palette = 
-`
+	let palette =
+		`
 <li class="palette">
 
 	<form class="commentForm">
@@ -383,7 +383,7 @@ function commentPalette() {
 
 
 `;
-return palette;
+	return palette;
 };
 
 

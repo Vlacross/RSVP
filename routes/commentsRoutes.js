@@ -9,7 +9,7 @@ const jwtStrategy = require('../passport')
 
 const passport = require('passport');
 passport.use('JWT', jwtStrategy)
-const jwtAuth = passport.authenticate('JWT', { session: false})
+const jwtAuth = passport.authenticate('JWT', { session: false })
 
 const CommentPost = require('../models/commentsModel')
 const Post = require('./../models/postsModel')
@@ -68,14 +68,14 @@ router.post('/create', jsonParser, (req, res) => {
 	CommentPost.create(comment)
 		.then(newComment => {
 			console.log('new commentsial', newComment)
-			res.json(newComment).status(202)	
-			
+			res.json(newComment).status(202)
+
 		})
 		.catch(err => {
 			return res.json(err.message).status(400)
 		});
-		
-		
+
+
 })
 
 /*Admin or author only can update details */
@@ -103,14 +103,14 @@ router.put('/details/:id', (req, res) => {
 
 router.delete('/delete/:id', (req, res) => {
 	console.log('hit the removal wall')
-    if (!req.params.id) {
-        console.error('missing \'id\'!!')
-        return res.status(400)
+	if (!req.params.id) {
+		console.error('missing \'id\'!!')
+		return res.status(400)
 	};
 	console.log('getting to delete!!')
-    CommentPost.findByIdAndDelete(req.params.id)
-        .then(res.status(204).end()
-        )
+	CommentPost.findByIdAndDelete(req.params.id)
+		.then(res.status(204).end()
+		)
 });
 
 

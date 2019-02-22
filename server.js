@@ -1,26 +1,26 @@
 const express = require('express');
-const bodyParser = require('body-parser')
-const jsonParser = bodyParser.json()
-const mongoose = require('mongoose')
+const bodyParser = require('body-parser');
+const jsonParser = bodyParser.json();
+const mongoose = require('mongoose');
 
-const app = express()
+const app = express();
 
-const { MONGODB_URI, PORT } = require('./config')
-const { CommentRoutes, UserRoutes, PostRoutes } = require('./routes')
+const { MONGODB_URI, PORT } = require('./config');
+const { CommentRoutes, UserRoutes, PostRoutes } = require('./routes');
 const { localStrategy, jwtStrategy, AuthRoute } = require('./passport');
 
-const { rsvpRouter } = require('./appHome')
+const { rsvpRouter } = require('./appHome');
 
 
 const passport = require('passport');
-passport.use('JWT', jwtStrategy)
-passport.use('local', localStrategy)
+passport.use('JWT', jwtStrategy);
+passport.use('local', localStrategy);
 
-const localAuth = passport.authenticate('local', {session: false});
+const localAuth = passport.authenticate('local', { session: false });
 const jwtAuth = passport.authenticate('JWT', { session: false });
 
-app.use(jsonParser)
-app.use('/login', AuthRoute)
+app.use(jsonParser);
+app.use('/login', AuthRoute);
 
 
 // app.use('*', jwtAuth)
@@ -34,7 +34,7 @@ app.use('/home', rsvpRouter)
 
 // app.get('/', function (req, res) {
 // 	console.log("obtained root route")
-	
+
 // 	res.status(207).end()
 
 // });
