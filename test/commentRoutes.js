@@ -8,9 +8,9 @@ const bcrypt = require('bcryptjs')
 
 const { MONGODB_URI_TEST } = require('../config');
 
-const Post = require('../models/postsModel');
-const User = require('../models/usersModel');
-const Comments = require('../models/commentsModel');
+const Post = require('../models/posts');
+const User = require('../models/users');
+const Comments = require('../models/comments');
 
 const seedPosts = require('../db/posts');
 const seedUsers = require('../db/users');

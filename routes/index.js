@@ -1,5 +1,5 @@
 module.exports = {
-	CommentRoutes: require('./commentsRoutes'),
-	UserRoutes: require('./usersRoutes'),
-	PostRoutes: require('./postsRoutes')
+	CommentRoutes: require('./comments'),
+	UserRoutes: require('./users'),
+	PostRoutes: require('./posts')
 }

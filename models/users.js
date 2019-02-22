@@ -5,10 +5,16 @@ const bcrypt = require('bcryptjs')
 
 /*User Schema */
 
+// TODO: Give user schema an array of `events` which points to the unique IDs of events they are invited to, and indicates whether the user `isAdmin` of that event
+
+
 const userSchema = new Schema({
   fullname: { type: String, require: true },
   username: { type: String, require: true, index: { unique: true } },
   password: { type: String, required: true },
+  /**
+   * events: [{id: REF TO EVENTS COLLECTION, isAdmin: BOOLEAN}, ]
+   */ 
   role: { type: String, require: true },
   attendanceVerdict: { type: String, require: true }
 }, {

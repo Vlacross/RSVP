@@ -9,7 +9,7 @@ const passport = require('passport');
 passport.use('JWT', jwtStrategy)
 const jwtAuth = passport.authenticate('JWT', { session: false})
 
-const Post = require('../models/postsModel')
+const Post = require('../models/posts')
 
 router.use(bodyParser.json())
 router.use('*', jwtAuth)

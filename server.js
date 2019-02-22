@@ -46,7 +46,7 @@ let server;
 
 function runServer() {
 	mongoose.connect(MONGODB_URI, { useNewUrlParser: true, autoIndex: false }, err => {
-		if (err) {
+		if (err) {Test
 			console.log(err)
 			reject(err)
 		}

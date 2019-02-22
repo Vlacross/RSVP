@@ -17,7 +17,7 @@ passport.use('local', localStrategy);
 const jwtAuth = passport.authenticate('JWT', { session: false });
 const localAuth = passport.authenticate('local', { session: false });
 
-const User = require('../models/usersModel');
+const User = require('../models/users');
 const { JWT_SECRET, ALG, EXP } = require('../config')
 // const hallPass = (req, res, next) => {return req.method !== 'POST' ? jwtAuth : next()}
 
