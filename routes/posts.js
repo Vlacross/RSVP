@@ -1,29 +1,28 @@
-const express = require('express')
-const router = express.Router()
-const bodyParser = require('body-parser')
-const jsonParser = bodyParser.json()
-const mongoose = require('mongoose')
+const express = require('express');
+const router = express.Router();
+const bodyParser = require('body-parser');
+const jsonParser = bodyParser.json();
+const mongoose = require('mongoose');
 
-const jwtStrategy = require('../passport')
+const jwtStrategy = require('../passport');
 const passport = require('passport');
-passport.use('JWT', jwtStrategy)
-const jwtAuth = passport.authenticate('JWT', { session: false})
+passport.use('JWT', jwtStrategy);
+const jwtAuth = passport.authenticate('JWT', { session: false });
 
-const Post = require('../models/posts')
+const Post = require('../models/posts');
 
-router.use(bodyParser.json())
-router.use('*', jwtAuth)
+router.use(bodyParser.json());
+router.use('*', jwtAuth);
 
 router.get('/', (req, res) => {
 	console.log(req.headers)
 	console.log('got to the posts!')
-})
+});
 
 
 /*can search Posts*/
 /*should be available for all accounts */
 router.get('/find', (req, res) => {
-	console.log('tried to find')
 	Post.find()
 		.then(posts => {
 			let list = [];
@@ -33,16 +32,15 @@ router.get('/find', (req, res) => {
 			res.json(list)
 		})
 	res.status(200)
-})
+});
 
 router.get('/find/:id', (req, res) => {
 	Post.findOne({ _id: req.params.id })
 		.then(post => {
-
 			res.json(post.serialize())
 		});
 	res.status(200);
-})
+});
 
 
 /*Can create a new Post */
@@ -57,13 +55,9 @@ router.post('/create', jsonParser, (req, res) => {
 		console.error(msg)
 		return res.status(400).json(msg).end()
 	}
-	console.log(missing)
 
 	/*add validation for user/author */
-
 	const { title, author, body } = req.body
-
-	console.log('made it to create!')
 
 	Post.create({
 		title,
@@ -78,7 +72,8 @@ router.post('/create', jsonParser, (req, res) => {
 			return res.json(err.message).status(400)
 		})
 
-})
+});
+
 
 /*Admin only can update details */
 router.put('/details/:id', (req, res) => {
@@ -99,7 +94,8 @@ router.put('/details/:id', (req, res) => {
 			return res.json(updatedPost.serialize()).status(203).end()
 		})
 		.catch(err => console.log(err, 23))
-})
+});
+
 
 /*Added / populate comments with newly created comment IDs */
 router.put('/comment/:id', (req, res) => {
@@ -110,16 +106,16 @@ router.put('/comment/:id', (req, res) => {
 	}
 
 	const { postId, commentId } = req.body
-	
-	Post.findByIdAndUpdate(postId, { $push: {'comments': commentId} }, { new: true })
+
+	Post.findByIdAndUpdate(postId, { $push: { 'comments': commentId } }, { new: true })
 		.then(updatedPost => {
 			return res.json(updatedPost.serialize()).status(203).end()
 		})
 		.catch(err => console.log(err, 23))
-})
+});
 
+/*remove/ depopulate comments */
 router.put('/decomment/:id', (req, res) => {
-	console.log('bodySon', req.body)
 	if (!req.params.id) {
 		let msg = `Incomplete credentials!`
 		console.error(msg)
@@ -127,16 +123,16 @@ router.put('/decomment/:id', (req, res) => {
 	}
 
 	const { postId, commentId } = req.body
-	
-	Post.findByIdAndUpdate(postId, { $pull: {'comments': commentId} }, { new: true })
+
+	Post.findByIdAndUpdate(postId, { $pull: { 'comments': commentId } }, { new: true })
 		.then(updatedPost => {
 			return res.json(updatedPost.serialize()).status(203).end()
 		})
 		.catch(err => console.log(err, 23))
-})
+});
+
 
 router.delete('/delete/:id', (req, res) => {
-	console.log('delPoSon')
 	if (!req.params.id) {
 		let msg = `Incomplete credentials!`
 		console.error(msg)
@@ -146,9 +142,7 @@ router.delete('/delete/:id', (req, res) => {
 	Post.findByIdAndDelete(req.params.id)
 		.then(res.status(204).end())
 		.catch(err => console.log(err, 23))
-})
-
-
+});
 
 
 module.exports = router

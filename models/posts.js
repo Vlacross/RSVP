@@ -1,10 +1,9 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const ObjectId = Schema.Types.ObjectId
+const ObjectId = Schema.Types.ObjectId;
 
 
 /* Post style schema */
-
 const postSchema = new Schema({
   title: String,
   author: { type: ObjectId, ref: 'User' },
@@ -22,7 +21,7 @@ postSchema.set('toJSON', {
   }
 });
 
-/*maybe make two serialize one for listing all posts, another for individual post selection */
+
 postSchema.methods.serialize = function () {
   return {
     id: this.id,
@@ -32,7 +31,8 @@ postSchema.methods.serialize = function () {
     comments: this.comments,
     createdAt: this.createdAt
   }
-}
+};
+
 
 function populatePost() {
   this.populate({ path: 'author' });
@@ -49,9 +49,8 @@ function populatePostList() {
   });
 };
 
-postSchema.pre('find', populatePost)
-postSchema.pre('findOne', populatePostList)
+postSchema.pre('find', populatePost);
+postSchema.pre('findOne', populatePostList);
 
-// postSchema.pre('find', populateComments)
 
 module.exports = mongoose.model('Post', postSchema)

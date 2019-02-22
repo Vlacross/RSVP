@@ -19,6 +19,8 @@ const localAuth = passport.authenticate('local', { session: false });
 
 const User = require('../models/users');
 const { JWT_SECRET, ALG, EXP } = require('../config')
+router.use(bodyParser.json());
+router.use('*', jwtAuth);
 // const hallPass = (req, res, next) => {return req.method !== 'POST' ? jwtAuth : next()}
 
 const opts = {
@@ -31,17 +33,11 @@ const buildToken = function (user) {
 }
 
 
-router.use(bodyParser.json());
-router.use('*', jwtAuth);
 
-router.get('/', (req, res) => {
-	console.log('got to the users!')
-});
 
 
 /*can search user*/
 router.get('/find', (req, res) => {
-	console.log('tried to find all users')
 	User.find()
 		.then(users => {
 			let list = [];
@@ -51,13 +47,12 @@ router.get('/find', (req, res) => {
 			res.json(list)
 		})
 	res.status(200)
-})
+});
 
 // (!req.params.id || !req.body.id || req.body.id !== req.params.id) 
 
 /*Admin or own User only can update details */
 router.put('/details/', (req, res) => {
-	console.log('updateCentrals', req.body)
 	if (!req.body.id) {
 		let msg = `Incomplete credentials!`
 		console.error(msg)
@@ -93,9 +88,7 @@ router.put('/details/', (req, res) => {
 			return res.json(obj).status(203).end()
 		})
 		.catch(err => console.log(err, 22))
-})
-
-
+});
 
 
 module.exports = router

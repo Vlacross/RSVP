@@ -9,8 +9,6 @@ const { MONGODB_URI, PORT } = require('./config');
 const { CommentRoutes, UserRoutes, PostRoutes } = require('./routes');
 const { localStrategy, jwtStrategy, AuthRoute } = require('./passport');
 
-const { rsvpRouter } = require('./appHome');
-
 
 const passport = require('passport');
 passport.use('JWT', jwtStrategy);
@@ -21,27 +19,13 @@ const jwtAuth = passport.authenticate('JWT', { session: false });
 
 app.use(jsonParser);
 app.use('/login', AuthRoute);
-
-
-// app.use('*', jwtAuth)
-/*keep the whole place on lockDown! */
-app.use(express.static('public'))
-
-app.use('/comments', CommentRoutes)
-app.use('/users', UserRoutes)
-app.use('/posts', PostRoutes)
-app.use('/home', rsvpRouter)
-
-// app.get('/', function (req, res) {
-// 	console.log("obtained root route")
-
-// 	res.status(207).end()
-
-// });
+app.use(express.static('public'));
+app.use('/comments', CommentRoutes);
+app.use('/users', UserRoutes);
+app.use('/posts', PostRoutes);
 
 
 
-/**/
 let server;
 
 function runServer() {
@@ -56,7 +40,7 @@ function runServer() {
 		console.log(`connected to ${MONGODB_URI}`)
 
 	})
-}
+};
 
 function closeServer() {
 	return mongoose.disconnect()
@@ -65,7 +49,7 @@ function closeServer() {
 		})
 		.catch(err => console.log(err))
 
-}
+};
 
 
 //  app.all('/*', function(req, res) {
@@ -78,7 +62,7 @@ function closeServer() {
 /*https://nodejs.org/api/modules.html#modules_accessing_the_main_module */
 if (require.main === module) {
 	runServer()
-}
+};
 
 module.exports = { app, runServer, closeServer }
 

@@ -1,7 +1,7 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const ObjectId = Schema.Types.ObjectId
-const bcrypt = require('bcryptjs')
+const ObjectId = Schema.Types.ObjectId;
+const bcrypt = require('bcryptjs');
 
 /*User Schema */
 
@@ -19,7 +19,7 @@ const userSchema = new Schema({
   attendanceVerdict: { type: String, require: true }
 }, {
   timestamps: true
-})
+});
 
 userSchema.set('toJSON', {
   virtuals: true,     // include built-in virtual `id`
@@ -51,7 +51,7 @@ userSchema.pre('save', function (next) {
       next()
     })
   })
-})
+});
 
 userSchema.pre('findOneAndUpdate', function(next) {
   const password = this.getUpdate().$set.password;
@@ -64,7 +64,7 @@ userSchema.pre('findOneAndUpdate', function(next) {
   console.log(password, hash, 'hookHittin')
   next()
 /*https://github.com/Automattic/mongoose/issues/4575 */
-})
+});
 
 userSchema.methods.comparePassword = function (pwd, done) {
 
@@ -76,19 +76,11 @@ userSchema.methods.comparePassword = function (pwd, done) {
 
   })
 
-}
+};
 
 userSchema.methods.checkPass = function (pwd) {
   return bcrypt.compareSync(pwd, this.password)
-}
-
-// userSchema.methods.comparePassword = function(storedPass, done) {
-//   bcrypt.compare(storedPass, this.password, function(err, isMatch) {
-//     if(err) {return next(err)}
-//     done(null, isMatch)
-//   })
-// }
-
+};
 
 userSchema.methods.serialize = function () {
   return {
