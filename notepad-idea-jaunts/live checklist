@@ -33,5 +33,7 @@
 -Build delete "double-check"
         -prompts "are you sure" on delete
 
--
+-Upon deploying to herkou
+    ()reconfigured mock data files to nest array of data into an object(mlab requires json file to contain json obj for import)
+    -go through endpoints and change responseData handling to expect object with array, instead of just and array
 

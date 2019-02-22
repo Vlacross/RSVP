@@ -1,0 +1,9 @@
+language: node_js
+node_js: node
+deploy:
+  provider: heroku
+  api_key:
+    secure: DFHxvZFKSSf7Mcfac2Az9AOnf/tPG2kKSlmSF6X8mFlEpUwTtTrdx7K5Ke24BzGsHK0VcLnm/e5BVMncoSH6rCByFFxsQ2D4Vps/wHiSnHgCKBJqtxHuWQIguix5ENZZSQcGVqKJ10GMMDmoIHJ7G8Tur9NfwzN5fb/H6BWkbfI+QDP8RWglVf3h6NvhsRONqTmoi+Iv7sawqy0T+ZXz5AYWuYg5/wphmufwBC7jETDgXB2g+deXYwttlZPtfdMYk7gMYCqf/olHOJPZ5Ek1wm813tkURvkjC579auJNtSWj+ZNE9zAH+eEGxo+gA1E+wj11/qPbPt13nB1hCrcXJ5if/800d6boMISoU3Ln+KpVX8ILbycT55G2NZeQhF4nINb/4NTKdfUMtt5ldmrHjYzOd0zFWtdFpZ+TauLZfPIN2g3/yu4pcnvvxbMYZ52ayf5DZQtFSLwPkrpY6mSnPXqHAQy0MVJ6itLQrF+Hxd6sbGNbTR7npW9XCQ3Q08NLbVceoU+Qdb3O1V6mQreEaKUUn9MY+kZkOwnmK1y7IXmqL+xVeu5+Dal2KWMVfCQZbG4vt1lo+pw2bbPO4eR8XOBdN/zEOiRREf+u0RKy32ObwnC+vgw9j3CTa+qSkM1e2KqAVpFRNuLB7JOrGgt0c8MEHMTF04GNuXMDaCHED3k=
+  app: RSVP
+  on:
+    repo: Vlacross/RSVP
