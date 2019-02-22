@@ -26,32 +26,32 @@ const { app } = require('../server');
 
 
 function testHooks() {
-	
-	before(function() {
+
+	before(function () {
 		console.log('mounting DB: ', MONGODB_URI_TEST)
-		return	mongoose.connect(MONGODB_URI_TEST, { useNewUrlParser: true })
-		
+		return mongoose.connect(MONGODB_URI_TEST, { useNewUrlParser: true })
+
 	})
 	beforeEach(function () {
-		
+
 		console.info('Dropping Database');
-	return	mongoose.connection.db.dropDatabase()	
-		.then(() => {
-			return Promise.all(seedUsers.map(user => bcrypt.hash(user.password, 10)));
-		})
-		.then((digests) => {
-			seedUsers.forEach((user, i) => user.password = digests[i]);
-			console.log('Seeding database')
-			return Promise.all([
-				Post.insertMany(seedPosts),
-				User.insertMany(seedUsers),
-				Comments.insertMany(seedComments),
-			]);
-		})
-		.catch(err => {
-			console.error(`ERROR: ${err.message}`);
-			console.error(err);
-		});
+		return mongoose.connection.db.dropDatabase()
+			.then(() => {
+				return Promise.all(seedUsers.map(user => bcrypt.hash(user.password, 10)));
+			})
+			.then((digests) => {
+				seedUsers.forEach((user, i) => user.password = digests[i]);
+				console.log('Seeding database')
+				return Promise.all([
+					Post.insertMany(seedPosts),
+					User.insertMany(seedUsers),
+					Comments.insertMany(seedComments),
+				]);
+			})
+			.catch(err => {
+				console.error(`ERROR: ${err.message}`);
+				console.error(err);
+			});
 	});
 	after(function () {
 		return mongoose.disconnect();
@@ -60,25 +60,25 @@ function testHooks() {
 
 
 
-describe('user login', function() {
+describe('user login', function () {
 
 	testHooks()
 
-	it('should perform a Unit test', function() {
+	it('should perform a Unit test', function () {
 
 		return User.find()
-		.then(function(res) {
-			expect(res).to.be.an('array')
-		})
+			.then(function (res) {
+				expect(res).to.be.an('array')
+			})
 	})
 
-	it.only('should perform an integration test', function() {
+	it.only('should perform an integration test', function () {
 		return chai.request(app)
-		.get('/users')
-		.then(function(res) {
-			console.log(res.text)
-			expect(res.text).to.be.eql('Unauthorized')
-		})
+			.get('/users')
+			.then(function (res) {
+				console.log(res.text)
+				expect(res.text).to.be.eql('Unauthorized')
+			})
 	})
 
 })
