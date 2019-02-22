@@ -1,6 +1,4 @@
-{
-  "posts": 
-  [
+[
   {
     "_id": "000000000000000000000000",
     "title": "5 life lessons learned from cats",
@@ -61,4 +59,3 @@
     
   }
 ]
-}

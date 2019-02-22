@@ -186,7 +186,7 @@ function getFeed() {
 	quickFetch(route, method)
 		.then(res => res.json())
 		.then(resj => {
-			let thread = buildFeed(resj.posts)
+			let thread = buildFeed(resj)
 			$('.viewWrapper').replaceWith(thread)
 		})
 		.catch(err => { console.log(err) });
