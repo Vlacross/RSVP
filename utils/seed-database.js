@@ -5,10 +5,12 @@ const bcrypt = require('bcryptjs');
 const { MONGODB_URI } = require('../config');
 
 
-const Post = require('../models/postsModel');
-const User = require('../models/usersModel');
-const Comments = require('../models/commentsModel');
+const Event = require('../models/events')
+const Post = require('../models/posts');
+const User = require('../models/users');
+const Comments = require('../models/comments');
 
+const seedEvents = require('../db/events');
 const seedPosts = require('../db/posts');
 const seedUsers = require('../db/users');
 const seedComments = require('../db/comments');
@@ -26,6 +28,7 @@ mongoose.connect(MONGODB_URI, { useNewUrlParser: true })
   seedUsers.forEach((user, i) => user.password = digests[i]);
   console.log('Seeding database')
     return Promise.all([
+      Event.insertMany(seedEvents),
       Post.insertMany(seedPosts),
       User.insertMany(seedUsers),
       Comments.insertMany(seedComments),

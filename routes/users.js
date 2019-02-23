@@ -32,12 +32,12 @@ const buildToken = function (user) {
 	)
 }
 
-const benji = require('../Roles/checkWare')
+const { levelOne, levelTwo } = require('../Roles/checkWare')
 
 
 
 /*can search user*/
-router.get('/find', (req, res) => {
+router.get('/find', levelOne, (req, res) => {
 	User.find()
 		.then(users => {
 			let list = [];
