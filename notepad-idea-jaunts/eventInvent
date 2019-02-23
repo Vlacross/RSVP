@@ -1,0 +1,80 @@
+
+
+
+mention made of referencing an array?
+
+
+"isLoggedIn and isAdmin middleware"
+create middleware for two levels
+    -map all endpoints and 
+
+
+
+
+
+____________________
+        __|_
+        __|__MastAdmin
+        __|__EventAdmin
+        __|__User
+
+
+
+
+
+
+
+
+  UA_|_     _|_      _|_Create
+    _|_     _|_      _|_Read
+    _|_     _|_      _|_Update
+   A_|_   UA_|_     A_|_Delete
+    _|_     _|_      _|_
+    U      C        P   
+
+----------------------------------------------------------------------------------
+**********************************************************************************
+Suggested user Flow for using App
+
+enter-OPTIONS
+        -log in with username-password-eventName
+            -authCheckw/ passport AND EventData(apply role to stored user info for mongoose-layer auth)
+
+        -register with full-user-pass-event(supposing invited)
+            -must be an existing event
+
+        -Create event----(create event collection )
+                new schema({
+                    event name: String,
+                    host: String,  ---(masterAdmin)
+                    dateOfEvent: (calendar selector?),
+                    location: String,
+                    contactInfo: String,
+                    attendees: [type: ObjectId, ref: 'users']
+
+                })
+
+    -Would need to add "event" to user schema   
+    -pre-set roles for routes so event creator can enable admin privlidges to certain users
+        -middleware to implement for pre-set routes depending on level of access allowed
+        -(checkbox option in schema and add's few extra features on client side) 
+        
+
+----------------------------------------------------------------------------------
+middleware 
+
+
+----------------------------------------------------------------------------------
+
+
+
+**********************************************************************************
+----------------------------------------------------------------------------------
+
+
+
+
+
+
+
+

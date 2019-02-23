@@ -16,7 +16,7 @@ const userSchema = new Schema({
    * events: [{id: REF TO EVENTS COLLECTION, isAdmin: BOOLEAN}, ]
    */ 
   role: { type: String, require: true },
-  attendanceVerdict: { type: String, require: true }
+  attending: { type: Boolean, require: true }
 }, {
   timestamps: true
 });
