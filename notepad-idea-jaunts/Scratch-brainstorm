@@ -59,7 +59,22 @@ Resources ***
  Fair tutorial on building own AUTH middleware instead of using Passport 
  https://medium.com/dev-bits/a-guide-for-adding-jwt-token-based-authentication-to-your-single-page-nodejs-applications-c403f7cf04f4 
 
+*****************************************************************************************************************
+*****************************************************************************************************************
+CODE CATCH
+*****************************************************************************************************************
+removed from User schema, perhaps failed implementation. Will delete in future when I know I don't need it.
+// userSchema.methods.comparePassword = function (pwd, done) {
 
+//   bcrypt.compare(pwd, this.password, function (err, res) {
+//     console.log(res, 'rezzy')
+//     if (err) { return done(err) }
+//     if (res === false) { return done(false) }
+//     else return done(true)
+
+//   })
+
+// };
 
 
 

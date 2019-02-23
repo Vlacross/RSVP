@@ -4,27 +4,35 @@
     "fullname": "User Zero",
     "username": "user0",
     "password": "password0",
-    "attending": "true"
+    "attending": "true",
+    "event": "242424242424242424242424",
+    "role": 0
   },
   {
     "_id": "333333333333333333333301",
     "fullname": "User One",
     "username": "user1",
     "password": "password1",
-    "attending": "true"
+    "attending": "true",
+    "event": "242424242424242424242424",
+    "role": 2
   },
   {
     "_id": "333333333333333333333302",
     "fullname": "User Two",
     "username": "user2",
     "password": "password2",
-    "attending": "true"
+    "attending": "true",
+    "event": "242424242424242424242424",
+    "role": 1
   },
   {
     "_id": "333333333333333333333007",
     "fullname": "Benji",
     "username": "big",
     "password": "ben",
-    "attending": "true"
+    "attending": "true",
+    "event": "242424242424242424242424",
+    "role": 0 
   }
 ]

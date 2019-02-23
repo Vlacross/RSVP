@@ -12,10 +12,8 @@ const userSchema = new Schema({
   fullname: { type: String, require: true },
   username: { type: String, require: true, index: { unique: true } },
   password: { type: String, required: true },
-  /**
-   * events: [{id: REF TO EVENTS COLLECTION, isAdmin: BOOLEAN}, ]
-   */ 
-  role: { type: String, require: true },
+  event: { type: ObjectId, ref: 'Event' }, 
+  role: { type: Number, default: 2, require: true },
   attending: { type: Boolean, require: true }
 }, {
   timestamps: true
@@ -55,9 +53,9 @@ userSchema.pre('save', function (next) {
 
 userSchema.pre('findOneAndUpdate', function(next) {
   const password = this.getUpdate().$set.password;
-  if(!password) {
-    return next(err)
-  }
+    if(!password) {
+      return next(err)
+    }
   const salt = bcrypt.genSaltSync();
   const hash = bcrypt.hashSync(password, salt);
   this.getUpdate().$set.password = hash
@@ -66,17 +64,6 @@ userSchema.pre('findOneAndUpdate', function(next) {
 /*https://github.com/Automattic/mongoose/issues/4575 */
 });
 
-userSchema.methods.comparePassword = function (pwd, done) {
-
-  bcrypt.compare(pwd, this.password, function (err, res) {
-    console.log(res, 'rezzy')
-    if (err) { return done(err) }
-    if (res === false) { return done(false) }
-    else return done(true)
-
-  })
-
-};
 
 userSchema.methods.checkPass = function (pwd) {
   return bcrypt.compareSync(pwd, this.password)
@@ -96,14 +83,14 @@ userSchema.statics.checkUniquity = async function (userName, next) {
   var unique = await this.count({ username: userName })
     .then(function (count) {
       console.log(`${count} is the count`)
-      if (!(count === 0)) {
+      if (count !== 0) {
         msg = `${userName} already taken!!`
         console.log(msg)
         return Promise.reject({ message: msg })
       }
       return userName
     })
-    .catch(function (error) {
+    .catch(function(error) {
       return Promise.reject({ message: msg })
     })
   return unique;

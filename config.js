@@ -1,7 +1,7 @@
 require('dotenv').config(); /*https://www.npmjs.com/package/dotenv */
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/RSVP'
-const MONGODB_URI_TEST = process.env.MONGODB_URI_TEST || 'mongodb://localhost:27017/RSVP-test'
+const MONGODB_URI = 'mongodb://localhost:27017/RSVP' || process.env.MONGODB_URI
+const MONGODB_URI_TEST = 'mongodb://localhost:27017/RSVP-test' || process.env.MONGODB_URI_TEST
 
 const PORT = process.env.PORT || 8080
 
