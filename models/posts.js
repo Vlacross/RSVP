@@ -7,6 +7,7 @@ const ObjectId = Schema.Types.ObjectId;
 const postSchema = new Schema({
   title: String,
   author: { type: ObjectId, ref: 'User' },
+  event: { type: ObjectId, ref: 'EventPlan' }, 
   body: String,
   comments: [{ type: ObjectId, ref: 'Comment' }]
 }, {

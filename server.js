@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const app = express();
 
 const { MONGODB_URI, PORT } = require('./config');
-const { CommentRoutes, UserRoutes, PostRoutes } = require('./routes');
+const { CommentRoutes, UserRoutes, PostRoutes, EventRoutes } = require('./routes');
 const { localStrategy, jwtStrategy, AuthRoute } = require('./passport');
 
 
@@ -23,6 +23,7 @@ app.use(express.static('public'));
 app.use('/comments', CommentRoutes);
 app.use('/users', UserRoutes);
 app.use('/posts', PostRoutes);
+app.use('/events', EventRoutes);
 
 
 

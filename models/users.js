@@ -12,7 +12,7 @@ const userSchema = new Schema({
   fullname: { type: String, require: true },
   username: { type: String, require: true, index: { unique: true } },
   password: { type: String, required: true },
-  event: { type: ObjectId, ref: 'Event' }, 
+  event: { type: ObjectId, ref: 'EventPlan' }, 
   role: { type: Number, default: 2, require: true },
   attending: { type: Boolean, require: true }
 }, {
@@ -51,6 +51,10 @@ userSchema.pre('save', function (next) {
   })
 });
 
+userSchema.pre('find', function() {
+  this.populate({ path: 'event' });
+})
+
 userSchema.pre('findOneAndUpdate', function(next) {
   const password = this.getUpdate().$set.password;
     if(!password) {
@@ -73,6 +77,7 @@ userSchema.methods.serialize = function () {
   return {
     fullname: this.fullname,
     username: this.username,
+    event: this.event.name,
     role: this.role
   }
 };

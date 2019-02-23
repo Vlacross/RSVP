@@ -10,6 +10,7 @@ passport.use('JWT', jwtStrategy);
 const jwtAuth = passport.authenticate('JWT', { session: false });
 
 const Post = require('../models/posts');
+const { levelOne, levelTwo } = require('../Roles/checkWare')
 
 router.use(bodyParser.json());
 router.use('*', jwtAuth);

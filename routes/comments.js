@@ -13,6 +13,7 @@ const jwtAuth = passport.authenticate('JWT', { session: false });
 
 const CommentPost = require('../models/comments');
 const Post = require('./../models/posts');
+const { levelOne, levelTwo } = require('../Roles/checkWare')
 
 router.use(bodyParser.json());
 router.use('*', jwtAuth);

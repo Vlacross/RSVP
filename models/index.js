@@ -1,5 +1,6 @@
 module.exports = {
 	Comment: require('./comments'),
 	User: require('./users'),
-	Post: require('./posts')
+	Post: require('./posts'),
+	EventPlan: require('./events')
 }

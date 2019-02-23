@@ -92,6 +92,8 @@ middleware:
 
 ----------------------------------------------------------------------------------
 
+Master Admin is assigned upon creation of event 
+    can later submit userList form with role edit(and apply eventAdmin role to certain users)
 
 
 **********************************************************************************

@@ -4,7 +4,10 @@
     "host": "Benjo",
     "dateOfEvent": "sept 2020",
     "contactInfo": "benjo@wump.com",
-    "attendees": ["333333333333333333333007"]
+    "attendees": [
+        "333333333333333333333007",
+        "333333333333333333333300"
+    ]
 }
 
 

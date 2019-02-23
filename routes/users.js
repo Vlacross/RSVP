@@ -18,9 +18,11 @@ const jwtAuth = passport.authenticate('JWT', { session: false });
 const localAuth = passport.authenticate('local', { session: false });
 
 const User = require('../models/users');
+const { levelOne, levelTwo, validateEvent } = require('../Roles/checkWare')
+
 const { JWT_SECRET, ALG, EXP } = require('../config')
 router.use(bodyParser.json());
-router.use('*', jwtAuth);
+// router.use('*', jwtAuth);
 // const hallPass = (req, res, next) => {return req.method !== 'POST' ? jwtAuth : next()}
 
 const opts = {
@@ -32,12 +34,11 @@ const buildToken = function (user) {
 	)
 }
 
-const { levelOne, levelTwo } = require('../Roles/checkWare')
 
 
 
 /*can search user*/
-router.get('/find', levelOne, (req, res) => {
+router.get('/find', (req, res) => {
 	User.find()
 		.then(users => {
 			let list = [];
