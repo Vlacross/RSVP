@@ -7,6 +7,7 @@ const ObjectId = Schema.Types.ObjectId;
 
 const commentSchema = new Schema({
 	userId: { type: ObjectId, ref: 'User' },
+	event: { type: ObjectId, ref: 'EventPlan', required: true },
 	text: String
 }, {
 	timestamps: true

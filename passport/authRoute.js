@@ -16,11 +16,11 @@ const jwtAuth = passport.authenticate('JWT', { session: false})
 
 const { JWT_SECRET, ALG, EXP } = require('../config')
 const { User } = require('../models')
-
+const EventPlan = require('../models/events');
+const { levelOne, levelTwo, validateEvent, validateAttendance, checkEventName } = require('../Roles/checkWare')
 
 const opts = {
 	algorithm: ALG,
-	// iat: new Date(),
 	expiresIn: EXP
 }
 const buildToken = function (user) {
@@ -56,14 +56,13 @@ router.post('/', localAuth, (req, res) => {
 	res.json({ token, user })
 })
 
-/*moved here to bypass jwt check(ternary middleware was consuming time and magic links for future release) */
-// const hallPass = (req, res, next) => {return req.method !== 'POST' ? jwtAuth : next()}
+
 /*Can create a new user account */
 router.post('/create', (req, res) => {
 	console.log(req.body)
 
 	/*forEach wasn't handling err - allowed to pass to create */
-	const requiredFields = ['fullname', 'username', 'password']
+	const requiredFields = ['fullname', 'username', 'password', 'event', 'role', 'attending']
 	let missing = requiredFields.filter(field => (!req.body[field]))
 	if (missing.length > 0) {
 		msg = `Missing ${missing} in header!`
@@ -72,7 +71,7 @@ router.post('/create', (req, res) => {
 	}
 	console.log(missing)
 	
-	const { fullname: full, username: user, password: pass } = req.body
+	const { fullname: full, username: user, password: pass, event, role, attending } = req.body
 
 	console.log('haswhatneeds')
 	User.checkUniquity(user)
@@ -81,16 +80,14 @@ router.post('/create', (req, res) => {
 	User.create({
 		fullname: full,
 		username: user,
-		role: 'attendee',
-		password: pass
+		role: role,
+		password: pass,
+		event: event,
+		attending: attending
 	})
 		.then(newUser => {
 			let token = buildToken(newUser.username)
-			let user = {
-				id: newUser._id,
-				fullname: newUser.fullname,
-				username: newUser.username
-			}
+			let user = newUser.serialize()
 			res.json({ token, user })
 			res.status(202)
 		})
@@ -98,7 +95,40 @@ router.post('/create', (req, res) => {
 			return res.json(err.message).status(400)
 		})
 
-})
+});
+
+
+
+/*Can create a new Event */
+router.post('/newEvent', checkEventName, (req, res) => {
+
+	/*forEach wasn't handling err - allowed to pass to create */
+	const requiredFields = ['name', 'host', 'dateOfEvent', 'contactInfo']
+	let missing = requiredFields.filter(field => (!req.body[field]))
+	if (missing.length > 0) {
+		msg = `Missing ${missing} in header!`
+		console.error(msg)
+		return res.status(400).json(msg).end()
+	}
+
+	/*validate masterAdmin account details gathered before create */
+	const { name, host, dateOfEvent, contactInfo } = req.body
+
+	EventPlan.create({
+		name,
+		host,
+		dateOfEvent,
+		contactInfo
+	})
+		.then(newEvent => {
+			res.json(newEvent.serialize())
+			res.status(202)
+		})
+		.catch(err => {
+			return res.json(err.message).status(400)
+		})
+
+});
 
 
 
