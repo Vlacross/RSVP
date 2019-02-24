@@ -28,6 +28,33 @@ function renderSignUp() {
 
 
 /*********ACCOUNT*********** */
+
+/*********deeletes current user account and related data*********** */
+
+function deleteUser() {
+
+	let user = JSON.parse(localStorage.getItem('user'));
+	let route = `users/delete/${user.id}`
+	let method = 'delete'
+	console.log(`removing user at ${route}`, user);
+	
+	quickFetch(route, method)
+		.then(res => {
+			console.log('deletion suxess!', res.status)
+			// logOut()
+		})
+		.catch(err => {
+			console.log('updateFail', err)
+			let type = 'update'
+			handleFail(type)
+		});
+};
+
+
+
+
+
+
 /*********updates current user details and info*********** */
 
 function submitEdit(route) {
@@ -580,7 +607,13 @@ function watchFetchActions() {
 	$('body').on('click', 'button.editSubmitButton', function (e) {
 		e.preventDefault();
 		submitEdit(route)
-	})
+	});
+	$('body').on('click', 'button.userDeleteButton', function (e) {
+		e.preventDefault();
+		console.log('This is it ...')
+		deleteUser()
+	});
+	
 /*STOP EDIT */
 	/************************ */
 /*START INTRO */
@@ -671,8 +704,9 @@ function watchPageActions() {
 		purgeComments(postId)
 		deletePost(route)
 	});
+	
 
-
+	
 }
 /********^*LISTENERS*^**************************************************************************************************^*LISTENERS*^********************** */
 

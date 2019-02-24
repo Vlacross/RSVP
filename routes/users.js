@@ -17,6 +17,8 @@ passport.use('local', localStrategy);
 const jwtAuth = passport.authenticate('JWT', { session: false });
 const localAuth = passport.authenticate('local', { session: false });
 
+const CommentPost = require('../models/comments');
+const Post = require('../models/posts');
 const User = require('../models/users');
 const { levelOne, levelTwo, validateEvent } = require('../Roles/checkWare')
 
@@ -89,6 +91,30 @@ router.put('/details/', (req, res) => {
 			return res.json(obj).status(203).end()
 		})
 		.catch(err => console.log(err, 22))
+});
+
+router.delete('/delete/:id', (req, res) => {
+    if(!req.params.id) {
+        console.error('missing \'id\'!!');
+        return res.status(400).end()
+    };
+    const userId = req.params.id;
+    // console.log(userId)
+    
+   
+    Post.find({author: userId})
+        .then(posts => {
+            posts.forEach(post => {
+				
+                post.remove()
+            });  
+		});
+	CommentPost.find({userId: userId})
+		.then(comments => {
+			comments.forEach(comment => comment.remove())
+		})
+     User.findOne({ _id: userId }).remove()
+	.then(res.status(204).end()) 
 });
 
 

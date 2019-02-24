@@ -195,6 +195,7 @@ function editProfile() {
 						</label>
 						
 						<button class="editSubmitButton" type="submit" name="editSubmitButton">Submit</button>
+						<button class="userDeleteButton" type="submit" name="userDeleteButton">delete</button>
 
 					</fieldset>
 				</form>
