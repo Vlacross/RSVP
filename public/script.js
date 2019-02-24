@@ -12,8 +12,9 @@ function renderSignIn() {
 
 	console.log('Signing In!');
 	$('.introView').addClass('hidden');
-	$('.accessView').removeClass('hidden');
+	$('main').append(introViewSwitch(loginForm))
 	promptAuth();
+	/*listens for loginSubmit */
 };
 
 /*changes the view and prompts for details to create a new user */
@@ -479,7 +480,7 @@ function routeFail() {
 	$('.failedResponse').remove();
 	$('.userNameInput').val('');
 	$('.userPassInput').val('');
-	$('.accessView').removeClass('hidden');
+	
 };
 
 /*********^***********^**********************************************************************************^*SITE*FLOW*ACTIONS*^**********************************/
@@ -500,15 +501,15 @@ function logOut() {
 
 
 /*********V*LOGIN*V***************************************************************************************************V*LOGIN*V*********************** */
-function promptAuth() {
+// function promptAuth() {
 
-	const fullname = $('.fullNameInput').val('');
-	const id = $('.userNameInput').val('');
-	const pwd = $('.userPassInput').val('');
-};
+// 	const fullname = $('.fullNameInput').val('');
+// 	const id = $('.userNameInput').val('');
+// 	const pwd = $('.userPassInput').val('');
+// };
 
 /*Initial User Login */
-function logIn(route, newUser) {
+function logIn(route) {
 	console.log(`sending fetch to ${route}`);
 	const fullname = $('.fullNameInput').val();
 	const id = $('.userNameInput').val();
@@ -538,7 +539,6 @@ function logIn(route, newUser) {
 			localStorage.setItem('user', JSON.stringify(resj.user))
 			localStorage.setItem('token', `${resj.token}`)
 			// let user = JSON.parse(localStorage.getItem('user'))
-			$('.accessView').addClass('hidden')
 			buildHome()
 		})
 		.catch(err => {
@@ -624,15 +624,16 @@ function watchFetchActions() {
 		route = 'login'
 		renderSignIn();
 	});
+	$('body').on('click', 'button.loginSubmit', function (e) {
+		e.preventDefault();
+		logIn(route);
+	});
+
 	$('body').on('click', 'button.introRegisterButton', function (e) {
 		e.preventDefault();
 		console.log('switching route for user create')
 		route = 'login/create'
 		renderSignUp();
-	});
-	$('body').on('click', 'button.loginSubmit', function (e) {
-		e.preventDefault();
-		logIn(route);
 	});
 	$('body').on('click', 'button.toggleIntro', function (e) {
 		e.preventDefault();

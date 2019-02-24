@@ -46,16 +46,17 @@ router.post('/', localAuth, (req, res) => {
 	if(!req) {console.log('err')}
 	console.log('maider This farm!', req.user)
 	let token = buildToken(req.user.username)
-	let user = {
-		id: req.user._id,
-		fullname: req.user.fullname,
-		username: req.user.username,
-		role: req.user.role
-	}
+	let user = req.user.serialize()
+	console.log(user)
 	
 	res.json({ token, user })
 })
 
+router.post('/eventCheck', validateEvent, (req, res) => {
+	if(!req) {console.log('err')}
+	console.log()
+	res.json()
+})
 
 /*Can create a new user account */
 router.post('/create', (req, res) => {

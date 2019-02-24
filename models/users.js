@@ -75,9 +75,10 @@ userSchema.methods.checkPass = function (pwd) {
 
 userSchema.methods.serialize = function () {
   return {
+    id: this.id,
     fullname: this.fullname,
     username: this.username,
-    event: this.event.name,
+    event: this.event,
     role: this.role,
     attending: this.attending
   }

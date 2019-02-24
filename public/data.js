@@ -24,6 +24,27 @@ function quickFetch(route, method) {
 };
 
 
+function viewSwitch(currentView) {
+
+	let viewWrap =
+		`
+<section class="viewWrapper">${currentView}</section>
+`;
+	return viewWrap;
+};
+
+
+function introViewSwitch(currentView) {
+
+	let viewWrap =
+		`
+<section class="accessView">${currentView}</section>
+`;
+	return viewWrap;
+}
+
+
+/**************PROMPTS*******************************************************************************************PROMPTS*************** */
 /*Let user know delete success */
 const deleteSuccessPrompt =
 	`
@@ -100,291 +121,378 @@ var failedDelete =
  </section>
  `;
 
-/*eventFeed */
+/**************PROMPTS*******************************************************************************************PROMPTS*************** */
 
-/*Main app home page- left-side nav bar */
-let homePage =
-	`
-	<section class="homePageView">
-
-	<nav class="siteNav">
-		
-		<button type="submit" class="usersListLink" name="usersListLink">Event Users</button>
-		<button type="submit" class="eventDetailsLink" name="eventDetailsLink">Event Details</button>
-		<button type="submit" class="eventNewsfeedLink" name="eventNewsfeedLink">Event News Feed</button>
-		<button type="submit" class="accountLink" name="accountLink">Account</button>
-		<button type="submit" class="logOut" name="Logout">Logout</button>
-		<button type="submit" class="addPost" name="addPost">AddPost</button>
-	</nav>
-
-	<section class="viewWrapper">
-		<span>viewing some of all topic posts</span>
-		<ul class="updatePosts">
-
-		</ul>
-		<span>viewing some of all topic posts</span>
-	</section>
-
-</section>
-
-`;
-
-function viewSwitch(currentView) {
-
-	let viewWrap =
-		`
-<section class="viewWrapper">${currentView}</section>
-`;
-	return viewWrap;
-}
-
-/*List of users in DB with role="atendee" */
-
-function usersListing(usr) {
-	let { fullname } = usr;
-	let usersListing =
-
-		`
-<li>
-	<p>${fullname}</p>
-</li>
-`;
-	return usersListing;
-};
+/*************V*LOGIN*REGISTER*V*****************************************************************************************V*LOGIN*REGISTER*V************** */
 
 
-/*Simple user account info card for current user to update details */
+const loginForm = 
+`
+<form class="authForm" autocomplete="off">
+	<fieldset class="accessFieldset">
+		<input autocomplete="false" name="hidden" type="text" style="display:none;">
 
-function accountProfile() {
-	let user = JSON.parse(localStorage.getItem('user'));
-	console.log(user, "inprof");
-	let { fullname, username } = user;
-	let accountDetails =
-		`
-<section class="accountProfile">
-	<span class="fullnameSpan">Fullname: ${fullname}</span>
-	<span class="usernameSpan">Username: ${username}</span>
-	<span  class="passwordSpan">Password: ${password}</span>
-	<button type="submit" class="profileEditButton" name="profileEditButton">Edit profile</button>
-</section>
-`;
-	return accountDetails;
-
-};
-
-function editProfile() {
-	let user = JSON.parse(localStorage.getItem('user'));
-	let { fullname, username } = user;
-
-	const editForm =
-		`
-				<form class="accountEditForm" autocomplete="off">
-					<fieldset class="updateFieldset">		
-						
-	
-						<label for="fullNameInput" class="fullNameLabel" >FullName
-							<input id="fullNameInput" name="fullNameInput" class="fullNameInput" type="text" value="${fullname}">
-						</label>
-	
-						<label for="userNameInput">Username
-							<input id="userNameInput" name="userNameInput" class="userNameInput" type="text" value="${username}" required>
-						</label>
-	
-						<label for="userPassInput">New PassWord
-							<input id="userPassInput" name="userPassInput" class="userPassInput" type="text" placeholder="Enter new password here" required>
-						</label>
-						
-						<button class="editSubmitButton" type="submit" name="editSubmitButton">Submit</button>
-						<button class="userDeleteButton" type="submit" name="userDeleteButton">delete</button>
-
-					</fieldset>
-				</form>
-
-
-`;
-	return editForm;
-};
-
-
-function constructPost() {
-
-	const newPostForm =
-		`
-	<form class="postForm">
-		<fieldset class="eventPost">
-		
-			<div class="form-inputs">
-
-				<label for="title-input">Title: 
-					<input id="title-input" class="eventPostTitleInput" name="title-input" type="text" required>
+				<label for="userNameInput">UserId--demoUser: "big"
+					<input id="userNameInput" name="userNameInput" class="userNameInput" type="text" required>
 				</label>
 
-				<label for="content-input">Content: 
-					<textarea class="eventPostContentInput" cols="40" rows="10" type="text" name="content-input"></textarea>
+				<label for="userPassInput">PassWord-demoPassword: "ben"
+					<input id="userPassInput" name="userPassInput" class="userPassInput" type="text" required>
 				</label>
 
-				<button class="postFormSubmit" type ="submit">Post</button>
+				<button class="loginSubmit" type="submit" name="submitButton">Submit</button>
+					
+	</fieldset>
+					<button class="toggleIntro" type="submit" name="toggleIntro">Back</button>
 
-			</div>
-
-		</fieldset>
-	</form>
-
-`;
-	return newPostForm;
-};
-
-/*template for event topic posts */
-
-function eventPost(post, count) {
-	let { title, author, body, comments, id, createdAt } = post;
-	let date = new Date(createdAt).toDateString();
-	let eventPost =
-		`
-<li  class="eventPost">
-
-	<div class="subPostTitle">
-		<a tabindex="${count}" class="postTitle" id="${id}">Title: ${title}</a>
-	</div>
-
-	<div class="subPost">
-		<h3>By: ${author}</h3>
-		<p>Posted on ${date}</p>
-	</div>
-
-	<p>${body}</p>
-	<p>${comments.length} Comments</p>
-	
-</li>
-`;
-	return eventPost;
-};
-
-/* compile comment Data into DOM content*/
-
-function buildComment(comment) {
-	let { listing, text, id, createdAt } = comment;
-
-	let date = new Date(createdAt).toDateString()
-	let remark =
-		`
-<li class="commentListing" id="${id}">
-
-	<p>posted: ${date}</p>
-	<h3>${listing}</h3>
-	<p>${text}</p>
-	<button class="removeComment">remove</button>
-</li>
-`;
-	return remark;
-}
-
-function generateRemarks(comments) {
-
-	if (comments.length === 0) {
-		let noComments =
-			`
-	<li>
-	<p>No Comments Yet!</p>
-	</li>
-	`;
-		return noComments;
-	};
-
-
-	let commentList = []
-	comments.forEach(comment => {
-		let readable = buildComment(comment)
-		commentList.push(readable)
-	});
-
-
-	return commentList.join(' ');
-};
-
-
-/*template for single-topic posts */
-
-function buildPost(post) {
-	let { title, author, body, comments, id, createdAt } = post;
-	console.log('commies');
-	let remarks = generateRemarks(comments);
-	let date = new Date(createdAt).toDateString();
-
-
-
-	let eventPost =
-
-
-		`
-<li  class="eventPost">
-
-	<div class="subPostTitle">
-		<h1 class="postTitle">Title: ${title}</h1>
-	</div>
-
-	
-
-	<div class="subPost">
-		<h3>By: ${author}</h3>
-		<h3>Posted on ${date}</h3>
-	</div>
-
-	<p>${body}</p>
-
-	<div class="subPostComment">
-
-			<div class="postButtons">
-				<button class="addComment">Comment</button>
-				<button class="postDeleteButton" data="${id}">Remove Post</button>
-			</div>
-		<ul class="commentsList">${remarks} </ul>
-	</div>
-
-</li>
+</form>
 
 `;
-	return eventPost;
-};
 
-const toggleButton =
-	`
-	<button class="cancelActionButton">Cancel</button>
-`;
+const eventCheck = 
+`
+<form class="eventCheck">
+	<input autocomplete="false" name="hidden" type="text" style="display:none;">
 
-const commentButton =
-	`
-<button class="addComment">Comment</button>
-`;
+	<label for="eventNameCheck" class="eventNameCheckLabel " >Search for an event to sign up for
+		<input id="eventNameInput" name="eventNameInput" class="eventNameInput" type="text">
+	</label>
+
+	<button class="eventNameButton">Find</button>
+
+</form>
+`
 
 
+const signupForm = 
+ 
+`
+<form class="authForm" autocomplete="off">
+	<fieldset class="accessFieldset">
+		<input autocomplete="false" name="hidden" type="text" style="display:none;">
 
-function commentPalette() {
-
-	let palette =
-		`
-<li class="palette">
-
-	<form class="commentForm">
-		
-		<div class="form-inputs">
-
-			<label for="content-input">
-				<textarea class="commentContentInput" cols="60" rows="8" type="text" name="content-input" placeholder="Enter your comment here"></textarea>
+			<label for="fullNameInput" class="fullNameLabel " >FullName
+				<input id="fullNameInput" name="fullNameInput" class="fullNameInput" type="text">
 			</label>
 
-			<button class="commentFormSubmit" type ="submit">Post</button>
+				<label for="userNameInput">UserName
+					<input id="userNameInput" name="userNameInput" class="userNameInput" type="text" required>
+				</label>
 
-		</div>
+				<label for="userPassInput">PassWord 
+					<input id="userPassInput" name="userPassInput" class="userPassInput" type="text" required>
+				</label>
+				<div class="attending">
+					<label for"going">
+						<input type="radio" id="going" name="attendance" class="radioChoice" value="true" checked>
+					</label>
+					<label for"notGoing">
+						<input type="radio" id="notGoing" name="attendance" class="radioChoice" value="false" checked>
+					</label>
+				</div>
 
-		
+						<button class="loginSubmit" type="submit" name="submitButton">Submit</button>
+	</fieldset>
+					<button class="toggleIntro" type="submit" name="toggleIntro">Back</button>
+</form>
+`;
+
+
+
+				/*************^*LOGIN*REGISTER*^*****************************************************************************************^*LOGIN*REGISTER*^************** */
+
+				/*eventFeed */
+
+				/*Main app home page- left-side nav bar */
+				let homePage =
+					`
+	<section class="homePageView">
+
+					<nav class="siteNav">
+
+						<button type="submit" class="usersListLink" name="usersListLink">Event Users</button>
+						<button type="submit" class="eventDetailsLink" name="eventDetailsLink">Event Details</button>
+						<button type="submit" class="eventNewsfeedLink" name="eventNewsfeedLink">Event News Feed</button>
+						<button type="submit" class="accountLink" name="accountLink">Account</button>
+						<button type="submit" class="logOut" name="Logout">Logout</button>
+						<button type="submit" class="addPost" name="addPost">AddPost</button>
+					</nav>
+
+					<section class="viewWrapper">
+						<span>viewing some of all topic posts</span>
+						<ul class="updatePosts">
+
+						</ul>
+						<span>viewing some of all topic posts</span>
+					</section>
+
+				</section>
+
+				`;
+				
+				/*List of users in DB with role="atendee" */
+				
+function usersListing(usr) {
+					let { fullname } = usr;
+				let usersListing =
+			
+					`
+<li>
+					<p>${fullname}</p>
+				</li>
+				`;
+					return usersListing;
+				};
+				
+				
+				/*************V*ACCOUNT*V*****************************************************************************************V*ACCOUNT*V************** */
+				
+				/*Simple user account info card for current user to update details */
+				
+function accountProfile() {
+					let user = JSON.parse(localStorage.getItem('user'));
+				console.log(user, "inprof");
+	let {fullname, username } = user;
+				let accountDetails =
+				`
+	<section class="accountProfile">
+					<span class="fullnameSpan">Fullname: ${fullname}</span>
+					<span class="usernameSpan">Username: ${username}</span>
+					<span class="passwordSpan">Password: ${password}</span>
+					<button type="submit" class="profileEditButton" name="profileEditButton">Edit profile</button>
+				</section>
+				`;
+				return accountDetails;
+			
+			};
+			
+function editProfile() {
+					let user = JSON.parse(localStorage.getItem('user'));
+	let {fullname, username } = user;
+			
+				const editForm =
+				`
+	<form class="accountEditForm" autocomplete="off">
+					<fieldset class="updateFieldset">
+
+
+						<label for="fullNameInput" class="fullNameLabel" >FullName
+	<input id="fullNameInput" name="fullNameInput" class="fullNameInput" type="text" value="${fullname}">
+	</label>
+
+							<label for="userNameInput">Username
+	<input id="userNameInput" name="userNameInput" class="userNameInput" type="text" value="${username}" required>
+	</label>
+
+								<label for="userPassInput">New PassWord
+	<input id="userPassInput" name="userPassInput" class="userPassInput" type="text" placeholder="Enter new password here" required>
+	</label>
+
+									<button class="editSubmitButton" type="submit" name="editSubmitButton">Submit</button>
+									<button class="userDeleteButton" type="submit" name="userDeleteButton">delete</button>
+	
+	</fieldset>
 	</form>
 
-</li>
+
+							`;
+							return editForm;
+						};
+						/*************^*ACCOUNT*^*****************************************************************************************^*ACCOUNT*^************** */
+						
+						
+						/*************V*POST*V*****************************************************************************************V*POST*V************** */
+						
+function constructPost() {
+	
+	const newPostForm =
+							`
+	<form class="postForm">
+								<fieldset class="eventPost">
+
+									<div class="form-inputs">
+
+										<label for="title-input">Title:
+	<input id="title-input" class="eventPostTitleInput" name="title-input" type="text" required>
+	</label>
+
+											<label for="content-input">Content:
+	<textarea class="eventPostContentInput" cols="40" rows="10" type="text" name="content-input"></textarea>
+											</label>
+
+											<button class="postFormSubmit" type="submit">Post</button>
+	
+	</div>
+	
+	</fieldset>
+	</form>
+
+								`;
+								return newPostForm;
+							};
+							
+							/*template for event topic posts */
+							
+function eventPost(post, count) {
+									let { title, author, body, comments, id, createdAt } = post;
+								let date = new Date(createdAt).toDateString();
+								let eventPost =
+								`
+	<li class="eventPost">
+
+									<div class="subPostTitle">
+										<a tabindex="${count}" class="postTitle" id="${id}">Title: ${title}</a>
+									</div>
+
+									<div class="subPost">
+										<h3>By: ${author}</h3>
+										<p>Posted on ${date}</p>
+									</div>
+
+									<p>${body}</p>
+									<p>${comments.length} Comments</p>
+
+								</li>
+								`;
+								return eventPost;
+							};
+							
+							
+							
+							/*template for single-topic posts */
+							
+function buildPost(post) {
+									let { title, author, body, comments, id, createdAt } = post;
+								console.log('commies');
+								let remarks = generateRemarks(comments);
+								let date = new Date(createdAt).toDateString();
+							
+							
+							
+								let eventPost =
+							
+							
+								`
+	<li class="eventPost">
+
+									<div class="subPostTitle">
+										<h1 class="postTitle">Title: ${title}</h1>
+									</div>
 
 
-`;
-	return palette;
-};
+
+									<div class="subPost">
+										<h3>By: ${author}</h3>
+										<h3>Posted on ${date}</h3>
+									</div>
+
+									<p>${body}</p>
+
+									<div class="subPostComment">
+
+										<div class="postButtons">
+											<button class="addComment">Comment</button>
+											<button class="postDeleteButton" data="${id}">Remove Post</button>
+										</div>
+										<ul class="commentsList">${remarks} </ul>
+									</div>
+
+								</li>
+
+								`;
+								return eventPost;
+							};
+							
+							const toggleButton =
+							`
+<button class="cancelActionButton">Cancel</button>
+								`;
+								
+								const commentButton =
+								`
+<button class="addComment">Comment</button>
+								`;
+								/*************^*POST*^*****************************************************************************************^*POST*^************** */
+								
+								/*************V*COMMENTS*V*****************************************************************************************V*COMMENTS*V************** */
+								
+								
+								/* compile comment Data into DOM content*/
+								
+function buildComment(comment) {
+									let { listing, text, id, createdAt } = comment;
+							
+								let date = new Date(createdAt).toDateString()
+								let remark =
+								`
+	<li class="commentListing" id="${id}">
+
+									<p>posted: ${date}</p>
+									<h3>${listing}</h3>
+									<p>${text}</p>
+									<button class="removeComment">remove</button>
+								</li>
+								`;
+								return remark;
+							}
+							
+function generateRemarks(comments) {
+	
+	if (comments.length === 0) {
+									let noComments =
+								`
+		<li>
+									<p>No Comments Yet!</p>
+								</li>
+								`;
+								return noComments;
+							};
+						
+						
+							let commentList = []
+	comments.forEach(comment => {
+									let readable = buildComment(comment)
+								commentList.push(readable)
+							});
+						
+						
+							return commentList.join(' ');
+						};
+						
+						
+function commentPalette() {
+
+									let palette =
+								`
+	<li class="palette">
+
+									<form class="commentForm">
+
+										<div class="form-inputs">
+
+											<label for="content-input">
+												<textarea class="commentContentInput" cols="60" rows="8" type="text" name="content-input" placeholder="Enter your comment here"></textarea>
+											</label>
+
+											<button class="commentFormSubmit" type="submit">Post</button>
+
+										</div>
+
+
+									</form>
+
+								</li>
+
+
+								`;
+								return palette;
+							};
+							
+							/*************^*COMMENTS*^*****************************************************************************************^*COMMENTS*^************** */
+							
+
+
+
+
 
 
