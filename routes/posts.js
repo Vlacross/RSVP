@@ -9,6 +9,8 @@ const passport = require('passport');
 passport.use('JWT', jwtStrategy);
 const jwtAuth = passport.authenticate('JWT', { session: false });
 
+const User = require('../models/users');
+const CommentPost = require('../models/comments');
 const Post = require('../models/posts');
 const { levelOne, levelTwo } = require('../Roles/checkWare')
 
@@ -133,17 +135,42 @@ router.put('/decomment/:id', (req, res) => {
 });
 
 
-router.delete('/delete/:id', (req, res) => {
+router.delete('/purgeComments/:id', (req, res) => {
 	if (!req.params.id) {
 		let msg = `Incomplete credentials!`
 		console.error(msg)
 		return res.status(400).json(msg).end()
 	}
+	
+	Post.findOne({_id: req.params.id})
+		.then(post => {
+			let comments = post.comments;
+			comments.forEach(comment => {
+				comment.remove()
+			})
+		})
+	
+	.then(res.status(204).end())
+	.catch(err => console.log(err, 23))
+})
 
+
+router.delete('/delete/:id', (req, res) => {
+
+
+	if (!req.params.id) {
+		let msg = `Incomplete credentials!`
+		console.error(msg)
+		return res.status(400).json(msg).end()
+	}
+	
 	Post.findByIdAndDelete(req.params.id)
 		.then(res.status(204).end())
 		.catch(err => console.log(err, 23))
-});
+	
+})
 
 
 module.exports = router
+
+
