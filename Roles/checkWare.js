@@ -75,6 +75,35 @@ validateEvent = function (req, res, next) {
       })
   };
 
+  checkEventName = function (req, res, next) {
+    
+    let name = req.body.name
+
+       return EventPlan.findOne({name: name}, function (err, event) {
+          if (err) {
+              let msg = 'eventCheck error!'
+            console.log(msg)
+            return Promise.reject({message: msg})
+          }
+          if (!name) {
+              let msg = 'No name is given'
+            console.log(msg)
+            return Promise.reject({message: msg})
+          }
+          if (event) {
+            let msg = 'Event name already exists'
+          console.log(msg)
+          return Promise.reject({message: msg})
+        }
+          if (!event) {
+              let msg = 'Event name not taken, success!'
+            console.log(msg)
+            return next()
+          }
+          
+      })
+  };
+
   validateAttendance = function (req, res, next) {
     let name = req.body.eventName
     let userId = req.body.id
@@ -102,4 +131,4 @@ validateEvent = function (req, res, next) {
 
 
 
-module.exports = { levelOne, levelTwo, validateEvent, validateAttendance }
+module.exports = { levelOne, levelTwo, validateEvent, validateAttendance, checkEventName }
