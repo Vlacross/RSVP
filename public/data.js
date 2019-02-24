@@ -246,12 +246,15 @@ const signupForm =
 				/*List of users in DB with role="atendee" */
 				
 function usersListing(usr) {
-					let { fullname } = usr;
+					let { fullname, joinDate, attending } = usr;
+					let date = new Date(joinDate).toDateString();
 				let usersListing =
 			
 					`
-<li>
-					<p>${fullname}</p>
+				<li class="userListing">
+					<p>Name: ${fullname}</p>
+					<p>Join Date: ${date}</p>
+					<p>Attending: ${attending}</p>
 				</li>
 				`;
 					return usersListing;
@@ -265,13 +268,13 @@ function usersListing(usr) {
 function accountProfile() {
 					let user = JSON.parse(localStorage.getItem('user'));
 				console.log(user, "inprof");
-	let {fullname, username } = user;
+	let {fullname, username, attending } = user;
 				let accountDetails =
 				`
 	<section class="accountProfile">
 					<span class="fullnameSpan">Fullname: ${fullname}</span>
 					<span class="usernameSpan">Username: ${username}</span>
-					<span class="passwordSpan">Password: ${password}</span>
+					<span class="attending">Attending: ${attending}</span>
 					<button type="submit" class="profileEditButton" name="profileEditButton">Edit profile</button>
 				</section>
 				`;
@@ -301,8 +304,19 @@ function editProfile() {
 	<input id="userPassInput" name="userPassInput" class="userPassInput" type="text" placeholder="Enter new password here" required>
 	</label>
 
-									<button class="editSubmitButton" type="submit" name="editSubmitButton">Submit</button>
-									<button class="userDeleteButton" type="submit" name="userDeleteButton">delete</button>
+	<div class="attending">
+
+		<label for"going">Going
+			<input type="radio" id="going" name="attendance" class="radioChoice" value="true" checked>
+		</label>
+
+		<label for"notGoing">Not Going
+			<input type="radio" id="notGoing" name="attendance" class="radioChoice" value="false" checked>
+		</label>
+	</div>
+
+					<button class="editSubmitButton" type="submit" name="editSubmitButton">Submit</button>
+					<button class="userDeleteButton" type="submit" name="userDeleteButton">delete</button>
 	
 	</fieldset>
 	</form>

@@ -94,6 +94,15 @@ main {
     align-items: flex-end;
 }
 
+.userListing {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border: solid 0.4px black;
+    border-left: none;
+    border-right: none;
+}
 
 .failedResponse {
     display: flex;

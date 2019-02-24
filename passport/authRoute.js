@@ -44,12 +44,15 @@ router.post('/check', jwtAuth, (req, res) => {
 
 router.post('/', localAuth, (req, res) => {
 	if(!req) {console.log('err')}
-	console.log('maider This farm!', req.user)
+	console.log('maider This farm!')
 	let token = buildToken(req.user.username)
-	let user = req.user.serialize()
-	console.log(user)
-	
-	res.json({ token, user })
+	User.findOne({_id: req.user.id})
+	.then(user => {
+		console.log(user.serialize())
+		let userData = user.serialize()
+		res.json({ token, userData })
+		
+	})
 })
 
 /*Check event before signup */
@@ -62,7 +65,7 @@ router.post('/eventCheck', validateEvent, (req, res) => {
 			event: event,
 			message: 'true'
 		}
-		res.json(successRes).status(200).end()
+		res.json(succ).status(200).end()
 	})
 	
 })

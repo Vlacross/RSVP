@@ -40,8 +40,8 @@ const buildToken = function (user) {
 
 
 /*can search user*/
-router.get('/find', (req, res) => {
-	User.find()
+router.get('/find/:id', (req, res) => {
+	User.find({event: req.params.id})
 		.then(users => {
 			let list = [];
 			users.forEach(user => {
@@ -62,12 +62,13 @@ router.put('/details/', (req, res) => {
 		return res.status(400).json(msg).end()
 	}
 
-	let { fullname, username, password, id } = req.body
+	let { fullname, username, password, id, attending } = req.body
 
 	const newDetails = {
 		fullname,
 		username,
-		password
+		password,
+		attending
 	}
 
 	User.findByIdAndUpdate(id, { $set: newDetails }, { new: true })

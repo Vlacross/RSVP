@@ -94,7 +94,6 @@ function deleteUser() {
 
 
 
-
 /*********updates current user details and info*********** */
 
 function submitEdit(route) {
@@ -105,12 +104,15 @@ function submitEdit(route) {
 	let fullName = $('.fullNameInput').val();
 	let userName = $('.userNameInput').val();
 	let pwd = $('.userPassInput').val();
+	const att = $('input[name=attendance]:checked').val()
+	
 	let updatedUser = {
-		id: user.id,
 		fullname: fullName,
 		username: userName,
-		password: pwd
+		password: pwd,
+		attending: att
 	};
+
 	console.log(updatedUser, 'preUpdate send');
 	fetch(route, {
 		method: 'put',
@@ -169,7 +171,9 @@ function buildUsers(usrs) {
 /*Gets a list of registered users and displays their name(eventually want role, join date, and attending or not) */
 function showUsers() {
 
-	let route = 'users/find';
+	let user = JSON.parse(localStorage.getItem('user'));
+
+	let route = `users/find/${user.event}`;
 	let method = 'GET';
 	quickFetch(route, method)
 		.then(res => res.json())
@@ -248,7 +252,9 @@ function buildFeed(arr) {
 /*Gets list of post data from server */
 function getFeed() {
 
-	let route = 'posts/find';
+	let user = JSON.parse(localStorage.getItem('user'))
+	console.log('raving??', user.event)
+	let route = `posts/find/${user.event}`;
 	let method = 'GET';
 	quickFetch(route, method)
 		.then(res => res.json())
@@ -263,7 +269,7 @@ function getFeed() {
 
 /*gets post data from server and builds content then renders to viewer */
 function getPost(postId) {
-	let route = `posts/find/${postId}`;
+	let route = `posts/findPost/${postId}`;
 	let method = 'GET';
 	
 	quickFetch(route, method)
@@ -465,6 +471,7 @@ function deleteComment(removalId, postId) {
 /*********BUILDHOME*********** */
 function buildHome() {
 
+	$('.accessView').remove()
 	$('main').addClass('sinkBack');
 	$('body').prepend(homePage);
 	getFeed();
@@ -554,34 +561,66 @@ function logOut() {
 
 /*Initial User Login */
 function logIn(route) {
+	
 	console.log(`sending fetch to ${route}`);
-	const fullname = $('.fullNameInput').val();					/*{ fullname:  username:  password: , event, role, attending  */
-	const id = $('.userNameInput').val();
+	const userName = $('.userNameInput').val();
 	const pwd = $('.userPassInput').val();
-	const att = $('input[name=attendance]:checked').val()
 	const logIn = {
-		username: id,
+		username: userName,
 		password: pwd
 	};
-	let eventName = JSON.parse(localStorage.getItem('event'))
-	const createNew = {
-		fullname: fullname,
-		username: id,
-		password: pwd,
-		event: eventName[0].id,
-		role: 2,
-		attending: att
-
-	};
-	let payLoad = !fullname ? logIn : createNew
-	console.log(payLoad, 'preauth send')
+	console.log(logIn, 'preauth send')
 	fetch(route, {
 		method: 'post',
 		headers: {
 			'Accept': 'application/json',
 			'Content-Type': 'application/json'
 		},
-		body: JSON.stringify(payLoad)
+		body: JSON.stringify(logIn)
+	})
+		.then(res => res.json())
+		.then(resj => {
+			console.log(resj, resj.userData)
+			localStorage.setItem('user', JSON.stringify(resj.userData))
+			localStorage.setItem('token', `${resj.token}`)
+			buildHome()
+		})
+		.catch(err => {
+			console.log('loginFail')
+			let type = 'login'
+			handleFail(type)
+		});
+};
+/********^*LOGIN*^*************************************************************************************************^*LOGIN*^********************** */
+
+/*********V*SIGN*UP*V***************************************************************************************************V*SIGN*UP*V*********************** */
+
+
+function signUp(route) {
+
+	console.log(`sending fetch to ${route}`);
+	const fullname = $('.fullNameInput').val();	
+	const userName = $('.userNameInput').val();
+	const pwd = $('.userPassInput').val();
+	const att = $('input[name=attendance]:checked').val()
+	let eventName = JSON.parse(localStorage.getItem('event'))
+	const createNew = {
+		fullname: fullname,
+		username: userName,
+		password: pwd,
+		event: eventName[0].id,
+		role: 2,
+		attending: att
+	};
+
+	console.log(createNew, 'preauth newUser send')
+	fetch(route, {
+		method: 'post',
+		headers: {
+			'Accept': 'application/json',
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(createNew)
 	})
 		.then(res => res.json())
 		.then(resj => {
@@ -597,8 +636,11 @@ function logIn(route) {
 			handleFail(type)
 		});
 };
-/********^*LOGIN*^*************************************************************************************************^*LOGIN*^********************** */
 
+
+
+
+/*********^*SIGN*UP*^***************************************************************************************************^*SIGN*UP*^*********************** */
 
 /********V*NAVBAR*V*************************************************************************************************V*NAVBAR*V********************** */
 function handleNav() {
@@ -691,8 +733,8 @@ function watchFetchActions() {
 	});
 		$('body').on('click', 'button.signUpSubmit', function (e) {
 		e.preventDefault();
-		route = 'login/create'
-		loginForm(route);
+		route = 'login/create';
+		signUp(route);
 	});
 	
 
@@ -719,8 +761,8 @@ function watchPageActions() {
 	/*post title from list view to select single post */
 	$('body').on('click', 'a.postTitle', function (e) {
 		e.preventDefault();
-		console.log('Just Building a home for the console dwarves!')
 		postId = $(this).attr('id')
+		console.log('Just Building a home for the console dwarves!', postId)
 		getPost(postId)
 	});
 	/*success response back to post */

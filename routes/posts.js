@@ -25,8 +25,9 @@ router.get('/', (req, res) => {
 
 /*can search Posts*/
 /*should be available for all accounts */
-router.get('/find', (req, res) => {
-	Post.find()
+router.get('/find/:id', (req, res) => {
+	console.log(req.params.id)
+	Post.find({event: req.params.id})
 		.then(posts => {
 			let list = [];
 			posts.forEach(post => {
@@ -37,7 +38,7 @@ router.get('/find', (req, res) => {
 	res.status(200)
 });
 
-router.get('/find/:id', (req, res) => {
+router.get('/findPost/:id', (req, res) => {
 	Post.findOne({ _id: req.params.id })
 		.then(post => {
 			res.json(post.serialize())

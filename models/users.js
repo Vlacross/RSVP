@@ -79,8 +79,8 @@ userSchema.methods.serialize = function () {
     fullname: this.fullname,
     username: this.username,
     event: this.event,
-    role: this.role,
-    attending: this.attending
+    attending: this.attending,
+    joinDate: this.createdAt
   }
 };
 
