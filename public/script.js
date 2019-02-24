@@ -264,7 +264,22 @@ function updatePost(route) {
 /*********SINGLE*POST*DELETE********** */
 
 /*removes a post(eventually would like only the author and admin) */
+
+
+function purgeComments(postId) {
+	console.log('at purge')
+	let method = 'delete';
+	let route = `posts/purgeComments/${postId}`
+	console.log(route)
+
+	quickFetch(route, method) 
+	.then(res => {
+		console.log('comments purged')
+	})
+}
+
 function deletePost(route) {
+	console.log('at deletet')
 	let method = 'delete';
 
 	quickFetch(route, method)
@@ -653,6 +668,7 @@ function watchPageActions() {
 		e.preventDefault();
 		console.log('Just drop the ship then...')
 		route = `posts/delete/${postId}`
+		purgeComments(postId)
 		deletePost(route)
 	});
 
