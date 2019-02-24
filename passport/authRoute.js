@@ -52,10 +52,19 @@ router.post('/', localAuth, (req, res) => {
 	res.json({ token, user })
 })
 
+/*Check event before signup */
 router.post('/eventCheck', validateEvent, (req, res) => {
 	if(!req) {console.log('err')}
-	console.log()
-	res.json()
+	console.log(req.body)
+	EventPlan.find({name: req.body.eventName})
+	.then(event => {
+		let successRes = {
+			event: event,
+			message: 'true'
+		}
+		res.json(successRes).status(200).end()
+	})
+	
 })
 
 /*Can create a new user account */

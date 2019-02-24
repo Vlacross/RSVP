@@ -121,6 +121,16 @@ var failedDelete =
  </section>
  `;
 
+ /*popup with details on returned fail */
+var noEvent =
+`<section class="noEvent" >
+	<h1>Woops!</h1>
+	<h3>Couldn't find an event with that name!</h3>
+	<p>Check your spelling and try again! </p>
+	<button class="noEventButton" name="noEventButton">Retry</button>
+</section>
+`;
+
 /**************PROMPTS*******************************************************************************************PROMPTS*************** */
 
 /*************V*LOGIN*REGISTER*V*****************************************************************************************V*LOGIN*REGISTER*V************** */
@@ -160,12 +170,14 @@ const eventCheck =
 
 	<button class="eventNameButton">Find</button>
 
+	<button class="toggleIntro" type="submit" name="toggleIntro">Back</button>
+
 </form>
 `
 
 
 const signupForm = 
- 
+ /*{ fullname:  username:  password: , event, role, attending  */
 `
 <form class="authForm" autocomplete="off">
 	<fieldset class="accessFieldset">
@@ -182,16 +194,17 @@ const signupForm =
 				<label for="userPassInput">PassWord 
 					<input id="userPassInput" name="userPassInput" class="userPassInput" type="text" required>
 				</label>
+
 				<div class="attending">
-					<label for"going">
+					<label for"going">Going
 						<input type="radio" id="going" name="attendance" class="radioChoice" value="true" checked>
 					</label>
-					<label for"notGoing">
+					<label for"notGoing">Not Going
 						<input type="radio" id="notGoing" name="attendance" class="radioChoice" value="false" checked>
 					</label>
 				</div>
 
-						<button class="loginSubmit" type="submit" name="submitButton">Submit</button>
+						<button class="signUpSubmit" type="submit" name="signUpSubmit">Submit</button>
 	</fieldset>
 					<button class="toggleIntro" type="submit" name="toggleIntro">Back</button>
 </form>

@@ -51,6 +51,7 @@ var levelTwo = function(req, res, next) {
 
 
 validateEvent = function (req, res, next) {
+
     
     let name = req.body.eventName
 
@@ -68,7 +69,8 @@ validateEvent = function (req, res, next) {
           if (!event) {
               let msg = 'no event found'
             console.log(msg)
-            return Promise.reject({message: msg})
+            return res.json({message: 'false'}) 
+            // Promise.reject({message: msg})
           }
           console.log('event found!')
           return next(null, event)

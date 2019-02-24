@@ -85,9 +85,14 @@ main {
 .accessFieldset {
     display: flex;
     flex-direction: column;
-    align-items: center
+    align-items: flex-end;
 }
 
+.attending {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
 
 
 .failedResponse {

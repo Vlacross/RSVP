@@ -2,8 +2,15 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 const mongoose = require('mongoose');
+const morgan = require('morgan')
 
 const app = express();
+const morganConfig = morgan(
+	process.env.NODE_ENV === 'development' ? 'dev' : 'common',
+	{
+		skip: () => process.env.NODE_ENV === 'test'
+	}
+);
 
 const { MONGODB_URI, PORT } = require('./config');
 const { CommentRoutes, UserRoutes, PostRoutes, EventRoutes } = require('./routes');
@@ -24,6 +31,7 @@ app.use('/comments', CommentRoutes);
 app.use('/users', UserRoutes);
 app.use('/posts', PostRoutes);
 app.use('/events', EventRoutes);
+app.use(morgan(morganConfig))
 
 
 

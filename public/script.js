@@ -3,8 +3,8 @@
 /*allows toggle between signing in and creating a new user */
 function toggleIntro() {
 	$('.introView').removeClass('hidden');
-	$('.accessView').addClass('hidden');
-	$('.fullNameLabel').addClass('hidden').attr('required', false);
+	$('.accessView').remove();
+	
 };
 
 /*changes the view and prompts login */
@@ -13,8 +13,8 @@ function renderSignIn() {
 	console.log('Signing In!');
 	$('.introView').addClass('hidden');
 	$('main').append(introViewSwitch(loginForm))
-	promptAuth();
-	/*listens for loginSubmit */
+	
+	/*listens for 'loginSubmit' */
 };
 
 /*changes the view and prompts for details to create a new user */
@@ -22,11 +22,50 @@ function renderSignUp() {
 
 	console.log('Signing Up!');
 	$('.introView').addClass('hidden');
-	$('.accessView').removeClass('hidden');
-	$('.fullNameLabel').removeClass('hidden').attr('required', true);
-	promptAuth();
+	$('main').append(introViewSwitch(eventCheck))
+	
+	/*eventCheck    eventNameButton*/
 };
 
+
+/********V*******EVENT*********V******************************************************************************************V*EVENT*ACTIONS*V*********************** */
+
+function checkEvent(route) {
+	
+	let name = $('.eventNameInput').val();
+	let event = {
+		eventName: name
+	}
+	console.log(`Checking eventName @ ${route}`)
+	fetch(route, {
+		method: 'post',
+		headers: {
+			'Accept': 'application/json',
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(event)})
+	.then(res => res.json())
+	.then(resj => {
+		console.log(resj)
+		if(resj.message === 'false') {
+			console.log('falzin')
+		 flashNoEvent()
+		}
+		if(resj.message === 'true') {
+			console.log('troobin', resj)
+		localStorage.setItem('event', JSON.stringify(resj.event))
+		$('.accessView').replaceWith(introViewSwitch(signupForm))
+		}
+	})
+	.catch(err => {
+		console.log('eventFindFail', err)
+		let type = 'login'
+		handleFail(type)
+	});
+}
+
+
+/********^*******EVENT**********^****************************************************************************************^*EVENT*ACTIONS*^*********************** */
 
 /*********ACCOUNT*********** */
 
@@ -478,10 +517,21 @@ function handleFail(type) {
 function routeFail() {
 	console.log('reroute');
 	$('.failedResponse').remove();
+	$('.accessView').removeClass('hidden');
 	$('.userNameInput').val('');
 	$('.userPassInput').val('');
 	
 };
+
+function flashNoEvent() {
+
+	$('.accessView').replaceWith(introViewSwitch(noEvent))
+
+	$('.noEventButton').one('click', function (e) {
+			e.preventDefault();
+			$('.accessView').replaceWith(introViewSwitch(eventCheck))
+		});
+}
 
 /*********^***********^**********************************************************************************^*SITE*FLOW*ACTIONS*^**********************************/
 
@@ -501,27 +551,27 @@ function logOut() {
 
 
 /*********V*LOGIN*V***************************************************************************************************V*LOGIN*V*********************** */
-// function promptAuth() {
-
-// 	const fullname = $('.fullNameInput').val('');
-// 	const id = $('.userNameInput').val('');
-// 	const pwd = $('.userPassInput').val('');
-// };
 
 /*Initial User Login */
 function logIn(route) {
 	console.log(`sending fetch to ${route}`);
-	const fullname = $('.fullNameInput').val();
+	const fullname = $('.fullNameInput').val();					/*{ fullname:  username:  password: , event, role, attending  */
 	const id = $('.userNameInput').val();
 	const pwd = $('.userPassInput').val();
+	const att = $('input[name=attendance]:checked').val()
 	const logIn = {
 		username: id,
 		password: pwd
 	};
+	let eventName = JSON.parse(localStorage.getItem('event'))
 	const createNew = {
 		fullname: fullname,
 		username: id,
-		password: pwd
+		password: pwd,
+		event: eventName[0].id,
+		role: 2,
+		attending: att
+
 	};
 	let payLoad = !fullname ? logIn : createNew
 	console.log(payLoad, 'preauth send')
@@ -632,9 +682,20 @@ function watchFetchActions() {
 	$('body').on('click', 'button.introRegisterButton', function (e) {
 		e.preventDefault();
 		console.log('switching route for user create')
-		route = 'login/create'
 		renderSignUp();
 	});
+	$('body').on('click', 'button.eventNameButton', function (e) {
+		e.preventDefault();
+		route = 'login/eventCheck'
+		checkEvent(route);
+	});
+		$('body').on('click', 'button.signUpSubmit', function (e) {
+		e.preventDefault();
+		route = 'login/create'
+		loginForm(route);
+	});
+	
+
 	$('body').on('click', 'button.toggleIntro', function (e) {
 		e.preventDefault();
 		toggleIntro()
