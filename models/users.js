@@ -12,7 +12,7 @@ const userSchema = new Schema({
   fullname: { type: String, require: true },
   username: { type: String, require: true, index: { unique: true } },
   password: { type: String, required: true },
-  event: { type: ObjectId, ref: 'EventPlan' }, 
+  event: { type: ObjectId, ref: 'EventPlan', required: true }, 
   role: { type: Number, default: 2, require: true },
   attending: { type: Boolean, require: true }
 }, {
@@ -78,7 +78,8 @@ userSchema.methods.serialize = function () {
     fullname: this.fullname,
     username: this.username,
     event: this.event.name,
-    role: this.role
+    role: this.role,
+    attending: this.attending
   }
 };
 

@@ -29,6 +29,7 @@ postSchema.methods.serialize = function () {
     title: this.title,
     author: this.author.fullname,
     body: this.body,
+    event: this.event,
     comments: this.comments,
     createdAt: this.createdAt
   }

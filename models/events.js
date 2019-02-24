@@ -29,6 +29,7 @@ const eventSchema = new Schema({
     return {
       id: this.id,
       name: this.name,
+      host: this.host,
       dateOfEvent: this.dateOfEvent,
       contactInfo: this.contactInfo,
       attendees: this.attendees,
