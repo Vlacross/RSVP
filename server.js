@@ -39,7 +39,7 @@ let server;
 
 function runServer() {
 	mongoose.connect(MONGODB_URI, { useNewUrlParser: true, autoIndex: false }, err => {
-		if (err) {Test
+		if (err) {
 			console.log(err)
 			reject(err)
 		}
