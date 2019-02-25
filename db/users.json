@@ -6,7 +6,7 @@
     "password": "password0",
     "attending": "true",
     "event": "242424242424242424242424",
-    "role": 0
+    "role": 1
   },
   {
     "_id": "333333333333333333333301",
@@ -15,7 +15,7 @@
     "password": "password1",
     "attending": "true",
     "event": "242424242424242424242424",
-    "role": 2
+    "role": 3
   },
   {
     "_id": "333333333333333333333302",
@@ -24,7 +24,7 @@
     "password": "password2",
     "attending": "true",
     "event": "242424242424242424242424",
-    "role": 1
+    "role": 2
   },
   {
     "_id": "333333333333333333333007",
@@ -33,6 +33,6 @@
     "password": "ben",
     "attending": "true",
     "event": "242424242424242424242424",
-    "role": 0 
+    "role": 1 
   }
 ]

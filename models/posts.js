@@ -60,14 +60,22 @@ postSchema.pre('findOne', populatePostList);
 postSchema.pre('remove', function() {
 	console.log('thissyisis', this)
   let arr = this.comments;
+  
+  for(let i = 0; i < arr.length; i++) {
+    CommentPost.findByIdAndDelete(i)
+  }
+
+
+
+
+
   arr.forEach(comment => {
     console.log(comment)
-    CommentPost.findOne(comment)
-    .then(comment => {
-      console.log('blogless')
+    CommentPost.findByIdAndDelete(comment)
     })
+    console.log('thisagin', this)
     
-  })
+ 
   
  
 })

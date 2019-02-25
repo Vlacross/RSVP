@@ -61,8 +61,19 @@ userSchema.post('save', function() {
     console.log(event)
   })
   
+})
+
+
+userSchema.pre('remove', function() {
+  console.log('rmoving user reference from event record', this.id)
+
+  EventPlan.findByIdAndUpdate(this.event, { $pull: { 'attendees': this.id }})
+  .then(event => {
+    console.log(event)
+  })
   
 })
+
 
 userSchema.pre('find', function() {
   this.populate({ path: 'event' });
@@ -93,7 +104,8 @@ userSchema.methods.serialize = function () {
     username: this.username,
     event: this.event,
     attending: this.attending,
-    joinDate: this.createdAt
+    joinDate: this.createdAt,
+    role: this.role
   }
 };
 

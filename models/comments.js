@@ -30,15 +30,13 @@ commentSchema.virtual('listing').get(function () {
 });
 
 commentSchema.post('save', function() {
-	console.log('thissyisis', this.postId)
 	Post.findByIdAndUpdate(this.postId, { $push: { 'comments': this.id }})
   .then(comment => {
     console.log(comment)
   })
-})
+});
 
 commentSchema.pre('remove', function() {
-	console.log('thissyisis', this.postId)
 	Post.findByIdAndUpdate(this.postId, { $pull: { 'comments': this.id }})
   
  
