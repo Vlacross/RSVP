@@ -516,22 +516,41 @@ function buildPost(post) {
 								/*************^*POST*^*****************************************************************************************^*POST*^************** */
 								
 								/*************V*COMMENTS*V*****************************************************************************************V*COMMENTS*V************** */
-								
+
 								
 								/* compile comment Data into DOM content*/
 								
 function buildComment(comment) {
 									let { listing, text, id, createdAt } = comment;
-							
-								let date = new Date(createdAt).toDateString()
-								let remark =
-								`
-	<li class="commentListing" id="${id}">
+									
+									let date = new Date(createdAt).toDateString()
+									
+									let user = JSON.parse(localStorage.getItem('user'))
+									console.log('lsiting id', comment)
 
-									<p>posted: ${date}</p>
+									let deleteButton = 
+
+`
+<button class="removeComment">remove</button>
+`
+
+
+								let content = 
+								`
+								<p>posted: ${date}</p>
 									<h3>${listing}</h3>
 									<p>${text}</p>
-									<button class="removeComment">remove</button>
+								`
+
+								if(user.id === comment.userId.id || user.role < 3){
+									content = content + deleteButton
+								}
+
+								let remark =
+								`
+	<li class="commentListing" id="${id}" data="${comment.userId.id}">
+
+									${content}
 								</li>
 								`;
 								return remark;
@@ -553,6 +572,7 @@ function generateRemarks(comments) {
 							let commentList = []
 	comments.forEach(comment => {
 									let readable = buildComment(comment)
+									
 								commentList.push(readable)
 							});
 						

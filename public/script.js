@@ -109,7 +109,7 @@ function buildEvent() {
 					username: userName,
 					password: pwd,
 					event: resj.id,
-					role: '0',
+					role: '1',
 					attending: true
 			}
 			console.log(eventAdmin)
@@ -186,11 +186,11 @@ function deleteUser() {
 	let route = `users/delete/${user.id}`
 	let method = 'delete'
 	console.log(`removing user at ${route}`, user);
-	
+
 	quickFetch(route, method)
 		.then(res => {
 			console.log('deletion suxess!', res.status)
-			// logOut()
+			logOut()
 		})
 		.catch(err => {
 			console.log('updateFail', err)
@@ -448,20 +448,7 @@ function updatePost(route) {
 
 /*removes a post(eventually would like only the author and admin) */
 
-
-// function purgeComments(postId) {
-// 	console.log('at purge')
-// 	let method = 'delete';
-// 	let route = `posts/purgeComments/${postId}`
-// 	console.log(route)
-
-// 	quickFetch(route, method) 
-// 	.then(res => {
-// 		console.log('comments purged')
-// 	})
-// }
-
-function deletePost(route) {
+function deletePost(route, postId) {
 	console.log('at deletet')
 	let method = 'delete';
 
@@ -506,20 +493,7 @@ function postComment(route, postId) {
 		.then(res => res.json())
 		.then(resj => {
 			console.log('middleFetch', resj)
-			// let route = `posts/comment/${postId}`
-			// let populateNew = {
-			// 	postId: postId,
-			// 	commentId: resj.id
-			// }
-			// fetch(route, {
-			// 	method: 'put',
-			// 	headers: {
-			// 		'Accept': 'application/json',
-			// 		'Content-Type': 'application/json',
-			// 		'Authorization': 'Bearer' + ' ' + token
-			// 	},
-			// 	body: JSON.stringify(populateNew)
-			// })
+		
 			console.log('update suxess!', resj)
 			let type = 'post'
 			promptSuccess(type)
@@ -534,17 +508,19 @@ function postComment(route, postId) {
 
 
 /**********COMMENTS**DELETE********** */
-function deleteComment(removalId, postId) {
+function deleteComment(removalId, postId, authorId) {
 	let route = `comments/delete/${removalId}`;
-	console.log('...theres just nothing left to say...');
+	let user = JSON.parse(localStorage.getItem('user'));
 	console.log('route', route);
+	
 	fetch(route, {
 		method: 'delete',
 		headers: {
 			'Accept': 'application/json',
 			'Content-Type': 'application/json',
 			'Authorization': 'Bearer' + ' ' + token
-		}
+		},
+		body: JSON.stringify()
 	})
 	.then(res => console.log(res.status))
 	
@@ -721,7 +697,7 @@ function signUp(route) {
 		username: userName,
 		password: pwd,
 		event: eventName[0].id,
-		role: 2,
+		role: 3,
 		attending: att
 	};
 
@@ -927,15 +903,16 @@ function watchPageActions() {
 		e.preventDefault();
 		console.log('Just put the Ants in the drawer!')
 		let removalId = $(this).parent().attr('id')
-		deleteComment(removalId, postId)
+		let authorId = $(this).parent().attr('data')
+		deleteComment(removalId, postId, authorId)
 	});
 	/*post remove */
 	$('body').on('click', 'button.postDeleteButton', function (e) {
 		e.preventDefault();
 		console.log('Just drop the ship then...')
-		route = `posts/delete/${postId}`
-		// purgeComments(postId)
-		deletePost(route)
+		route = `posts/delete/${postId}`;
+		deletePost(route, postId)
+		
 	});
 	
 
