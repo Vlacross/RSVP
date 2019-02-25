@@ -3,6 +3,8 @@ const Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
 const bcrypt = require('bcryptjs');
 
+const EventPlan = require('./events');
+
 /*User Schema */
 
 // TODO: Give user schema an array of `events` which points to the unique IDs of events they are invited to, and indicates whether the user `isAdmin` of that event
@@ -50,6 +52,17 @@ userSchema.pre('save', function (next) {
     })
   })
 });
+
+userSchema.post('save', function() {
+  console.log('how eventful', this.id)
+
+  EventPlan.findByIdAndUpdate(this.event, { $push: { 'attendees': this.id }})
+  .then(event => {
+    console.log(event)
+  })
+  
+  
+})
 
 userSchema.pre('find', function() {
   this.populate({ path: 'event' });
