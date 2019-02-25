@@ -54,7 +54,7 @@ validateEvent = function (req, res, next) {
 
     
     let name = req.body.eventName
-
+    
        return EventPlan.findOne({name: name}, function (err, event) {
           if (err) {
               let msg = 'eventValidation error!'

@@ -27,6 +27,14 @@ function renderSignUp() {
 	/*eventCheck    eventNameButton*/
 };
 
+/*changes the view and prompts for details to create an event */
+function createEvent() {
+
+	console.log('invent an Event!')
+	$('.introView').addClass('hidden');
+	$('main').append(introViewSwitch(newEventCheck))
+}
+
 
 /********V*******EVENT*********V******************************************************************************************V*EVENT*ACTIONS*V*********************** */
 
@@ -46,13 +54,11 @@ function checkEvent(route) {
 		body: JSON.stringify(event)})
 	.then(res => res.json())
 	.then(resj => {
-		console.log(resj)
 		if(resj.message === 'false') {
-			console.log('falzin')
 		 flashNoEvent()
 		}
 		if(resj.message === 'true') {
-			console.log('troobin', resj)
+			console.log('logDog')
 		localStorage.setItem('event', JSON.stringify(resj.event))
 		$('.accessView').replaceWith(introViewSwitch(signupForm))
 		}
@@ -64,6 +70,105 @@ function checkEvent(route) {
 	});
 }
 
+/******************************************************NEW*EVENT*************** */
+
+function buildEvent() {
+
+	// $('.accessView').replaceWith(introViewSwitch(newEventForm(name)))
+	let route;
+	route = 'login/newEvent'
+
+	let fullName = $('.fullNameInput').val();
+	let userName = $('.userNameInput').val();
+	let pwd = $('.userPassInput').val();
+	let contactInfo = $('.userContactInfoInput').val() 
+
+	let eventName = $('.eventName').val()
+	let dateOfEvent = $('.dateOfEventInput').val()
+	let description = $('.eventDescriptionInput').val()
+						
+	let newEvent = {
+		name: eventName,
+		host: fullName,
+		dateOfEvent: dateOfEvent,
+		contactInfo: contactInfo
+	}
+	console.log(newEvent)
+	fetch(route, {
+		method: 'post',
+		headers: {
+			'Accept': 'application/json',
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(newEvent)})
+		.then(res => res.json())
+		.then(resj => {
+
+			let eventAdmin = {
+					fullname: fullName,
+					username: userName,
+					password: pwd,
+					event: resj.id,
+					role: '0',
+					attending: true
+			}
+			console.log(eventAdmin)
+			route = 'login/create'
+			fetch(route, {
+				method: 'post',
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(eventAdmin)})
+				.then(res => res.json())
+				.then(resj => {
+					console.log(resj)
+				})
+		})
+		.catch(err => {
+			console.log(err)
+		})
+
+
+	
+	
+}
+
+
+function checkEventName(route) {
+	console.log('nameChecker')
+	let name = $('.eventNameInput').val();
+	let event = {
+		eventName: name
+	}
+	console.log(`Checking eventName @ ${route}`)
+	fetch(route, {
+		method: 'post',
+		headers: {
+			'Accept': 'application/json',
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(event)})
+	.then(res => res.json())
+	.then(resj => {
+		console.log(resj)
+		if(resj.message === 'false') {
+			console.log('Good To Go - Not Taken')
+			$('.accessView').replaceWith(introViewSwitch(newEventForm(name)))
+		}
+		if(resj.message === 'true') {
+			console.log('troobin', resj)
+		
+		
+		}
+	})
+	.catch(err => {
+		console.log('eventFindFail', err)
+		let type = 'login'
+		handleFail(type)
+	});
+}
 
 /********^*******EVENT**********^****************************************************************************************^*EVENT*ACTIONS*^*********************** */
 
@@ -710,6 +815,8 @@ function watchFetchActions() {
 	/************************ */
 /*START INTRO */
 
+
+
 	$('body').on('click', 'button.introLoginButton', function (e) {
 		e.preventDefault();
 		console.log('switching route for login')
@@ -735,6 +842,21 @@ function watchFetchActions() {
 		e.preventDefault();
 		route = 'login/create';
 		signUp(route);
+	});
+
+	$('body').on('click', 'button.introCreateEventButton', function (e) {
+		e.preventDefault();
+		console.log('switching route for user create')
+		createEvent()
+	});
+	$('body').on('click', 'button.newEventNameInput', function (e) {
+		e.preventDefault();
+		route = 'login/eventCheck'
+		checkEventName(route);
+	});
+	$('body').on('click', 'button.newEventSubmit', function (e) {
+		e.preventDefault()
+		buildEvent();
 	});
 	
 

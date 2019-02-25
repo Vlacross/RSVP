@@ -61,7 +61,7 @@ router.post('/eventCheck', validateEvent, (req, res) => {
 	console.log(req.body)
 	EventPlan.find({name: req.body.eventName})
 	.then(event => {
-		let successRes = {
+		let succ = {
 			event: event,
 			message: 'true'
 		}
@@ -93,20 +93,21 @@ router.post('/create', (req, res) => {
 	User.create({
 		fullname: full,
 		username: user,
-		role: role,
+		role: parseInt(role),
 		password: pass,
 		event: event,
 		attending: attending
 	})
-		.then(newUser => {
-			let token = buildToken(newUser.username)
-			let user = newUser.serialize()
-			res.json({ token, user })
-			res.status(202)
-		})
-		.catch(err => {
-			return res.json(err.message).status(400)
-		})
+
+	.then(newUser => {
+		let token = buildToken(newUser.username)
+		let user = newUser.serialize()
+		res.json({ token, user })
+		res.status(202)
+	})
+	.catch(err => {
+		return res.json(err.message).status(400)
+	})
 
 });
 

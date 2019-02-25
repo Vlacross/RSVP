@@ -135,7 +135,7 @@ var noEvent =
 
 /*************V*LOGIN*REGISTER*V*****************************************************************************************V*LOGIN*REGISTER*V************** */
 
-
+/*for existing users to log in */
 const loginForm = 
 `
 <form class="authForm" autocomplete="off">
@@ -159,6 +159,7 @@ const loginForm =
 
 `;
 
+/*checks if given event exists */
 const eventCheck = 
 `
 <form class="eventCheck">
@@ -175,9 +176,28 @@ const eventCheck =
 </form>
 `
 
+/*same as 'eventCheck', but different label and handled differently on output side */
+const newEventCheck = 
+`
+<form class="eventCheck">
+	<input autocomplete="false" name="hidden" type="text" style="display:none;">
 
+	<label for="eventNameInput" class="eventNameCheckLabel " >Pick a name for your event and check for availablility!
+		<input id="eventNameInput" name="eventNameInput" class="eventNameInput" type="text">
+	</label>
+
+	<button class="newEventNameInput">Find</button>
+
+	<button class="toggleIntro" type="submit" name="toggleIntro">Back</button>
+
+</form>
+`
+
+
+
+/*form for new user */
 const signupForm = 
- /*{ fullname:  username:  password: , event, role, attending  */
+ 
 `
 <form class="authForm" autocomplete="off">
 	<fieldset class="accessFieldset">
@@ -210,6 +230,99 @@ const signupForm =
 </form>
 `;
 
+/*form for new event Host / masterAdmin */
+// function eventHostSignupForm(eventName) {
+
+// const eventHostSignupForm = 
+ 
+// `
+// <form class="authForm" autocomplete="off">
+// 	<fieldset class="accessFieldset">
+// 		<input autocomplete="false" name="hidden" type="text" style="display:none;">
+// 		<input class="eventName hidden" value="${eventName}" >
+
+// 			<label for="fullNameInput" class="fullNameLabel " >FullName
+// 				<input id="fullNameInput" name="fullNameInput" class="fullNameInput" type="text">
+// 			</label>
+
+// 				<label for="userNameInput">UserName
+// 					<input id="userNameInput" name="userNameInput" class="userNameInput" type="text" required>
+// 				</label>
+
+// 				<label for="userPassInput">PassWord 
+// 					<input id="userPassInput" name="userPassInput" class="userPassInput" type="text" required>
+// 				</label>
+
+// 				<label for="userContactInfoInput">Enter an e-mail
+// 					<input id="userContactInfoInput" name="userContactInfoInput" class="userContactInfoInput" type="email" required>
+// 				</label>
+
+			
+// 						<label for="HostSignupForm">Press next to enter event details!
+// 							<button class="hostFormSubmit" type="submit" name="hostFormSubmit">Next</button>
+// 						</label>
+						
+
+// 	</fieldset>
+// 					<button class="toggleIntro" type="submit" name="toggleIntro">Back</button>
+// </form>
+// `
+// return eventHostSignupForm
+// };
+
+
+/*form for creating a new event-- follows after creating host account / master admin */
+function newEventForm(name)  {
+	let today = new Date()
+
+let eventForm =
+
+`
+<form class="authForm" autocomplete="off">
+	<fieldset class="accessFieldset">
+		<input autocomplete="false" name="hidden" type="text" style="display:none;">
+
+
+				<h2>Enter Details for your new event!</h2>
+				<input class="eventName hidden" value="${name}">
+				<p>Event Name: ${name}</p>			
+
+				
+				<label for="dateOfEventInput">Choose a date for your event: 
+					<input id="dateOfEventInput" name="dateOfEventInput" class="dateOfEventInput" type="date" min="${today}" required>
+				</label>
+
+				<label for="eventDescriptionInput">Add a quick description about your event: 
+					<input id="eventDescriptionInput" name="eventDescriptionInput" class="eventDescriptionInput" type="text" required>
+				</label>
+
+				<h2>Enter details for your new Event-Host account!</h2>
+
+				<label for="fullNameInput" class="fullNameLabel" >FullName
+					<input id="fullNameInput" name="fullNameInput" class="fullNameInput" type="text">
+				</label>
+
+				<label for="userNameInput">UserName
+					<input id="userNameInput" name="userNameInput" class="userNameInput" type="text" required>
+				</label>
+
+				<label for="userPassInput">PassWord 
+					<input id="userPassInput" name="userPassInput" class="userPassInput" type="text" required>
+				</label>
+
+				<label for="userContactInfoInput">Enter an e-mail
+					<input id="userContactInfoInput" name="userContactInfoInput" class="userContactInfoInput" type="email" required>
+				</label>
+
+
+						<button class="newEventSubmit" type="submit" name="newEventSubmit">Submit</button>
+	</fieldset>
+					<button class="toggleIntro" type="submit" name="toggleIntro">Back</button>
+</form>
+`;
+
+return eventForm;
+}
 
 
 				/*************^*LOGIN*REGISTER*^*****************************************************************************************^*LOGIN*REGISTER*^************** */
