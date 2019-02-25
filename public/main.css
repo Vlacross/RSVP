@@ -74,11 +74,27 @@ main {
     margin: 8px;
 }
 
-.introPageFieldset {
-    padding: 8px;
+.introButton {
+    width: 40%;
+    height: 35px;
+    border-radius: 8px;
+}
+
+.introView {
+    text-align: center;
     display: flex;
     flex-direction: column;
-    align-items: space-between;
+  
+}
+
+.introSelections {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.introPageFieldset {
+    padding: 8px;
     border: none;
 }
 
