@@ -121,9 +121,9 @@ var failedDelete =
  </section>
  `;
 
- /*popup with details on returned fail */
+/*popup with details on returned fail */
 var noEvent =
-`<section class="noEvent" >
+	`<section class="noEvent" >
 	<h1>Woops!</h1>
 	<h3>Couldn't find an event with that name!</h3>
 	<p>Check your spelling and try again! </p>
@@ -136,8 +136,8 @@ var noEvent =
 /*************V*LOGIN*REGISTER*V*****************************************************************************************V*LOGIN*REGISTER*V************** */
 
 /*for existing users to log in */
-const loginForm = 
-`
+const loginForm =
+	`
 <form class="authForm" autocomplete="off">
 	<fieldset class="accessFieldset">
 		<input autocomplete="false" name="hidden" type="text" style="display:none;">
@@ -160,8 +160,8 @@ const loginForm =
 `;
 
 /*checks if given event exists */
-const eventCheck = 
-`
+const eventCheck =
+	`
 <form class="eventCheck">
 	<input autocomplete="false" name="hidden" type="text" style="display:none;">
 
@@ -177,8 +177,8 @@ const eventCheck =
 `
 
 /*same as 'eventCheck', but different label and handled differently on output side */
-const newEventCheck = 
-`
+const newEventCheck =
+	`
 <form class="eventCheck">
 	<input autocomplete="false" name="hidden" type="text" style="display:none;">
 
@@ -196,9 +196,9 @@ const newEventCheck =
 
 
 /*form for new user */
-const signupForm = 
- 
-`
+const signupForm =
+
+	`
 <form class="authForm" autocomplete="off">
 	<fieldset class="accessFieldset">
 		<input autocomplete="false" name="hidden" type="text" style="display:none;">
@@ -233,12 +233,12 @@ const signupForm =
 
 
 /*form for creating a new event-- follows after creating host account / master admin */
-function newEventForm(name)  {
+function newEventForm(name) {
 	let today = new Date()
 
-let eventForm =
+	let eventForm =
 
-`
+		`
 <form class="authForm" autocomplete="off">
 	<fieldset class="accessFieldset">
 		<input autocomplete="false" name="hidden" type="text" style="display:none;">
@@ -282,17 +282,17 @@ let eventForm =
 </form>
 `;
 
-return eventForm;
+	return eventForm;
 }
 
 
-				/*************^*LOGIN*REGISTER*^*****************************************************************************************^*LOGIN*REGISTER*^************** */
+/*************^*LOGIN*REGISTER*^*****************************************************************************************^*LOGIN*REGISTER*^************** */
 
-				/*eventFeed */
+/*eventFeed */
 
-				/*Main app home page- left-side nav bar */
-				let homePage =
-					`
+/*Main app home page- left-side nav bar */
+let homePage =
+	`
 	<section class="homePageView">
 
 					<nav class="siteNav">
@@ -316,35 +316,35 @@ return eventForm;
 				</section>
 
 				`;
-				
-				/*List of users in DB with role="atendee" */
-				
+
+/*List of users in DB with role="atendee" */
+
 function usersListing(usr) {
-					let { fullname, joinDate, attending } = usr;
-					let date = new Date(joinDate).toDateString();
-				let usersListing =
-			
-					`
+	let { fullname, joinDate, attending } = usr;
+	let date = new Date(joinDate).toDateString();
+	let usersListing =
+
+		`
 				<li class="userListing">
 					<p>Name: ${fullname}</p>
 					<p>Join Date: ${date}</p>
 					<p>Attending: ${attending}</p>
 				</li>
 				`;
-					return usersListing;
-				};
-				
-				
-				/*************V*ACCOUNT*V*****************************************************************************************V*ACCOUNT*V************** */
-				
-				/*Simple user account info card for current user to update details */
-				
+	return usersListing;
+};
+
+
+/*************V*ACCOUNT*V*****************************************************************************************V*ACCOUNT*V************** */
+
+/*Simple user account info card for current user to update details */
+
 function accountProfile() {
-					let user = JSON.parse(localStorage.getItem('user'));
-				console.log(user, "inprof");
-	let {fullname, username, attending } = user;
-				let accountDetails =
-				`
+	let user = JSON.parse(localStorage.getItem('user'));
+	console.log(user, "inprof");
+	let { fullname, username, attending } = user;
+	let accountDetails =
+		`
 	<section class="accountProfile">
 					<span class="fullnameSpan">Fullname: ${fullname}</span>
 					<span class="usernameSpan">Username: ${username}</span>
@@ -352,16 +352,16 @@ function accountProfile() {
 					<button type="submit" class="profileEditButton" name="profileEditButton">Edit profile</button>
 				</section>
 				`;
-				return accountDetails;
-			
-			};
-			
+	return accountDetails;
+
+};
+
 function editProfile() {
-					let user = JSON.parse(localStorage.getItem('user'));
-	let {fullname, username } = user;
-			
-				const editForm =
-				`
+	let user = JSON.parse(localStorage.getItem('user'));
+	let { fullname, username } = user;
+
+	const editForm =
+		`
 	<form class="accountEditForm" autocomplete="off">
 					<fieldset class="updateFieldset">
 
@@ -397,17 +397,24 @@ function editProfile() {
 
 
 							`;
-							return editForm;
-						};
-						/*************^*ACCOUNT*^*****************************************************************************************^*ACCOUNT*^************** */
-						
-						
-						/*************V*POST*V*****************************************************************************************V*POST*V************** */
-						
+	return editForm;
+};
+/*************^*ACCOUNT*^*****************************************************************************************^*ACCOUNT*^************** */
+
+
+/*************V*EVENT*V*****************************************************************************************V*EVENT*V*****************/
+/*************^*EVENT*^*****************************************************************************************^*EVENT*^************** */
+
+
+
+
+
+/*************V*POST*V*****************************************************************************************V*POST*V************** */
+
 function constructPost() {
-	
+
 	const newPostForm =
-							`
+		`
 	<form class="postForm">
 								<fieldset class="eventPost">
 
@@ -429,16 +436,16 @@ function constructPost() {
 	</form>
 
 								`;
-								return newPostForm;
-							};
-							
-							/*template for event topic posts */
-							
+	return newPostForm;
+};
+
+/*template for event topic posts */
+
 function eventPost(post, count) {
-									let { title, author, body, comments, id, createdAt } = post;
-								let date = new Date(createdAt).toDateString();
-								let eventPost =
-								`
+	let { title, author, body, comments, id, createdAt } = post;
+	let date = new Date(createdAt).toDateString();
+	let eventPost =
+		`
 	<li class="eventPost">
 
 									<div class="subPostTitle">
@@ -455,136 +462,147 @@ function eventPost(post, count) {
 
 								</li>
 								`;
-								return eventPost;
-							};
-							
-							
-							
-							/*template for single-topic posts */
-							
+	return eventPost;
+};
+
+
+
+/*template for single-topic posts */
+
 function buildPost(post) {
-									let { title, author, body, comments, id, createdAt } = post;
-								console.log('commies');
-								let remarks = generateRemarks(comments);
-								let date = new Date(createdAt).toDateString();
-							
-							
-							
-								let eventPost =
-							
-							
-								`
-	<li class="eventPost">
+	let { title, author, body, comments, id, createdAt } = post;
+	console.log('commies');
+	let remarks = generateRemarks(comments);
+	let date = new Date(createdAt).toDateString();
 
-									<div class="subPostTitle">
-										<h1 class="postTitle">Title: ${title}</h1>
-									</div>
+	let user = JSON.parse(localStorage.getItem('user'))
+
+	let deleteButton =
+	`
+	<button class="postDeleteButton" data="${id}">Remove Post</button>
+	`
+
+	let buttons = 
+	`
+	<button class="addComment">Comment</button>
+	
+	`
+if(user.role < 3) {
+	buttons = buttons + deleteButton 
+}
+
+	let eventPost =
 
 
+		`
+<li class="eventPost">
 
-									<div class="subPost">
-										<h3>By: ${author}</h3>
-										<h3>Posted on ${date}</h3>
-									</div>
+	<div class="subPostTitle">
+		<h1 class="postTitle">Title: ${title}</h1>
+	</div>
 
-									<p>${body}</p>
+	<div class="subPost">
+		<h3>By: ${author}</h3>
+		<h3>Posted on ${date}</h3>
+	</div>
 
-									<div class="subPostComment">
+		<p>${body}</p>
 
-										<div class="postButtons">
-											<button class="addComment">Comment</button>
-											<button class="postDeleteButton" data="${id}">Remove Post</button>
-										</div>
-										<ul class="commentsList">${remarks} </ul>
-									</div>
+	<div class="subPostComment">
 
-								</li>
+		<div class="postButtons">
+			${buttons}
+		</div>
+				<ul class="commentsList">${remarks} </ul>
+	</div>
+
+</li>
 
 								`;
-								return eventPost;
-							};
-							
-							const toggleButton =
-							`
+	return eventPost;
+};
+
+const toggleButton =
+	`
 <button class="cancelActionButton">Cancel</button>
 								`;
-								
-								const commentButton =
-								`
+
+const commentButton =
+	`
 <button class="addComment">Comment</button>
 								`;
-								/*************^*POST*^*****************************************************************************************^*POST*^************** */
-								
-								/*************V*COMMENTS*V*****************************************************************************************V*COMMENTS*V************** */
+/*************^*POST*^*****************************************************************************************^*POST*^************** */
 
-								
-								/* compile comment Data into DOM content*/
-								
+/*************V*COMMENTS*V*****************************************************************************************V*COMMENTS*V************** */
+
+
+/* compile comment Data into DOM content*/
+
 function buildComment(comment) {
-									let { listing, text, id, createdAt } = comment;
-									
-									let date = new Date(createdAt).toDateString()
-									
-									let user = JSON.parse(localStorage.getItem('user'))
-									console.log('lsiting id', comment)
+	let { listing, text, id, createdAt } = comment;
 
-									let deleteButton = 
+	let date = new Date(createdAt).toDateString()
 
-`
+	let user = JSON.parse(localStorage.getItem('user'))
+	console.log('lsiting id', comment)
+
+	let deleteButton =
+
+		`
 <button class="removeComment">remove</button>
 `
 
 
-								let content = 
-								`
+	let content =
+		`
 								<p>posted: ${date}</p>
 									<h3>${listing}</h3>
 									<p>${text}</p>
 								`
 
-								if(user.id === comment.userId.id || user.role < 3){
-									content = content + deleteButton
-								}
+	if (user.id === comment.userId.id || user.role < 3) {
+		content = content + deleteButton
+	}
 
-								let remark =
-								`
+	let remark =
+		`
 	<li class="commentListing" id="${id}" data="${comment.userId.id}">
 
 									${content}
 								</li>
 								`;
-								return remark;
-							}
-							
+	return remark;
+}
+
 function generateRemarks(comments) {
-	
+
 	if (comments.length === 0) {
-									let noComments =
-								`
+		let noComments =
+			`
 		<li>
 									<p>No Comments Yet!</p>
 								</li>
 								`;
-								return noComments;
-							};
-						
-						
-							let commentList = []
+		return noComments;
+	};
+
+
+	let commentList = []
 	comments.forEach(comment => {
-									let readable = buildComment(comment)
-									
-								commentList.push(readable)
-							});
-						
-						
-							return commentList.join(' ');
-						};
-						
-						
+		let readable = buildComment(comment)
+
+		commentList.push(readable)
+	});
+
+
+	return commentList.join(' ');
+};
+
+
 function commentPalette() {
 
-									let palette =
-								`
+	let palette =
+		`
 	<li class="palette">
 
 									<form class="commentForm">
@@ -606,14 +624,15 @@ function commentPalette() {
 
 
 								`;
-								return palette;
-							};
-							
-							/*************^*COMMENTS*^*****************************************************************************************^*COMMENTS*^************** */
-							
+	return palette;
+};
+
+/*************^*COMMENTS*^*****************************************************************************************^*COMMENTS*^************** */
 
 
 
 
 
 
+
+(route, method, body)
