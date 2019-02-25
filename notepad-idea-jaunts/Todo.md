@@ -2,7 +2,7 @@
     -should have been done since the project started to practice integration testing
         -Test each routes folder
         
-- Finish deletes
+- ** - Finish deletes
         -allow user to delete self with roles in place(maybe without moving route to unprtoected endpoint?)
         -eventually find more elequant way to populate/depopulate comment Ids into post data without double fetching
 
@@ -50,6 +50,7 @@ EVENTS LAYER
 ***************
 BUGS AND BREAKS
 ***************
+-make a new template for Post create success and tie the back button to getPost with new post id(currently sharing with )
 
 
 
