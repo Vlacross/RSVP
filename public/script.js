@@ -91,7 +91,8 @@ function buildEvent() {
 		name: eventName,
 		host: fullName,
 		dateOfEvent: dateOfEvent,
-		contactInfo: contactInfo
+		contactInfo: contactInfo,
+		summary: description
 	}
 	console.log(newEvent)
 	fetch(route, {
@@ -175,8 +176,25 @@ function checkEventName(route) {
 }
 
 function getEventInfo() {
-	
+
+	let user = JSON.parse(localStorage.getItem('user'));
+	let route = `events/find/${user.event}`;
+	let method = 'GET';
+	console.log('route', route)
+
+	quickFetch(route, method)
+	.then(res => res.json())
+	.then(resj => {
+		console.log('events', resj)
+		$('.viewWrapper').replaceWith(viewSwitch(buildEventDetails(resj)))
+	})
+	.catch(err => {
+		console.log(err)
+	})
+
 }
+
+
 
 /********^*******EVENT**********^****************************************************************************************^*EVENT*ACTIONS*^*********************** */
 
@@ -560,12 +578,23 @@ function deleteComment(removalId, postId, authorId) {
 /********^***********^**********************************************************************************^**COMMENT*ACTIONS*^***********************************/
 /********V***********V***********************************************************************************V*SITE*FLOW*ACTIONS*V**********************************/
 
+function checkRole() {
+	let user = JSON.parse(localStorage.getItem('user'));
+	if (user.role === 1) {
+		$('.siteNav').append(eventDeleteButton)
+	}
+
+};
+
+
 /*********BUILDHOME*********** */
 function buildHome() {
 
+	$('.wrapper').addClass('inUse')
 	$('.accessView').remove()
 	$('main').addClass('sinkBack');
 	$('body').prepend(homePage);
+	checkRole()
 	getFeed();
 };
 
@@ -645,6 +674,7 @@ function logOut() {
 	$('.homePageView').remove();
 	$('.introView').removeClass('hidden');
 	$('main').removeClass('sinkBack');
+	$('.wrapper').removeClass('inUse')
 };
 /*********^*LOGOUT*^***************************************************************************************************^*LOGOUT*^*********************** */
 
@@ -739,7 +769,7 @@ function handleNav() {
 	console.log('handlinNAV')
 	$('body').on('click', 'button.eventDetailsLink', function (e) {
 		e.preventDefault();
-		showDetails()
+		getEventInfo()
 	});
 	$('body').on('click', 'button.usersListLink', function (e) {
 		e.preventDefault();

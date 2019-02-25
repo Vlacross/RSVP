@@ -24,27 +24,24 @@ router.get('/', (req, res) => {
 });
 
 
-router.post('/validate', validateEvent, validateAttendance, (req, res) => {
+// router.post('/validate', validateEvent, validateAttendance, (req, res) => {
 
-	console.log(req.body)
+// 	console.log(req.body)
 
 
-	console.log('past it')
+// 	console.log('past it')
 	
-});
+// });
 
 
-router.get('/find', (req, res) => {
-	EventPlan.find()
-		.then(events => {
-			let list = [];
-			events.forEach(event => {
-				list.push(event.serialize())
-			})
-			res.json(list)
+router.get('/find/:id', (req, res) => {
+	EventPlan.findOne({_id: req.params.id})
+		.then(event => {
+			res.json(event.serialize())
 		})
-	res.status(200)
 });
+
+
 
 
 /*MasterAdmin only can update details */

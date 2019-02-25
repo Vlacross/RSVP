@@ -290,6 +290,11 @@ function newEventForm(name) {
 
 /*eventFeed */
 
+const eventDeleteButton = 
+`
+<button class="deleteEventButton navButton" type="submit" name="deleteEventButton">Delete Event</button>
+`
+
 /*Main app home page- left-side nav bar */
 let homePage =
 	`
@@ -297,12 +302,12 @@ let homePage =
 
 					<nav class="siteNav">
 
-						<button type="submit" class="usersListLink" name="usersListLink">Event Users</button>
-						<button type="submit" class="eventDetailsLink" name="eventDetailsLink">Event Details</button>
-						<button type="submit" class="eventNewsfeedLink" name="eventNewsfeedLink">Event News Feed</button>
-						<button type="submit" class="accountLink" name="accountLink">Account</button>
-						<button type="submit" class="logOut" name="Logout">Logout</button>
-						<button type="submit" class="addPost" name="addPost">AddPost</button>
+						<button type="submit" class="usersListLink navButton" name="usersListLink">Event Users</button>
+						<button type="submit" class="eventDetailsLink navButton" name="eventDetailsLink">Event Details</button>
+						<button type="submit" class="eventNewsfeedLink navButton" name="eventNewsfeedLink">Event News Feed</button>
+						<button type="submit" class="accountLink navButton" name="accountLink">Account</button>
+						<button type="submit" class="logOut navButton" name="Logout">Logout</button>
+						<button type="submit" class="addPost navButton" name="addPost">AddPost</button>
 					</nav>
 
 					<section class="viewWrapper">
@@ -401,13 +406,33 @@ function editProfile() {
 };
 /*************^*ACCOUNT*^*****************************************************************************************^*ACCOUNT*^************** */
 
-
 /*************V*EVENT*V*****************************************************************************************V*EVENT*V*****************/
+
+function buildEventDetails(event) {
+let { contactInfo, createdAt, dateOfEvent, host, name, attendees, summary } = event;
+
+let detailPage = 
+`
+<section class="detailPage">
+	<h1 class="dpName">${name}</h1>
+	<p class="dpDate">${dateOfEvent}</p>
+
+	<div>
+		<p>Host: ${host}</p>
+		<p>Contact @ ${contactInfo}</p>
+		<p>Description of event: ${summary}</p>
+		<p>number of people going: ${attendees.length}</p>
+	</div>
+
+</section>
+`
+return detailPage;
+
+};
+
+
+
 /*************^*EVENT*^*****************************************************************************************^*EVENT*^************** */
-
-
-
-
 
 /*************V*POST*V*****************************************************************************************V*POST*V************** */
 

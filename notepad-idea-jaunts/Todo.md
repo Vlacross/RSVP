@@ -47,6 +47,9 @@ EVENTS LAYER
 
 -make dashboard for master admin to change roels of other users
 
+***************
+BUGS AND BREAKS
+***************
 
 
 

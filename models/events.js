@@ -11,7 +11,8 @@ const eventSchema = new Schema({
     host: String,
     dateOfEvent: String,
     contactInfo: String,
-    attendees: [{ type: ObjectId, ref: 'User' }]
+    attendees: [{ type: ObjectId, ref: 'User' }],
+    summary: String
   }, {
     timestamps: true
   });
@@ -33,32 +34,10 @@ const eventSchema = new Schema({
       dateOfEvent: this.dateOfEvent,
       contactInfo: this.contactInfo,
       attendees: this.attendees,
-      createdAt: this.createdAt
+      createdAt: this.createdAt,
+      summary: this.summary
     }
   };
-
-
-
-
-  // validateEvent = function (req, res, next) {
-    
-  //   let name = req.body.eventName
-
-  //      EventPlan.findOne({name: name}, function (err, event) {
-  //         if (err) {
-  //           console.log('eventValidation error!', err)
-  //           return next(err, null)
-  //         }
-  //         if (!event) {
-  //           console.log('no event found')
-  //           return next(null, null)
-  //         }
-  //         console.log('event found!')
-  //         return next(null, event)
-  //     })
-  // };
-
- 
 
 
   module.exports = mongoose.model('EventPlan', eventSchema)

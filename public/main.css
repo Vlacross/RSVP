@@ -44,9 +44,13 @@ fieldset input {
     border: solid 1px white;
     border-radius: 12;
     color: rgb(214, 213, 213);
-    margin-left: 18%;
+    margin-left: auto;
     margin-right:  auto;
     max-width: 960px;
+}
+
+.inUse {
+    margin-left: 18%;
 }
 
 main {
@@ -134,7 +138,12 @@ main {
     max-width: 18%;
     overflow: hidden;
  
-    
+}
+
+.navButton {
+    width: 100px;
+    height: 4%;
+    margin-top: 20%;
 }
 
 .viewWrapper {
@@ -225,3 +234,49 @@ a:hover {
     display: none;
 }
 
+
+
+@media only screen and (max-width: 700px) {
+
+
+    .banner {
+        font-size: 6em;
+        text-decoration: underline;
+        font-family: 'Yellowtail', cursive;
+        margin: 8px;
+    }
+
+    .navButton {
+        width: 85px;
+        height: 4%;
+        margin-top: 20%;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+
+
+    .banner {
+        font-size: 4em;
+        text-decoration: underline;
+        font-family: 'Yellowtail', cursive;
+        margin: 8px;
+    }
+
+    .navButton {
+        width: 70px;
+        height: 3%;
+        margin-top: 20%;
+    }
+}
+
+@media only screen and (max-width: 400px) {
+
+
+    .banner {
+        font-size: 3em;
+        text-decoration: underline;
+        font-family: 'Yellowtail', cursive;
+        margin: 8px;
+    }
+}

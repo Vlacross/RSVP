@@ -117,7 +117,7 @@ router.post('/create', (req, res) => {
 router.post('/newEvent', checkEventName, (req, res) => {
 
 	/*forEach wasn't handling err - allowed to pass to create */
-	const requiredFields = ['name', 'host', 'dateOfEvent', 'contactInfo']
+	const requiredFields = ['name', 'host', 'dateOfEvent', 'contactInfo', 'summary']
 	let missing = requiredFields.filter(field => (!req.body[field]))
 	if (missing.length > 0) {
 		msg = `Missing ${missing} in header!`
@@ -126,13 +126,14 @@ router.post('/newEvent', checkEventName, (req, res) => {
 	}
 
 	/*validate masterAdmin account details gathered before create */
-	const { name, host, dateOfEvent, contactInfo } = req.body
+	const { name, host, dateOfEvent, contactInfo, summary } = req.body
 
 	EventPlan.create({
 		name,
 		host,
 		dateOfEvent,
-		contactInfo
+		contactInfo,
+		summary
 	})
 		.then(newEvent => {
 			res.json(newEvent.serialize())
