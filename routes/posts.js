@@ -33,6 +33,7 @@ router.get('/find/:id', (req, res) => {
 			posts.forEach(post => {
 				list.push(post.serialize())
 			})
+			console.log(list.length)
 			res.json(list)
 		})
 	res.status(200)
@@ -52,7 +53,7 @@ router.get('/findPost/:id', (req, res) => {
 router.post('/create', jsonParser, (req, res) => {
 
 	/*forEach wasn't handling err - allowed to pass to create */
-	const requiredFields = ['title', 'author', 'body']
+	const requiredFields = ['title', 'author', 'body', 'event']
 	let missing = requiredFields.filter(field => (!req.body[field]))
 	if (missing.length > 0) {
 		msg = `Missing ${missing} in header!`
@@ -61,12 +62,13 @@ router.post('/create', jsonParser, (req, res) => {
 	}
 
 	/*add validation for user/author */
-	const { title, author, body } = req.body
+	const { title, author, body, event } = req.body
 
 	Post.create({
 		title,
 		author,
-		body
+		body,
+		event
 	})
 		.then(newPost => {
 			res.json(newPost.serialize())
@@ -136,24 +138,24 @@ router.put('/decomment/:id', (req, res) => {
 });
 
 
-router.delete('/purgeComments/:id', (req, res) => {
-	if (!req.params.id) {
-		let msg = `Incomplete credentials!`
-		console.error(msg)
-		return res.status(400).json(msg).end()
-	}
+// router.delete('/purgeComments/:id', (req, res) => {
+// 	if (!req.params.id) {
+// 		let msg = `Incomplete credentials!`
+// 		console.error(msg)
+// 		return res.status(400).json(msg).end()
+// 	}
 	
-	Post.findOne({_id: req.params.id})
-		.then(post => {
-			let comments = post.comments;
-			comments.forEach(comment => {
-				comment.remove()
-			})
-		})
+// 	Post.findOne({_id: req.params.id})
+// 		.then(post => {
+// 			let comments = post.comments;
+// 			comments.forEach(comment => {
+// 				comment.remove()
+// 			})
+// 		})
 	
-	.then(res.status(204).end())
-	.catch(err => console.log(err, 23))
-})
+// 	.then(res.status(204).end())
+// 	.catch(err => console.log(err, 23))
+// })
 
 
 router.delete('/delete/:id', (req, res) => {
@@ -165,9 +167,14 @@ router.delete('/delete/:id', (req, res) => {
 		return res.status(400).json(msg).end()
 	}
 	
-	Post.findByIdAndDelete(req.params.id)
-		.then(res.status(204).end())
+Post.findOneAndRemove({_id: req.params.id}, function(err, post) {
+	post.remove()
+})
+.then(res.status(204).end())
 		.catch(err => console.log(err, 23))
+	// Post.findByIdAndDelete(req.params.id)
+	// 	.then(res.status(204).end())
+	// 	.catch(err => console.log(err, 23))
 	
 })
 

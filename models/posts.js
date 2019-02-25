@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
 
+const CommentPost = require('./comments');
 
 /* Post style schema */
 const postSchema = new Schema({
@@ -54,5 +55,21 @@ function populatePostList() {
 postSchema.pre('find', populatePost);
 postSchema.pre('findOne', populatePostList);
 
+
+/*https://github.com/Automattic/mongoose/issues/3054 */
+postSchema.pre('remove', function() {
+	console.log('thissyisis', this)
+  let arr = this.comments;
+  arr.forEach(comment => {
+    console.log(comment)
+    CommentPost.findOne(comment)
+    .then(comment => {
+      console.log('blogless')
+    })
+    
+  })
+  
+ 
+})
 
 module.exports = mongoose.model('Post', postSchema)

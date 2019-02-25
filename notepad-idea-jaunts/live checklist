@@ -18,20 +18,28 @@
         -set up for account page to show join date 
         -same for users list maybe?
 
--Fully implement user (attending) data in schema
+*-Fully implement user (attending) data in schema
         -add checkbox on sign up
         -change userlist to project categories
 
--Build Event Details data and render sheet with link on nav tab
+*-Build Event Details data and render sheet with link on nav tab
 
 -Maybe regroup listeners?
 
--Finish username and password validation
+*-Finish username and password validation
     -create min-max length
     -refuse whitespace
 
+
 -Build delete "double-check"
         -prompts "are you sure" on delete
+
+***************
+EVENTS LAYER
+***************
+-Seperate checkWare file into two files: role-authentication and credentials validation
+
+
 
 
 

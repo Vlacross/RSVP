@@ -230,45 +230,6 @@ const signupForm =
 </form>
 `;
 
-/*form for new event Host / masterAdmin */
-// function eventHostSignupForm(eventName) {
-
-// const eventHostSignupForm = 
- 
-// `
-// <form class="authForm" autocomplete="off">
-// 	<fieldset class="accessFieldset">
-// 		<input autocomplete="false" name="hidden" type="text" style="display:none;">
-// 		<input class="eventName hidden" value="${eventName}" >
-
-// 			<label for="fullNameInput" class="fullNameLabel " >FullName
-// 				<input id="fullNameInput" name="fullNameInput" class="fullNameInput" type="text">
-// 			</label>
-
-// 				<label for="userNameInput">UserName
-// 					<input id="userNameInput" name="userNameInput" class="userNameInput" type="text" required>
-// 				</label>
-
-// 				<label for="userPassInput">PassWord 
-// 					<input id="userPassInput" name="userPassInput" class="userPassInput" type="text" required>
-// 				</label>
-
-// 				<label for="userContactInfoInput">Enter an e-mail
-// 					<input id="userContactInfoInput" name="userContactInfoInput" class="userContactInfoInput" type="email" required>
-// 				</label>
-
-			
-// 						<label for="HostSignupForm">Press next to enter event details!
-// 							<button class="hostFormSubmit" type="submit" name="hostFormSubmit">Next</button>
-// 						</label>
-						
-
-// 	</fieldset>
-// 					<button class="toggleIntro" type="submit" name="toggleIntro">Back</button>
-// </form>
-// `
-// return eventHostSignupForm
-// };
 
 
 /*form for creating a new event-- follows after creating host account / master admin */

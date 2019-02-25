@@ -124,7 +124,11 @@ function buildEvent() {
 				.then(res => res.json())
 				.then(resj => {
 					console.log(resj)
+					localStorage.setItem('user', JSON.stringify(resj.user))
+					localStorage.setItem('token', `${resj.token}`)
+					buildHome()
 				})
+
 		})
 		.catch(err => {
 			console.log(err)
@@ -312,7 +316,8 @@ function shipPost(route) {
 	let newPost = {
 		author: user.id,
 		title: title,
-		body: content
+		body: content,
+		event: user.event
 	};
 	console.log(newPost, 'prePost shipment');
 	fetch(route, {
@@ -444,17 +449,17 @@ function updatePost(route) {
 /*removes a post(eventually would like only the author and admin) */
 
 
-function purgeComments(postId) {
-	console.log('at purge')
-	let method = 'delete';
-	let route = `posts/purgeComments/${postId}`
-	console.log(route)
+// function purgeComments(postId) {
+// 	console.log('at purge')
+// 	let method = 'delete';
+// 	let route = `posts/purgeComments/${postId}`
+// 	console.log(route)
 
-	quickFetch(route, method) 
-	.then(res => {
-		console.log('comments purged')
-	})
-}
+// 	quickFetch(route, method) 
+// 	.then(res => {
+// 		console.log('comments purged')
+// 	})
+// }
 
 function deletePost(route) {
 	console.log('at deletet')
@@ -484,7 +489,9 @@ function postComment(route, postId) {
 
 	let newComment = {
 		userId: user.id,
-		text: text
+		text: text,
+		postId: postId,
+		event: user.event
 	};
 	console.log(newComment, 'preSnark remark');
 	fetch(route, {
@@ -499,20 +506,20 @@ function postComment(route, postId) {
 		.then(res => res.json())
 		.then(resj => {
 			console.log('middleFetch', resj)
-			let route = `posts/comment/${postId}`
-			let populateNew = {
-				postId: postId,
-				commentId: resj.id
-			}
-			fetch(route, {
-				method: 'put',
-				headers: {
-					'Accept': 'application/json',
-					'Content-Type': 'application/json',
-					'Authorization': 'Bearer' + ' ' + token
-				},
-				body: JSON.stringify(populateNew)
-			})
+			// let route = `posts/comment/${postId}`
+			// let populateNew = {
+			// 	postId: postId,
+			// 	commentId: resj.id
+			// }
+			// fetch(route, {
+			// 	method: 'put',
+			// 	headers: {
+			// 		'Accept': 'application/json',
+			// 		'Content-Type': 'application/json',
+			// 		'Authorization': 'Bearer' + ' ' + token
+			// 	},
+			// 	body: JSON.stringify(populateNew)
+			// })
 			console.log('update suxess!', resj)
 			let type = 'post'
 			promptSuccess(type)
@@ -927,7 +934,7 @@ function watchPageActions() {
 		e.preventDefault();
 		console.log('Just drop the ship then...')
 		route = `posts/delete/${postId}`
-		purgeComments(postId)
+		// purgeComments(postId)
 		deletePost(route)
 	});
 	
