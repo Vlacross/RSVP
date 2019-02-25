@@ -8,23 +8,30 @@ const EventPlan = require('../models/events');
 
 /*Allows eventAdmins and masterAdmin through */
 var levelOne = function(req, res, next) {
+
+    console.log('lvl1 checker', req.body)
     let role = req.user.role;
+    
 
     if(!role) {
+        console.log('no role')
         return Promise.reject({message: 'No role detected', reason: 'Unauthorized'})
     }
 
-    if(role === 0) {
+    if(role === 1) {
+        console.log('here')
         return next()
     }
 
-    if(role !== 1) {
+    if(role > 2) {
+        
         console.log("level One Restriction: access denied!", 'current role', role)
         return Promise.reject({message: 'This account does not hold eventAdmin privileges', reason: 'Unauthorized'})
     }
     console.log("lvl1-pass")
     next()
 };
+
 
 /*Allows only masterAdmins through */
 var levelTwo = function(req, res, next) {
@@ -34,7 +41,7 @@ var levelTwo = function(req, res, next) {
         return Promise.reject({message: 'No role detected', reason: 'Unauthorized'})
     }
 
-    if(role !== 0) {
+    if(role !== 1) {
         console.log("level Two Restriction: access denied!", 'current role', role)
         return Promise.reject({message: 'This account does not hold masterAdmin privileges', reason: 'Unauthorized'})
     }
@@ -54,7 +61,7 @@ validateEvent = function (req, res, next) {
 
     
     let name = req.body.eventName
-    
+
        return EventPlan.findOne({name: name}, function (err, event) {
           if (err) {
               let msg = 'eventValidation error!'
