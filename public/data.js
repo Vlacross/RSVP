@@ -659,5 +659,3 @@ function commentPalette() {
 
 
 
-
-(route, method, body)
