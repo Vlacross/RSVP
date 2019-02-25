@@ -25,7 +25,6 @@ router.get('/', (req, res) => {
 	/*Can create a new CommentPost */
 	/*Access to All */
 router.post('/create', jsonParser, (req, res) => {
-	console.log('buddy', req.body)
 
 	/*forEach wasn't handling err - allowed to pass to create */
 	const requiredFields = ['text', 'userId', 'event', 'postId']
@@ -62,7 +61,7 @@ router.post('/create', jsonParser, (req, res) => {
 
 
 	/*Admin or author only can update details */
-router.put('/details/:id', (req, res) => {
+router.put('/details/:id', levelOne, (req, res) => {
 	if (!req.params.id || !req.body.id || req.body.id !== req.params.id) {
 		let msg = `Incomplete credentials!`
 		console.error(msg)

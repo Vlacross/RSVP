@@ -50,7 +50,7 @@ router.get('/findPost/:id', (req, res) => {
 
 /*Can create a new Post */
 /*Add Auth for Support Accounts Only */
-router.post('/create', jsonParser, (req, res) => {
+router.post('/create', jsonParser, levelOne, (req, res) => {
 
 	/*forEach wasn't handling err - allowed to pass to create */
 	const requiredFields = ['title', 'author', 'body', 'event']
@@ -82,7 +82,7 @@ router.post('/create', jsonParser, (req, res) => {
 
 
 /*Admin only can update details */
-router.put('/details/:id', (req, res) => {
+router.put('/details/:id', levelOne, (req, res) => {
 	if (!req.params.id || !req.body.id || req.body.id !== req.params.id) {
 		let msg = `Incomplete credentials!`
 		console.error(msg)
@@ -104,7 +104,7 @@ router.put('/details/:id', (req, res) => {
 
 
 /*Added / populate comments with newly created comment IDs */
-router.put('/comment/:id', (req, res) => {
+router.put('/comment/:id', levelOne, (req, res) => {
 	if (!req.params.id) {
 		let msg = `Incomplete credentials!`
 		console.error(msg)
@@ -120,42 +120,30 @@ router.put('/comment/:id', (req, res) => {
 		.catch(err => console.log(err, 23))
 });
 
-/*remove/ depopulate comments */
-router.put('/decomment/:id', (req, res) => {
+
+router.delete('/purgeComments/:id', levelOne, (req, res) => {
 	if (!req.params.id) {
 		let msg = `Incomplete credentials!`
 		console.error(msg)
 		return res.status(400).json(msg).end()
 	}
-
-	const { postId, commentId } = req.body
-
-	Post.findByIdAndUpdate(postId, { $pull: { 'comments': commentId } }, { new: true })
-		.then(updatedPost => {
-			return res.json(updatedPost.serialize()).status(203).end()
+	
+	CommentPost.find({postId: req.params.id})
+		.then(comments => {
+			comments.forEach(comment => comment.remove())
 		})
-		.catch(err => console.log(err, 23))
-});
 
-
-// router.delete('/purgeComments/:id', (req, res) => {
-// 	if (!req.params.id) {
-// 		let msg = `Incomplete credentials!`
-// 		console.error(msg)
-// 		return res.status(400).json(msg).end()
-// 	}
+	Post.findOne({_id: req.params.id})
+		.then(post => {
+			let comments = post.comments;
+			comments.forEach(comment => {
+				comment.remove()
+			})
+		})
 	
-// 	Post.findOne({_id: req.params.id})
-// 		.then(post => {
-// 			let comments = post.comments;
-// 			comments.forEach(comment => {
-// 				comment.remove()
-// 			})
-// 		})
-	
-// 	.then(res.status(204).end())
-// 	.catch(err => console.log(err, 23))
-// })
+	.then(res.status(204).end())
+	.catch(err => console.log(err, 23))
+})
 
 
 router.delete('/delete/:id', (req, res) => {
@@ -166,15 +154,11 @@ router.delete('/delete/:id', (req, res) => {
 		console.error(msg)
 		return res.status(400).json(msg).end()
 	}
-	
-Post.findOneAndRemove({_id: req.params.id}, function(err, post) {
-	post.remove()
-})
-.then(res.status(204).end())
+
+
+	Post.findByIdAndDelete(req.params.id)
+		.then(res.status(204).end())
 		.catch(err => console.log(err, 23))
-	// Post.findByIdAndDelete(req.params.id)
-	// 	.then(res.status(204).end())
-	// 	.catch(err => console.log(err, 23))
 	
 })
 

@@ -20,12 +20,13 @@ const localAuth = passport.authenticate('local', { session: false });
 const CommentPost = require('../models/comments');
 const Post = require('../models/posts');
 const User = require('../models/users');
-const { levelOne, levelTwo, validateEvent } = require('../Roles/checkWare')
+const EventPlan = require('../models/events');
+const { levelOne, levelTwo, } = require('../Roles/checkWare')
 
 const { JWT_SECRET, ALG, EXP } = require('../config')
 router.use(bodyParser.json());
-// router.use('*', jwtAuth);
-// const hallPass = (req, res, next) => {return req.method !== 'POST' ? jwtAuth : next()}
+router.use('*', jwtAuth);
+
 
 const opts = {
 	algorithm: ALG,
@@ -101,7 +102,12 @@ router.delete('/delete/:id', (req, res) => {
     };
     const userId = req.params.id;
     // console.log(userId)
-    
+	
+	// EventPlan
+	// Post.findByIdAndUpdate(postId, { $push: { 'comments': commentId } }, { new: true })
+	// 	.then(updatedPost => {
+	// 		return res.json(updatedPost.serialize()).status(203).end()
+	// 	})
    
     Post.find({author: userId})
         .then(posts => {

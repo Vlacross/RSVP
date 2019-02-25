@@ -16,7 +16,7 @@ const EventPlan = require('../models/events');
 const { levelOne, levelTwo, validateEvent, validateAttendance } = require('../Roles/checkWare')
 
 router.use(bodyParser.json());
-// router.use('*', jwtAuth);
+router.use('*', jwtAuth);
 
 router.get('/', (req, res) => {
 	console.log(req.headers)
