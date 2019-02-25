@@ -98,9 +98,14 @@ Master Admin is assigned upon creation of event
 
 **********************************************************************************
 ----------------------------------------------------------------------------------
+How to allow Users to control their own content when write permissions restricted on mongoose Layer:q
+    -for when the item is a post or comment the user wants to remove
+    -match item id with user id on client side to send a pass property in the header
+        -adjust middleware to allow pass
 
 
-
+----------------------------------------------------------------------------------
+**********************************************************************************
 
 
 
