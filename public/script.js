@@ -36,6 +36,22 @@ function createEvent() {
 }
 
 
+function showAppInfo() {
+	
+	$('.appInfoButton').addClass('hidden');
+	$('.introView').addClass('hidden');
+	$('main').append(introViewSwitch(appInfo))
+
+};
+
+function toggleAppInfo() {
+	$('.introView').removeClass('hidden');
+	$('.appInfoButton').removeClass('hidden');
+	$('.accessView').remove()
+
+};
+
+
 /********V*******EVENT*********V******************************************************************************************V*EVENT*ACTIONS*V*********************** */
 
 function checkEvent(route) {
@@ -590,7 +606,8 @@ function checkRole() {
 /*********BUILDHOME*********** */
 function buildHome() {
 
-	$('.wrapper').addClass('inUse')
+	$('.info').addClass('hidden')
+	$('.wrapper').removeClass('preUse')
 	$('.accessView').remove()
 	$('main').addClass('sinkBack');
 	$('body').prepend(homePage);
@@ -674,7 +691,8 @@ function logOut() {
 	$('.homePageView').remove();
 	$('.introView').removeClass('hidden');
 	$('main').removeClass('sinkBack');
-	$('.wrapper').removeClass('inUse')
+	$('.wrapper').addClass('preUse')
+	$('.info').removeClass('hidden')
 };
 /*********^*LOGOUT*^***************************************************************************************************^*LOGOUT*^*********************** */
 
@@ -881,6 +899,18 @@ function watchFetchActions() {
 		e.preventDefault();
 		toggleIntro()
 	});
+
+	$('body').on('click', 'button.appInfoButton', function (e) {
+		e.preventDefault();
+		showAppInfo()
+	});
+	$('body').on('click', 'button.toggleInfo', function (e) {
+		e.preventDefault();
+		toggleAppInfo()
+	});
+
+
+
 /*STOP INTRO */
 }
 

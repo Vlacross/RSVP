@@ -8,7 +8,7 @@ body {
     flex-direction: column;
     align-items: center;
     background-color: rgba(0, 0, 0, 0.815);
-    /* background-color: rgb(251, 251, 251); */
+    
 }
 
 ul {
@@ -39,18 +39,26 @@ fieldset input {
 
 .wrapper {
     
-    background: rgb(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.952);
     /* background: rgba(54, 53, 48, 0.1); */
     border: solid 1px white;
     border-radius: 12;
-    color: rgb(214, 213, 213);
-    margin-left: auto;
-    margin-right:  auto;
+    color: rgba(0, 0, 0, 0.815);
+   
+    margin-right: 25%;
+    margin-left: 18%;
     max-width: 960px;
 }
 
-.inUse {
-    margin-left: 18%;
+
+.preUse {
+    border-radius: 12;
+    color: rgba(0, 0, 0, 0.815);
+    margin-left: auto;
+    margin-right:  auto;
+    width: 94vh;
+    height: 94vh;
+    max-width: 960px
 }
 
 main {
@@ -74,10 +82,36 @@ main {
     margin: 8px;
 }
 
+button {
+    width: 40%;
+    height: 35px;
+    border-radius: 8px;
+}
+
+.appInfo {
+    margin-top: 8%;
+    margin-left: 14%;
+    margin-right: 14%;
+    text-align: center;
+    font-size: 1.5em;
+}
+
+/* .infoButton {
+    width: 40%;
+    height: 35px;
+    border-radius: 8px;
+} */
+
 .introButton {
     width: 40%;
     height: 35px;
     border-radius: 8px;
+    margin-bottom: 8%;
+    
+}
+
+.introLabel {
+    margin-top: 20%;
 }
 
 .introView {
@@ -167,10 +201,10 @@ main {
     flex-direction: column;
     align-items: center;
     border: solid 1px white;
-    background: rgb(0, 0, 0, 0.2);
+    /* background: rgb(255, 255, 255); */
     background: rgb(255, 255, 255, 0.7);
     position: absolute;
-    right: 0;
+    right: 2%;
     width: 80%;
     max-width: 80%;
     padding: 14px;
