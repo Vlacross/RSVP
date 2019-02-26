@@ -96,12 +96,6 @@ button {
     font-size: 1.5em;
 }
 
-/* .infoButton {
-    width: 40%;
-    height: 35px;
-    border-radius: 8px;
-} */
-
 .introButton {
     width: 40%;
     height: 35px;
@@ -284,13 +278,65 @@ a:hover {
     display: none;
 }
 
+@media only screen and (max-width: 1000px) {
+
+    .preUse {
+        border-radius: 12;
+        color: rgba(0, 0, 0, 0.815);
+        margin-left: auto;
+        margin-right:  auto;
+        width: 84vh;
+        height: 94vh;
+        max-width: 960px
+    }
+}
+
+@media only screen and (max-width: 900px) {
+
+    .preUse {
+        border-radius: 12;
+        color: rgba(0, 0, 0, 0.815);
+        margin-left: auto;
+        margin-right:  auto;
+        width: 74vh;
+        height: 94vh;
+        max-width: 960px
+    }
+}
+
+@media only screen and (max-width: 800px) {
+
+    .preUse {
+        border-radius: 12;
+        color: rgba(0, 0, 0, 0.815);
+        margin-left: auto;
+        margin-right:  auto;
+        width: 60vh;
+        height: 94vh;
+        max-width: 960px
+    }
+}
+
 
 
 @media only screen and (max-width: 700px) {
 
+    button {
+        width: 30%;
+        height: 25px;
+        border-radius: 8px;
+    }
+
+    .introButton {
+        width: 30%;
+        height: 25px;
+        border-radius: 8px;
+        margin-bottom: 8%;
+        
+    }
 
     .banner {
-        font-size: 6em;
+        font-size: 5em;
         text-decoration: underline;
         font-family: 'Yellowtail', cursive;
         margin: 8px;
@@ -301,10 +347,33 @@ a:hover {
         height: 4%;
         margin-top: 20%;
     }
+
+    .preUse {
+        border-radius: 12;
+        color: rgba(0, 0, 0, 0.815);
+        margin-left: auto;
+        margin-right:  auto;
+        width: 42vh;
+        height: 94vh;
+        max-width: 960px
+    }
 }
 
 @media only screen and (max-width: 600px) {
 
+    button {
+        width: 40%;
+        height: 25px;
+        border-radius: 8px;
+    }
+
+    .introButton {
+        width: 40%;
+        height: 25px;
+        border-radius: 8px;
+        margin-bottom: 8%;
+        
+    }
 
     .banner {
         font-size: 4em;
@@ -318,7 +387,44 @@ a:hover {
         height: 3%;
         margin-top: 20%;
     }
+
+    
 }
+
+@media only screen and (max-width: 500px) {
+
+    button {
+        width: 50%;
+        height: 25px;
+        border-radius: 8px;
+    }
+
+    .introButton {
+        width: 50%;
+        height: 25px;
+        border-radius: 8px;
+        margin-bottom: 8%;
+        
+    }
+
+    .banner {
+        font-size: 3em;
+        text-decoration: underline;
+        font-family: 'Yellowtail', cursive;
+        margin: 8px;
+    }
+
+    .preUse {
+        border-radius: 12;
+        color: rgba(0, 0, 0, 0.815);
+        margin-left: auto;
+        margin-right:  auto;
+        width: 35vh;
+        height: 94vh;
+        max-width: 960px
+    }
+}
+
 
 @media only screen and (max-width: 400px) {
 
@@ -329,4 +435,15 @@ a:hover {
         font-family: 'Yellowtail', cursive;
         margin: 8px;
     }
+
+    .preUse {
+        border-radius: 12;
+        color: rgba(0, 0, 0, 0.815);
+        margin-left: auto;
+        margin-right:  auto;
+        width: 30vh;
+        height: 94vh;
+        max-width: 960px
+    }
 }
+
