@@ -43,6 +43,27 @@ function introViewSwitch(currentView) {
 	return viewWrap;
 }
 
+const appInfo = 
+`
+
+<div class="appInfo">
+
+<h2>welcome to RSVP,</h2><p> a simple online app for coordinating events!
+Simply sign Up to start an event thread, set up an account 
+to manage updates and content, then invite people to join 
+under your unique event name so they can stay up-to-date 
+on any last-second changes or notifications! This light-weight
+ app has a simple platform that helps orchestrate many events 
+ with many users, but is much smaller than main stream social 
+ media apps! Click back to get started, or if you're already a 
+ user, login!</p>
+
+ <button class="toggleInfo back" type="submit" name="toggleInfo">Back</button>
+</div>
+`;
+
+
+
 
 /**************PROMPTS*******************************************************************************************PROMPTS*************** */
 /*Let user know delete success */
