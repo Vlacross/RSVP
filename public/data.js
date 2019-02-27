@@ -69,7 +69,7 @@ on any last-second changes or notifications! This light-weight
 /*Let user know delete success */
 const deleteSuccessPrompt =
 	`
-<section class="deleteResponse" >
+<section class="deleteResponse prompt" >
 	<h1>Success!</h1>
 	<h3>details successfully deleted!</h3>
 	<p>Click home to go back to main post feed! </p>
@@ -81,7 +81,7 @@ const deleteSuccessPrompt =
 /*Let user know update success */
 const updateSuccessPrompt =
 	`
-<section class="successResponse" >
+<section class="successResponse prompt" >
 	<h1>Success!</h1>
 	<h3>details successfully updated!</h3>
 	<p>Click home to go back to main post feed! </p>
@@ -92,7 +92,7 @@ const updateSuccessPrompt =
 /*Let user know on post success */
 const postSuccessPrompt =
 	`
-<section class="successResponse" >
+<section class="successResponse prompt" >
 	<h1>Success!</h1>
 	<h3>Content Posted!</h3>
 	<p>Click home to go back to main post feed! </p>
@@ -104,7 +104,7 @@ const postSuccessPrompt =
 
 /*popup with details on returned fail */
 var failedLogin =
-	`<section class="failedResponse" >
+	`<section class="failedResponse prompt" >
     <h1>Woops!</h1>
     <h3>Looks like something went wrong!</h3>
 		<p>Log in failed! Check your username and password and try again! </p>
@@ -114,7 +114,7 @@ var failedLogin =
 
 /*popup with details on returned fail */
 var failedUpdate =
-	`<section class="failedUpdate" >
+	`<section class="failedUpdate prompt" >
     <h1>Woops!</h1>
     <h3>Looks like something went wrong!</h3>
 		<p>Update failed! Check your username and password and try again! </p>
@@ -124,7 +124,7 @@ var failedUpdate =
 
 /*popup with details on returned fail */
 var failedPost =
-	`<section class="failedUpdate" >
+	`<section class="failedUpdate prompt" >
     <h1>Woops!</h1>
     <h3>Looks like something went wrong!</h3>
 		<p>Update failed! Check your username and password and try again! </p>
@@ -134,7 +134,7 @@ var failedPost =
 
 /*popup with details on returned fail */
 var failedDelete =
-	`<section class="failedUpdate" >
+	`<section class="failedUpdate prompt" >
     <h1>Woops!</h1>
     <h3>Looks like something went wrong!</h3>
 		<p>Update failed! Check your username and password and try again! </p>
@@ -144,13 +144,24 @@ var failedDelete =
 
 /*popup with details on returned fail */
 var noEvent =
-	`<section class="noEvent" >
+	`<section class="noEvent prompt" >
 	<h1>Woops!</h1>
 	<h3>Couldn't find an event with that name!</h3>
 	<p>Check your spelling and try again! </p>
 	<button class="noEventButton" name="noEventButton">Retry</button>
 </section>
 `;
+
+/*popup with details on returned fail */
+var unauthorizedAccess =
+	`<section class="unauthorized prompt" >
+	<h1>Woops!</h1>
+	<h3>looks like you entered incorrect credentials!</h3>
+	<p>Check your spelling and try again! </p>
+	<button class="failedUpdateButton" name="unauthorizedButton">Retry</button>
+</section>
+`;
+
 
 /**************PROMPTS*******************************************************************************************PROMPTS*************** */
 
@@ -311,9 +322,10 @@ function newEventForm(name) {
 
 /*eventFeed */
 
-const eventDeleteButton = 
+const eventAdminButton = 
 `
 <button class="deleteEventButton navButton" type="submit" name="deleteEventButton">Delete Event</button>
+<button type="submit" class="usersListLink navButton" name="usersListLink">Event Users</button>
 `
 
 /*Main app home page- left-side nav bar */
@@ -323,7 +335,6 @@ let homePage =
 
 					<nav class="siteNav">
 
-						<button type="submit" class="usersListLink navButton" name="usersListLink">Event Users</button>
 						<button type="submit" class="eventDetailsLink navButton" name="eventDetailsLink">Event Details</button>
 						<button type="submit" class="eventNewsfeedLink navButton" name="eventNewsfeedLink">Event News Feed</button>
 						<button type="submit" class="accountLink navButton" name="accountLink">Account</button>
@@ -346,15 +357,21 @@ let homePage =
 /*List of users in DB with role="atendee" */
 
 function usersListing(usr) {
-	let { fullname, joinDate, attending } = usr;
+	let { fullname, joinDate, attending, id } = usr;
 	let date = new Date(joinDate).toDateString();
 	let usersListing =
 
 		`
 				<li class="userListing">
-					<p>Name: ${fullname}</p>
-					<p>Join Date: ${date}</p>
-					<p>Attending: ${attending}</p>
+					<div class="userListingDiv">
+						<p>Name: ${fullname}</p>
+						<p>Join Date: ${date}</p>
+						<p>Attending: ${attending}</p>
+					</div>
+					<div class="userManageButton" data="${id}">
+						<button type="submit" class="userAccountButton" name="userAccountButton">Edit User</button>
+						<button type="submit" class="accountDeleteButton" name="accountDeleteButton">Delete User</button>
+					</div>
 				</li>
 				`;
 	return usersListing;
@@ -372,10 +389,59 @@ function accountProfile() {
 	let accountDetails =
 		`
 	<section class="accountProfile">
+				<div class="accountSpans">
 					<span class="fullnameSpan">Fullname: ${fullname}</span>
 					<span class="usernameSpan">Username: ${username}</span>
 					<span class="attending">Attending: ${attending}</span>
+				</div>
+
+				<div class="accountButton">
 					<button type="submit" class="profileEditButton" name="profileEditButton">Edit profile</button>
+				</div>
+					
+				</section>
+				`;
+	return accountDetails;
+
+};
+
+/*Simple user account info card for current user to update details */
+
+function manageAccountProfile(user) {
+	let { fullname, username, id } = user;
+	let accountDetails =
+		`
+	<section class="accountManage">
+				<div class="accountSpans">
+					<span class="fullnameSpan">Fullname: ${fullname}</span>
+					<span class="usernameSpan">Username: ${username}</span>
+				
+				<div class="role">
+
+					<label for"admin1Radio">MasterAdmin
+						<input type="radio" id="masterAdmin" name="role" class="radioChoice" value="1">
+					</label>
+		
+					<label for"admin2Radio">Event Lead
+						<input type="radio" id="eventAdmin" name="role" class="radioChoice" value="2">
+					</label>
+
+					<label for"userRadio">Basic User
+						<input type="radio" id="user" name="role" class="radioChoice" value="3" checked>
+					</label>
+
+				</div>
+
+
+			</div>
+
+				<div class="accountButtonManage" data="${id}">
+					<button type="submit" class="accountManageSubmit" name="accountManageSubmit">Edit profile</button>
+					<button type="submit" class="accountDeleteButton" name="accountDeleteButton">Delete User</button>
+					<button class="toggleUserList">Back</button>
+				</div>
+
+					
 				</section>
 				`;
 	return accountDetails;
@@ -400,9 +466,11 @@ function editProfile() {
 	<input id="userNameInput" name="userNameInput" class="userNameInput" type="text" value="${username}" required>
 	</label>
 
-								<label for="userPassInput">New PassWord
-	<input id="userPassInput" name="userPassInput" class="userPassInput" type="text" placeholder="Enter new password here" required>
+								<label for="userPassInput">Current PassWord
+	<input id="userPassInput" name="userPassInput" class="userPassInput" type="text" placeholder="Enter current password here" required>
 	</label>
+
+								
 
 	<div class="attending">
 

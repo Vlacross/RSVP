@@ -21,7 +21,6 @@ const CommentPost = require('../models/comments');
 const Post = require('../models/posts');
 const User = require('../models/users');
 const EventPlan = require('../models/events');
-const { levelOne, levelTwo, } = require('../Roles/checkWare')
 
 const { JWT_SECRET, ALG, EXP } = require('../config')
 router.use(bodyParser.json());
@@ -37,8 +36,15 @@ const buildToken = function (user) {
 	)
 }
 
-
-
+/*Find One User */
+router.get('/findOne/:id', (req, res) => {
+	User.findOne({_id: req.params.id})
+		.then(user => {
+			
+			res.json(user.serialize())
+		})
+	res.status(200)
+})
 
 /*can search user*/
 router.get('/find/:id', (req, res) => {
@@ -63,8 +69,22 @@ router.put('/details/', (req, res) => {
 		return res.status(400).json(msg).end()
 	}
 
+
 	let { fullname, username, password, id, attending } = req.body
 
+	const requiredFields = ['fullname', 'username', 'password', 'attending']
+	let missing = requiredFields.filter(field => (!req.body[field]))
+	if (missing.length > 0) {
+		msg = {
+			code: 422,
+			message: `Missing ${missing} in header!`,
+			reason: `Missing ${missing} in header!`
+		}
+		console.error(msg)
+		return res.status(400).json(msg).end()
+	}
+	console.log(missing)
+	
 	const newDetails = {
 		fullname,
 		username,
@@ -80,17 +100,15 @@ router.put('/details/', (req, res) => {
 			return updatedUser
 		})
 		.then(updatedUser => {
+			console.log('updatedUSER', updatedUser)
 			let token = buildToken(updatedUser.username)
 			let obj = {
-				user:
-				{
-					id: updatedUser.id,
-					fullname: updatedUser.fullname,
-					username: updatedUser.username
-				},
-				token
+				user: updatedUser.serialize(),
+				token: token
 			}
+			console.log('obj', obj)
 			return res.json(obj).status(203).end()
+
 		})
 		.catch(err => console.log(err, 22))
 });

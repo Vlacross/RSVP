@@ -158,7 +158,6 @@ function buildEvent() {
 
 
 function checkEventName(route) {
-	console.log('nameChecker')
 	let name = $('.eventNameInput').val();
 	let event = {
 		eventName: name
@@ -175,13 +174,9 @@ function checkEventName(route) {
 	.then(resj => {
 		console.log(resj)
 		if(resj.message === 'false') {
-			console.log('Good To Go - Not Taken')
 			$('.accessView').replaceWith(introViewSwitch(newEventForm(name)))
 		}
 		if(resj.message === 'true') {
-			console.log('troobin', resj)
-		
-		
 		}
 	})
 	.catch(err => {
@@ -214,7 +209,93 @@ function getEventInfo() {
 
 /********^*******EVENT**********^****************************************************************************************^*EVENT*ACTIONS*^*********************** */
 
+
+
+/********V*******MASTER*ADMIN**********V****************************************************************************************V*MASTER*ADMIN*V*********************** */
+
+
+function accountRemove(accountId) {
+
+
+};
+
+
+function accountManage(accountId) {
+
+	function submitEdit(route) {
+
+		console.log(`sending update to ${route}`);
+		let token = localStorage.getItem('token');
+	
+		let fullName = $('.fullNameInput').val();
+		let userName = $('.userNameInput').val();
+		let pwd = $('.userPassInput').val();
+		let newPwd = $('.userNewPassInput').val()
+		const att = $('input[name=attendance]:checked').val()
+		
+		let updatedUser = {
+			id: user.id,
+			username: user.username,
+			fullname: fullName,
+			newUsername: userName,
+			password: pwd,
+			newPassword: newPwd,
+			event: user.event,
+			role: user.role,
+			attending: att
+		};
+	
+		console.log(updatedUser, 'preUpdate send');
+		fetch(route, {
+			method: 'put',
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json',
+				'Authorization': 'Bearer' + ' ' + token
+			},
+			body: JSON.stringify(updatedUser)
+		})
+			.then(res => {
+				if(res.status === 422 || res.status === 400 || res.status === 422) {
+					console.log('unauthow')
+					return Promise.reject({message: 'unauthorized'})
+				}
+				return res.json()})
+			.then(resj => {
+				
+				console.log('update suxess!', resj)
+				localStorage.removeItem('user')
+				localStorage.removeItem('token')
+				localStorage.setItem('user', JSON.stringify(resj.user))
+				localStorage.setItem('token', resj.token)
+				let type = 'update'
+				promptSuccess(type)
+			})
+			.catch(err => {
+				console.log('updateFail', err)
+				let type = 'update'
+				if(err.message === 'unauthorized') {
+					console.log('handl')
+					 type = 'unauthorized'
+					handleFail(type)
+					return
+				}
+				
+				handleFail(type)
+			});
+	};
+};
+
+
+
+
+/********^*******MASTER*ADMIN**********^****************************************************************************************^*MASTER*ADMIN*^*********************** */
+
 /*********ACCOUNT*********** */
+
+
+
+
 
 /*********deeletes current user account and related data*********** */
 
@@ -241,6 +322,61 @@ function deleteUser() {
 
 
 
+/*********V*CREATEUSER**V****************************************************V*CREATEUSER**V*********************** */
+
+
+function signUp(route) {
+
+	console.log(`sending fetch to ${route}`);
+	const fullname = $('.fullNameInput').val();	
+	const userName = $('.userNameInput').val();
+	const pwd = $('.userPassInput').val();
+	const att = $('input[name=attendance]:checked').val()
+	let eventName = JSON.parse(localStorage.getItem('event'))
+	const createNew = {
+		fullname: fullname,
+		username: userName,
+		password: pwd,
+		event: eventName[0].id,
+		role: 3,
+		attending: att
+	};
+
+	console.log(createNew, 'preauth newUser send')
+	fetch(route, {
+		method: 'post',
+		headers: {
+			'Accept': 'application/json',
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(createNew)
+	})
+		.then(res => res.json())
+		.then(resj => {
+			console.log(resj, 'resj.user')
+			if(resj.code === 422) {
+				return new Error(res.message)
+			}
+			localStorage.setItem('user', JSON.stringify(resj.user))
+			localStorage.setItem('token', `${resj.token}`)
+			// let user = JSON.parse(localStorage.getItem('user'))
+			buildHome()
+		})
+		.catch(err => {
+			console.log('loginFail', err)
+			let type = 'post'
+			handleFail(type)
+		});
+};
+
+
+
+
+
+
+
+
+
 /*********updates current user details and info*********** */
 
 function submitEdit(route) {
@@ -248,15 +384,22 @@ function submitEdit(route) {
 	console.log(`sending update to ${route}`);
 	let user = JSON.parse(localStorage.getItem('user'));
 	let token = localStorage.getItem('token');
+
 	let fullName = $('.fullNameInput').val();
 	let userName = $('.userNameInput').val();
 	let pwd = $('.userPassInput').val();
+	let newPwd = $('.userNewPassInput').val()
 	const att = $('input[name=attendance]:checked').val()
 	
 	let updatedUser = {
+		id: user.id,
+		username: user.username,
 		fullname: fullName,
-		username: userName,
+		newUsername: userName,
 		password: pwd,
+		newPassword: newPwd,
+		event: user.event,
+		role: user.role,
 		attending: att
 	};
 
@@ -270,8 +413,14 @@ function submitEdit(route) {
 		},
 		body: JSON.stringify(updatedUser)
 	})
-		.then(res => res.json())
+		.then(res => {
+			if(res.status === 422 || res.status === 400 || res.status === 422) {
+				console.log('unauthow')
+				return Promise.reject({message: 'unauthorized'})
+			}
+			return res.json()})
 		.then(resj => {
+			
 			console.log('update suxess!', resj)
 			localStorage.removeItem('user')
 			localStorage.removeItem('token')
@@ -283,6 +432,13 @@ function submitEdit(route) {
 		.catch(err => {
 			console.log('updateFail', err)
 			let type = 'update'
+			if(err.message === 'unauthorized') {
+				console.log('handl')
+				 type = 'unauthorized'
+				handleFail(type)
+				return
+			}
+			
 			handleFail(type)
 		});
 };
@@ -291,14 +447,13 @@ function submitEdit(route) {
 function editAccount() {
 	let user = JSON.parse(localStorage.getItem('user'));
 	let editForm = viewSwitch(editProfile(user));
-	console.log(user, editForm);
 	$('.viewWrapper').replaceWith(editForm);
 };
 
 /*uses stored user id to render user account details */
 function getAccount() {
-	let user = JSON.parse(localStorage.getItem('user'));
-	let acc = viewSwitch(accountProfile(user));
+	
+	let acc = viewSwitch(accountProfile());
 	$('.viewWrapper').replaceWith(acc);
 };
 
@@ -370,6 +525,7 @@ function shipPost(route) {
 		.then(res => res.json())
 		.then(resj => {
 			console.log('update suxess!', resj)
+			localStorage.setItem('postId', resj.id)
 			let type = 'post'
 			promptSuccess(type)
 		})
@@ -597,7 +753,7 @@ function deleteComment(removalId, postId, authorId) {
 function checkRole() {
 	let user = JSON.parse(localStorage.getItem('user'));
 	if (user.role === 1) {
-		$('.siteNav').append(eventDeleteButton)
+		$('.siteNav').append(eventAdminButton)
 	}
 
 };
@@ -635,8 +791,12 @@ function promptSuccess(type) {
 
 /*********HANDLEFAIL*********** */
 function handleFail(type) {
+	console.log('faylin', type)
 	let msg;
 	switch(type) {
+		case 'unauthorized':
+			msg = unauthorizedAccess;
+			break;
 		case 'update':
 			msg = failedUpdate;
 			break;
@@ -644,20 +804,25 @@ function handleFail(type) {
 			msg = failedPost;
 			break;
 		case 'delete':
-			msg = failedDelete;
-		case 'login':
-			msg = failedLogin;
-			$('.accessView').addClass('hidden');
-			break;	
+			msg = failedDelete;	
 		};
 
-	$('main').append(msg);
+		$('.viewWrapper').replaceWith(viewSwitch(msg))
+
+};
+
+function handleLoginFail() {
+
+	$('.accessView').addClass('hidden')
+
+	$('main').append(failedLogin);
 
 	$('.failedResponseButton').one('click', function (e) {
 		e.preventDefault();
 		routeFail();
 	});
-};
+}
+
 
 function routeFail() {
 	console.log('reroute');
@@ -727,60 +892,11 @@ function logIn(route) {
 		})
 		.catch(err => {
 			console.log('loginFail')
-			let type = 'login'
-			handleFail(type)
+			handleLoginFail()
 		});
 };
 /********^*LOGIN*^*************************************************************************************************^*LOGIN*^********************** */
 
-/*********V*SIGN*UP*V***************************************************************************************************V*SIGN*UP*V*********************** */
-
-
-function signUp(route) {
-
-	console.log(`sending fetch to ${route}`);
-	const fullname = $('.fullNameInput').val();	
-	const userName = $('.userNameInput').val();
-	const pwd = $('.userPassInput').val();
-	const att = $('input[name=attendance]:checked').val()
-	let eventName = JSON.parse(localStorage.getItem('event'))
-	const createNew = {
-		fullname: fullname,
-		username: userName,
-		password: pwd,
-		event: eventName[0].id,
-		role: 3,
-		attending: att
-	};
-
-	console.log(createNew, 'preauth newUser send')
-	fetch(route, {
-		method: 'post',
-		headers: {
-			'Accept': 'application/json',
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify(createNew)
-	})
-		.then(res => res.json())
-		.then(resj => {
-			console.log(resj, resj.user)
-			localStorage.setItem('user', JSON.stringify(resj.user))
-			localStorage.setItem('token', `${resj.token}`)
-			// let user = JSON.parse(localStorage.getItem('user'))
-			buildHome()
-		})
-		.catch(err => {
-			console.log('loginFail')
-			let type = 'login'
-			handleFail(type)
-		});
-};
-
-
-
-
-/*********^*SIGN*UP*^***************************************************************************************************^*SIGN*UP*^*********************** */
 
 /********V*NAVBAR*V*************************************************************************************************V*NAVBAR*V********************** */
 function handleNav() {
@@ -926,6 +1042,15 @@ function watchPageActions() {
 		console.log('going to home page!')
 		$('.homePageView').remove()
 		buildHome();
+		localStorage.removeItem('postId')
+	});
+	/*failed response to home */
+	$('body').on('click', 'button.failedUpdateButton', function (e) {
+		e.preventDefault();
+		console.log('going to home page!')
+		$('.homePageView').remove()
+		buildHome();
+		localStorage.removeItem('postId')
 	});
 	/*post title from list view to select single post */
 	$('body').on('click', 'a.postTitle', function (e) {
@@ -938,7 +1063,10 @@ function watchPageActions() {
 	$('body').on('click', 'button.successResponseReturnButton', function (e) {
 		e.preventDefault();
 		console.log('lets double check what we did...!')
+		postId = localStorage.getItem('postId')
 		getPost(postId);
+		localStorage.removeItem('postId')
+
 	});
 	/*toggle remove create comment form */
 	$('body').on('click', 'button.cancelActionButton', function (e) {
@@ -976,11 +1104,58 @@ function watchPageActions() {
 		console.log('Just drop the ship then...')
 		route = `posts/delete/${postId}`;
 		deletePost(route, postId)
-		
 	});
 	
+/**************************************************************MasterAdmin */
 
+	/*Allows MasterAdmin to change user details and role */
+	$('body').on('click', 'button.userAccountButton', function (e) {
+		e.preventDefault();
+		console.log('administrator managing account')
+		let accountId = $(this).parent().attr('data')
+		route = `users/findOne/${accountId}`
+		method = 'GET'
 	
+		quickFetch(route, method)
+		.then(res => res.json())
+		.then(resj => {
+			console.log(resj[0])
+			$('.viewWrapper').replaceWith(viewSwitch(manageAccountProfile(resj)))
+		})
+		manageAccountProfile(accountId)
+		accountManage(accountId)
+	});
+	/*submits fetch to update user account */
+	$('body').on('click', 'button.accountManageSubmit', function (e) {
+		e.preventDefault();
+		console.log('managing preFetch')
+		let accountId = $(this).parent().attr('data')
+		
+	});
+	/*toggles back from account manage */
+	$('body').on('click', 'button.toggleUserList', function (e) {
+		e.preventDefault();
+		showUsers()
+	});
+
+
+	$('body').on('click', 'button.accountDeleteButton', function (e) {
+		e.preventDefault();
+		console.log('Just drop the ship then...')
+		let accountId = $(this).parent().attr('data')
+		accountRemove(accountId)
+	});
+
+
+
+/**************************************************************MasterAdmin */
+
+
+
+
+
+
+
 }
 /********^*LISTENERS*^**************************************************************************************************^*LISTENERS*^********************** */
 
