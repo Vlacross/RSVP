@@ -69,7 +69,7 @@ on any last-second changes or notifications! This light-weight
 /*Let user know delete success */
 const deleteSuccessPrompt =
 	`
-<section class="deleteResponse" >
+<section class="deleteResponse prompt" >
 	<h1>Success!</h1>
 	<h3>details successfully deleted!</h3>
 	<p>Click home to go back to main post feed! </p>
@@ -81,7 +81,7 @@ const deleteSuccessPrompt =
 /*Let user know update success */
 const updateSuccessPrompt =
 	`
-<section class="successResponse" >
+<section class="successResponse prompt" >
 	<h1>Success!</h1>
 	<h3>details successfully updated!</h3>
 	<p>Click home to go back to main post feed! </p>
@@ -92,7 +92,7 @@ const updateSuccessPrompt =
 /*Let user know on post success */
 const postSuccessPrompt =
 	`
-<section class="successResponse" >
+<section class="successResponse prompt" >
 	<h1>Success!</h1>
 	<h3>Content Posted!</h3>
 	<p>Click home to go back to main post feed! </p>
@@ -104,7 +104,7 @@ const postSuccessPrompt =
 
 /*popup with details on returned fail */
 var failedLogin =
-	`<section class="failedResponse" >
+	`<section class="failedResponse prompt" >
     <h1>Woops!</h1>
     <h3>Looks like something went wrong!</h3>
 		<p>Log in failed! Check your username and password and try again! </p>
@@ -114,7 +114,7 @@ var failedLogin =
 
 /*popup with details on returned fail */
 var failedUpdate =
-	`<section class="failedUpdate" >
+	`<section class="failedUpdate prompt" >
     <h1>Woops!</h1>
     <h3>Looks like something went wrong!</h3>
 		<p>Update failed! Check your username and password and try again! </p>
@@ -124,7 +124,7 @@ var failedUpdate =
 
 /*popup with details on returned fail */
 var failedPost =
-	`<section class="failedUpdate" >
+	`<section class="failedUpdate prompt" >
     <h1>Woops!</h1>
     <h3>Looks like something went wrong!</h3>
 		<p>Update failed! Check your username and password and try again! </p>
@@ -134,7 +134,7 @@ var failedPost =
 
 /*popup with details on returned fail */
 var failedDelete =
-	`<section class="failedUpdate" >
+	`<section class="failedUpdate prompt" >
     <h1>Woops!</h1>
     <h3>Looks like something went wrong!</h3>
 		<p>Update failed! Check your username and password and try again! </p>
@@ -143,14 +143,35 @@ var failedDelete =
  `;
 
 /*popup with details on returned fail */
-var noEvent =
-	`<section class="noEvent" >
+var eventNotFound =
+	`<section class="noEvent prompt" >
 	<h1>Woops!</h1>
 	<h3>Couldn't find an event with that name!</h3>
 	<p>Check your spelling and try again! </p>
-	<button class="noEventButton" name="noEventButton">Retry</button>
+	<button class="failedIntroButton" name="failedIntroButton">Retry</button>
 </section>
 `;
+
+/*popup with details on returned fail */
+var duplicateName =
+	`<section class="nameTaken prompt" >
+	<h1>Woops!</h1>
+	<h3>Looks like that name is already being used!</h3>
+	<p>Choose a different name and try again!</p>
+	<button class="failedIntroButton" name="failedIntroButton">Retry</button>
+</section>
+`;
+
+/*popup with details on returned fail */
+var unauthorizedAccess =
+	`<section class="unauthorized prompt" >
+	<h1>Woops!</h1>
+	<h3>looks like you entered incorrect credentials!</h3>
+	<p>Check your spelling and try again! </p>
+	<button class="failedUpdateButton" name="unauthorizedButton">Retry</button>
+</section>
+`;
+
 
 /**************PROMPTS*******************************************************************************************PROMPTS*************** */
 
@@ -159,23 +180,27 @@ var noEvent =
 /*for existing users to log in */
 const loginForm =
 	`
+
 <form class="authForm" autocomplete="off">
 	<fieldset class="accessFieldset">
+	<div class="accessFieldsetDiv">
 		<input autocomplete="false" name="hidden" type="text" style="display:none;">
 
-				<label for="userNameInput">UserId--demoUser: "big"
+				<label for="userNameInput">UserId--demoUser: "big"</label>
 					<input id="userNameInput" name="userNameInput" class="userNameInput" type="text" required>
-				</label>
+				
 
-				<label for="userPassInput">PassWord-demoPassword: "ben"
+				<label for="userPassInput">PassWord-demoPassword: "ben"	</label>
 					<input id="userPassInput" name="userPassInput" class="userPassInput" type="text" required>
-				</label>
+			
 
 				<button class="loginSubmit" type="submit" name="submitButton">Submit</button>
 					
 	</fieldset>
+		<div class="loginBackButton">
 					<button class="toggleIntro" type="submit" name="toggleIntro">Back</button>
-
+		</div>		
+	</div>
 </form>
 
 `;
@@ -186,14 +211,14 @@ const eventCheck =
 <form class="eventCheck">
 	<input autocomplete="false" name="hidden" type="text" style="display:none;">
 
-	<label for="eventNameCheck" class="eventNameCheckLabel " >Search for an event to sign up for
+	<label for="eventNameCheck" class="eventNameCheckLabel " >Search for an event to sign up for</label>
 		<input id="eventNameInput" name="eventNameInput" class="eventNameInput" type="text">
-	</label>
+	
+	<div class="eventCheckButtons">
+		<button class="eventNameButton">Find</button>
 
-	<button class="eventNameButton">Find</button>
-
-	<button class="toggleIntro" type="submit" name="toggleIntro">Back</button>
-
+		<button class="toggleIntro" type="submit" name="toggleIntro">Back</button>
+	</div>
 </form>
 `
 
@@ -203,13 +228,14 @@ const newEventCheck =
 <form class="eventCheck">
 	<input autocomplete="false" name="hidden" type="text" style="display:none;">
 
-	<label for="eventNameInput" class="eventNameCheckLabel " >Pick a name for your event and check for availablility!
+	<label for="eventNameInput" class="eventNameCheckLabel " >Pick a name for your event and check for availablility!	</label>
 		<input id="eventNameInput" name="eventNameInput" class="eventNameInput" type="text">
-	</label>
 
-	<button class="newEventNameInput">Find</button>
 
-	<button class="toggleIntro" type="submit" name="toggleIntro">Back</button>
+	<div class="eventCheckButtons">
+		<button class="newEventNameInput">Find</button>
+		<button class="toggleIntro" type="submit" name="toggleIntro">Back</button>
+	</div>
 
 </form>
 `
@@ -221,33 +247,35 @@ const signupForm =
 
 	`
 <form class="authForm" autocomplete="off">
-	<fieldset class="accessFieldset">
+	<fieldset class="accessFieldset event">
 		<input autocomplete="false" name="hidden" type="text" style="display:none;">
 
-			<label for="fullNameInput" class="fullNameLabel " >FullName
-				<input id="fullNameInput" name="fullNameInput" class="fullNameInput" type="text">
-			</label>
+			<label for="fullNameInput" class="fullNameLabel event" >FullName</label>
+				<input id="fullNameInput" name="fullNameInput" class="fullNameInput event" type="text">
+			
 
-				<label for="userNameInput">UserName
-					<input id="userNameInput" name="userNameInput" class="userNameInput" type="text" required>
-				</label>
+				<label for="userNameInput" class="userNameInputLabel event">UserName</label>
+					<input id="userNameInput" name="userNameInput" class="userNameInput event" type="text" required>
+				
 
-				<label for="userPassInput">PassWord 
-					<input id="userPassInput" name="userPassInput" class="userPassInput" type="text" required>
-				</label>
+				<label for="userPassInput" class="userPassInputLabel event">PassWord </label>
+					<input id="userPassInput" name="userPassInput" class="userPassInput event" type="text" required>
+				
 
 				<div class="attending">
-					<label for"going">Going
+					<label for"going" class="goingLabel event">Going</label>
 						<input type="radio" id="going" name="attendance" class="radioChoice" value="true" checked>
-					</label>
-					<label for"notGoing">Not Going
+					
+					<label for"notGoing" class="newGoingLabel event">Not Going</label>
 						<input type="radio" id="notGoing" name="attendance" class="radioChoice" value="false" checked>
-					</label>
+					
 				</div>
 
-						<button class="signUpSubmit" type="submit" name="signUpSubmit">Submit</button>
+						<button class="signUpSubmit event" type="submit" name="signUpSubmit">Submit</button>
 	</fieldset>
-					<button class="toggleIntro" type="submit" name="toggleIntro">Back</button>
+			<div class="loginBackButton">
+				<button class="toggleIntro" type="submit" name="toggleIntro">Back</button>
+			</div>	
 </form>
 `;
 
@@ -255,51 +283,63 @@ const signupForm =
 
 /*form for creating a new event-- follows after creating host account / master admin */
 function newEventForm(name) {
-	let today = new Date()
+	let date = new Date()
+	let y = date.getFullYear();
+	let m = date.getMonth();
+	let d = date.getDate();
+	let today = `${y} + "-" + ${m} + "-" + ${d}`
+	console.log(today)
 
 	let eventForm =
 
 		`
 <form class="authForm" autocomplete="off">
-	<fieldset class="accessFieldset">
+	<fieldset class="accessFieldset event">
 		<input autocomplete="false" name="hidden" type="text" style="display:none;">
 
-
-				<h2>Enter Details for your new event!</h2>
+			<div class="eventInputGroup">
+			<h2>Event Name: ${name}</h2>			
+				<p>Enter Details for your new event!</p>
 				<input class="eventName hidden" value="${name}">
-				<p>Event Name: ${name}</p>			
 
 				
-				<label for="dateOfEventInput">Choose a date for your event: 
-					<input id="dateOfEventInput" name="dateOfEventInput" class="dateOfEventInput" type="date" min="${today}" required>
-				</label>
+				<label for="dateOfEventInput" class="dateOfEventLabel event">Choose a date for your event: </label>
+					<input id="dateOfEventInput" name="dateOfEventInput" class="dateOfEventInput event" type="date" min="${today}" required>
+				
 
-				<label for="eventDescriptionInput">Add a quick description about your event: 
-					<input id="eventDescriptionInput" name="eventDescriptionInput" class="eventDescriptionInput" type="text" required>
-				</label>
+				<label for="eventDescriptionInput" class="eventDescriptionLabel event">Add a quick description about your event: </label>
+					<input id="eventDescriptionInput" name="eventDescriptionInput" class="eventDescriptionInput event" type="text" required>
+				
 
-				<h2>Enter details for your new Event-Host account!</h2>
+			</div>
 
-				<label for="fullNameInput" class="fullNameLabel" >FullName
-					<input id="fullNameInput" name="fullNameInput" class="fullNameInput" type="text">
-				</label>
+			<div class="adminInputGroups">
 
-				<label for="userNameInput">UserName
-					<input id="userNameInput" name="userNameInput" class="userNameInput" type="text" required>
-				</label>
+				<h2>Enter details for your new account!</h2>
 
-				<label for="userPassInput">PassWord 
-					<input id="userPassInput" name="userPassInput" class="userPassInput" type="text" required>
-				</label>
+				<label for="fullNameInput" class="fullNameLabel event" >FullName</label>
+					<input id="fullNameInput" name="fullNameInput" class="fullNameInput event" type="text">
+				
 
-				<label for="userContactInfoInput">Enter an e-mail
-					<input id="userContactInfoInput" name="userContactInfoInput" class="userContactInfoInput" type="email" required>
-				</label>
+				<label for="userNameInput" class="userNameLabel event">UserName</label>
+					<input id="userNameInput" name="userNameInput" class="userNameInput event" type="text" required>
+				
+
+				<label for="userPassInput" class="userPassLabel event">PassWord </label>
+					<input id="userPassInput" name="userPassInput" class="userPassInput event" type="text" required>
+				
+
+				<label for="userContactInfoInput" class="userContactInfoLabel event">Enter an e-mail</label>
+					<input id="userContactInfoInput" name="userContactInfoInput" class="userContactInfoInput event" type="email" required>
+				
+				</div>
 
 
-						<button class="newEventSubmit" type="submit" name="newEventSubmit">Submit</button>
+						<button class="newEventSubmit event" type="submit" name="newEventSubmit">Submit</button>
 	</fieldset>
+				<div class="loginBackButton">
 					<button class="toggleIntro" type="submit" name="toggleIntro">Back</button>
+				</div>
 </form>
 `;
 
@@ -311,8 +351,14 @@ function newEventForm(name) {
 
 /*eventFeed */
 
-const eventDeleteButton = 
+const eventLeadButton = 
 `
+<button type="submit" class="addPost navButton" name="addPost">AddPost</button>
+`;
+
+const eventAdminButton = 
+`
+<button type="submit" class="usersListLink navButton" name="usersListLink">Event Users</button>
 <button class="deleteEventButton navButton" type="submit" name="deleteEventButton">Delete Event</button>
 `
 
@@ -323,12 +369,10 @@ let homePage =
 
 					<nav class="siteNav">
 
-						<button type="submit" class="usersListLink navButton" name="usersListLink">Event Users</button>
-						<button type="submit" class="eventDetailsLink navButton" name="eventDetailsLink">Event Details</button>
 						<button type="submit" class="eventNewsfeedLink navButton" name="eventNewsfeedLink">Event News Feed</button>
 						<button type="submit" class="accountLink navButton" name="accountLink">Account</button>
+						<button type="submit" class="eventDetailsLink navButton" name="eventDetailsLink">Event Details</button>
 						<button type="submit" class="logOut navButton" name="Logout">Logout</button>
-						<button type="submit" class="addPost navButton" name="addPost">AddPost</button>
 					</nav>
 
 					<section class="viewWrapper">
@@ -346,15 +390,21 @@ let homePage =
 /*List of users in DB with role="atendee" */
 
 function usersListing(usr) {
-	let { fullname, joinDate, attending } = usr;
+	let { fullname, joinDate, attending, id } = usr;
 	let date = new Date(joinDate).toDateString();
 	let usersListing =
 
 		`
 				<li class="userListing">
-					<p>Name: ${fullname}</p>
-					<p>Join Date: ${date}</p>
-					<p>Attending: ${attending}</p>
+					<div class="userListingDiv">
+						<p>Name: ${fullname}</p>
+						<p>Join Date: ${date}</p>
+						<p>Attending: ${attending}</p>
+					</div>
+					<div class="userManageButton" data="${id}">
+						<button type="submit" class="userAccountButton" name="userAccountButton">Edit User Role</button>
+						<button type="submit" class="accountDeleteButton" name="accountDeleteButton">Delete User</button>
+					</div>
 				</li>
 				`;
 	return usersListing;
@@ -372,10 +422,59 @@ function accountProfile() {
 	let accountDetails =
 		`
 	<section class="accountProfile">
+				<div class="accountSpans">
 					<span class="fullnameSpan">Fullname: ${fullname}</span>
 					<span class="usernameSpan">Username: ${username}</span>
 					<span class="attending">Attending: ${attending}</span>
+				</div>
+
+				<div class="accountButton">
 					<button type="submit" class="profileEditButton" name="profileEditButton">Edit profile</button>
+				</div>
+					
+				</section>
+				`;
+	return accountDetails;
+
+};
+
+/*Simple user account info card for current user to update details */
+
+function manageAccountProfile(user) {
+	let { fullname, username, id } = user;
+	let accountDetails =
+		`
+	<section class="accountManage">
+				<div class="accountSpans">
+					<span class="fullnameSpan">Fullname: ${fullname}</span>
+					<span class="usernameSpan">Username: ${username}</span>
+				
+				<div class="role">
+
+					<label for"admin1Radio">MasterAdmin
+						<input type="radio" id="masterAdmin" name="role" class="radioChoice" value="1">
+					</label>
+		
+					<label for"admin2Radio">Event Lead
+						<input type="radio" id="eventAdmin" name="role" class="radioChoice" value="2">
+					</label>
+
+					<label for"userRadio">Basic User
+						<input type="radio" id="user" name="role" class="radioChoice" value="3">
+					</label>
+
+				</div>
+
+
+			</div>
+
+				<div class="accountButtonManage" data="${id}">
+					<button type="submit" class="accountManageSubmit" name="accountManageSubmit">Edit Role</button>
+					<button type="submit" class="accountDeleteButton" name="accountDeleteButton">Delete User</button>
+					<button class="toggleUserList">Back</button>
+				</div>
+
+					
 				</section>
 				`;
 	return accountDetails;
@@ -400,9 +499,11 @@ function editProfile() {
 	<input id="userNameInput" name="userNameInput" class="userNameInput" type="text" value="${username}" required>
 	</label>
 
-								<label for="userPassInput">New PassWord
-	<input id="userPassInput" name="userPassInput" class="userPassInput" type="text" placeholder="Enter new password here" required>
+								<label for="userPassInput">Current PassWord
+	<input id="userPassInput" name="userPassInput" class="userPassInput" type="text" placeholder="Enter current password here" required>
 	</label>
+
+								
 
 	<div class="attending">
 

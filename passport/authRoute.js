@@ -17,12 +17,13 @@ const jwtAuth = passport.authenticate('JWT', { session: false})
 const { JWT_SECRET, ALG, EXP } = require('../config')
 const { User } = require('../models')
 const EventPlan = require('../models/events');
-const { levelOne, levelTwo, validateEvent, validateAttendance, checkEventName } = require('../Roles/checkWare')
+const { validateEvent, validateAttendance, checkEventName } = require('../Middleware/validators')
 
 const opts = {
 	algorithm: ALG,
 	expiresIn: EXP
 }
+
 const buildToken = function (user) {
 	return jwt.sign({ user }, JWT_SECRET, opts
 	)
@@ -30,17 +31,6 @@ const buildToken = function (user) {
 
 
 router.use(bodyParser.json())
-router.use(express.static('./passport/views'))
-
-
-router.post('/check', jwtAuth, (req, res) => {
-	console.log('got to the Loggin Rodeo sun!', req.rawHeaders)
-
-	// console.log(req.headers, req.rawHeaders)
-	res.status(201)
-})
-
-
 
 router.post('/', localAuth, (req, res) => {
 	if(!req) {console.log('err')}
@@ -78,16 +68,59 @@ router.post('/create', (req, res) => {
 	const requiredFields = ['fullname', 'username', 'password', 'event', 'role', 'attending']
 	let missing = requiredFields.filter(field => (!req.body[field]))
 	if (missing.length > 0) {
-		msg = `Missing ${missing} in header!`
+		msg = {
+			code: 422,
+			message: `Missing ${missing} in header!`,
+			reason: `Missing ${missing} in header!`
+		}
 		console.error(msg)
 		return res.status(400).json(msg).end()
 	}
 	console.log(missing)
+
+	const trimmed = ['username', 'password'];
+	let untrimmed = trimmed.find(field => req.body[field].trim() !== req.body[field])
+	console.log(untrimmed)
+	if(untrimmed) {
+		let msg = {
+			code: 422,
+			message: "whiteSpace found in credentials! Username and password can't start or end with a space!",
+			reason: 'whiteSpace found in user/pass'}
+		return res.status(422).json(msg).end()
+	}
 	
 	const { fullname: full, username: user, password: pass, event, role, attending } = req.body
 
-	console.log('haswhatneeds')
-	User.checkUniquity(user)
+	User.count({username: user}, function(err, user) {
+		if(err) {
+			return err}
+		if(user !== 0) {
+			let msg = {
+				code: 422,
+				message: "username already in use!",
+				reason: 'username is already in use'}
+			return res.status(422).json(msg).end()
+		}
+	})
+
+	
+	if(user.length <= 5 || user.length >= 15) {
+		let msg = {
+			code: 422,
+			message: 'Username must be between 6-14 characters',
+			reason: 'Username must be between 6-14 characters'}
+		return res.status(422).json(msg).end()
+	}
+
+	
+	if(pass.length <=7 || user.length >= 43) {
+		let msg = {
+			code: 422,
+			message: 'Password must be between 10-42 characters',
+			reason: 'Password must be between 10-42 characters'}
+		return res.status(422).json(msg).end()
+	}
+
 	console.log('made it to create!')
 
 	User.create({

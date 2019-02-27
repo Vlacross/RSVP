@@ -12,7 +12,6 @@ const jwtAuth = passport.authenticate('JWT', { session: false });
 const User = require('../models/users');
 const CommentPost = require('../models/comments');
 const Post = require('../models/posts');
-const { levelOne, levelTwo } = require('../Roles/checkWare')
 
 router.use(bodyParser.json());
 router.use('*', jwtAuth);
@@ -50,7 +49,7 @@ router.get('/findPost/:id', (req, res) => {
 
 /*Can create a new Post */
 /*Add Auth for Support Accounts Only */
-router.post('/create', jsonParser, levelOne, (req, res) => {
+router.post('/create', jsonParser, (req, res) => {
 
 	/*forEach wasn't handling err - allowed to pass to create */
 	const requiredFields = ['title', 'author', 'body', 'event']
@@ -82,7 +81,7 @@ router.post('/create', jsonParser, levelOne, (req, res) => {
 
 
 /*Admin only can update details */
-router.put('/details/:id', levelOne, (req, res) => {
+router.put('/details/:id', (req, res) => {
 	if (!req.params.id || !req.body.id || req.body.id !== req.params.id) {
 		let msg = `Incomplete credentials!`
 		console.error(msg)
@@ -104,7 +103,7 @@ router.put('/details/:id', levelOne, (req, res) => {
 
 
 /*Added / populate comments with newly created comment IDs */
-router.put('/comment/:id', levelOne, (req, res) => {
+router.put('/comment/:id', (req, res) => {
 	if (!req.params.id) {
 		let msg = `Incomplete credentials!`
 		console.error(msg)
@@ -121,7 +120,7 @@ router.put('/comment/:id', levelOne, (req, res) => {
 });
 
 
-router.delete('/purgeComments/:id', levelOne, (req, res) => {
+router.delete('/purgeComments/:id', (req, res) => {
 	if (!req.params.id) {
 		let msg = `Incomplete credentials!`
 		console.error(msg)
