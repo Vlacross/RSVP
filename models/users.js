@@ -79,9 +79,10 @@ userSchema.pre('remove', function() {
 
 /*hashes user password on update */
 userSchema.pre('findOneAndUpdate', function(next) {
+
   const password = this.getUpdate().$set.password;
     if(!password) {
-      return next(err)
+      return next()
     }
   const salt = bcrypt.genSaltSync();
   const hash = bcrypt.hashSync(password, salt);

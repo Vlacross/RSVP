@@ -41,7 +41,7 @@ router.get('/findOne/:id', (req, res) => {
 	User.findOne({_id: req.params.id})
 		.then(user => {
 			
-			res.json(user.serialize())
+			res.json(user)
 		})
 	res.status(200)
 })
@@ -70,7 +70,7 @@ router.put('/details/', (req, res) => {
 	}
 
 
-	let { fullname, username, password, id, attending } = req.body
+	let { fullname, username, password, id, attending, role } = req.body
 
 	const requiredFields = ['fullname', 'username', 'password', 'attending']
 	let missing = requiredFields.filter(field => (!req.body[field]))
@@ -89,16 +89,12 @@ router.put('/details/', (req, res) => {
 		fullname,
 		username,
 		password,
-		attending
+		attending,
+		role
 	}
 
 	User.findByIdAndUpdate(id, { $set: newDetails }, { new: true })
-		.then(updatedUser => {
-			updatedUser.save(function (err) {
-				if (err) throw new Error(err)
-			})
-			return updatedUser
-		})
+		
 		.then(updatedUser => {
 			console.log('updatedUSER', updatedUser)
 			let token = buildToken(updatedUser.username)
@@ -109,6 +105,37 @@ router.put('/details/', (req, res) => {
 			console.log('obj', obj)
 			return res.json(obj).status(203).end()
 
+		})
+		.catch(err => console.log(err, 22))
+});
+
+/*strictly for setting userRole */
+router.put('/roles', (req, res) => {
+
+	if (!req.body.id) {
+		let msg = `Incomplete credentials!`
+		console.error(msg)
+		return res.status(400).json(msg).end()
+	}
+
+	let { id, role } = req.body
+
+	const requiredFields = ['id', 'role']
+	let missing = requiredFields.filter(field => (!req.body[field]))
+	if (missing.length > 0) {
+		msg = {
+			code: 422,
+			message: `Missing ${missing} in header!`,
+			reason: `Missing ${missing} in header!`
+		}
+		console.error(msg)
+		return res.status(400).json(msg).end()
+	}
+
+	User.findByIdAndUpdate(id, { $set: { role: parseInt(role) } }, { new: true })
+		.then(updatedUser => {
+			console.log('updatedUSER', updatedUser)
+			return res.status(203).end()
 		})
 		.catch(err => console.log(err, 22))
 });

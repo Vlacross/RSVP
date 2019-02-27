@@ -220,29 +220,15 @@ function accountRemove(accountId) {
 };
 
 
-function accountManage(accountId) {
-
-	function submitEdit(route) {
+function accountManage(route, accountId) {
 
 		console.log(`sending update to ${route}`);
 		let token = localStorage.getItem('token');
-	
-		let fullName = $('.fullNameInput').val();
-		let userName = $('.userNameInput').val();
-		let pwd = $('.userPassInput').val();
-		let newPwd = $('.userNewPassInput').val()
-		const att = $('input[name=attendance]:checked').val()
+		let role = $('input[name=role]:checked').val()
 		
 		let updatedUser = {
-			id: user.id,
-			username: user.username,
-			fullname: fullName,
-			newUsername: userName,
-			password: pwd,
-			newPassword: newPwd,
-			event: user.event,
-			role: user.role,
-			attending: att
+			id: accountId,
+			role: role
 		};
 	
 		console.log(updatedUser, 'preUpdate send');
@@ -255,35 +241,23 @@ function accountManage(accountId) {
 			},
 			body: JSON.stringify(updatedUser)
 		})
-			.then(res => {
-				if(res.status === 422 || res.status === 400 || res.status === 422) {
-					console.log('unauthow')
-					return Promise.reject({message: 'unauthorized'})
-				}
-				return res.json()})
-			.then(resj => {
-				
-				console.log('update suxess!', resj)
-				localStorage.removeItem('user')
-				localStorage.removeItem('token')
-				localStorage.setItem('user', JSON.stringify(resj.user))
-				localStorage.setItem('token', resj.token)
-				let type = 'update'
-				promptSuccess(type)
-			})
-			.catch(err => {
-				console.log('updateFail', err)
-				let type = 'update'
-				if(err.message === 'unauthorized') {
-					console.log('handl')
-					 type = 'unauthorized'
-					handleFail(type)
-					return
-				}
-				
+		.then(res => res.json())
+		.then(resj => {
+			
+			console.log('udpatedRole!', resj)
+			let type = 'update'
+			promptSuccess(type)
+		})
+		.catch(err => {
+			console.log('updateFail', err)
+			let type = 'update'
+					type = 'unauthorized'
 				handleFail(type)
-			});
-	};
+				
+			
+				
+		 });
+
 };
 
 
@@ -1119,18 +1093,19 @@ function watchPageActions() {
 		quickFetch(route, method)
 		.then(res => res.json())
 		.then(resj => {
-			console.log(resj[0])
+			console.log(resj)
 			$('.viewWrapper').replaceWith(viewSwitch(manageAccountProfile(resj)))
+			/*setting radio buttons as value of selected user role */
+			$(`input[name=role][value="${resj.role}"]`).attr('checked', 'checked')
 		})
-		manageAccountProfile(accountId)
-		accountManage(accountId)
 	});
 	/*submits fetch to update user account */
 	$('body').on('click', 'button.accountManageSubmit', function (e) {
 		e.preventDefault();
 		console.log('managing preFetch')
 		let accountId = $(this).parent().attr('data')
-		
+		route = `users/roles`
+		accountManage(route, accountId)
 	});
 	/*toggles back from account manage */
 	$('body').on('click', 'button.toggleUserList', function (e) {

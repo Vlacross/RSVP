@@ -369,7 +369,7 @@ function usersListing(usr) {
 						<p>Attending: ${attending}</p>
 					</div>
 					<div class="userManageButton" data="${id}">
-						<button type="submit" class="userAccountButton" name="userAccountButton">Edit User</button>
+						<button type="submit" class="userAccountButton" name="userAccountButton">Edit User Role</button>
 						<button type="submit" class="accountDeleteButton" name="accountDeleteButton">Delete User</button>
 					</div>
 				</li>
@@ -427,7 +427,7 @@ function manageAccountProfile(user) {
 					</label>
 
 					<label for"userRadio">Basic User
-						<input type="radio" id="user" name="role" class="radioChoice" value="3" checked>
+						<input type="radio" id="user" name="role" class="radioChoice" value="3">
 					</label>
 
 				</div>
@@ -436,7 +436,7 @@ function manageAccountProfile(user) {
 			</div>
 
 				<div class="accountButtonManage" data="${id}">
-					<button type="submit" class="accountManageSubmit" name="accountManageSubmit">Edit profile</button>
+					<button type="submit" class="accountManageSubmit" name="accountManageSubmit">Edit Role</button>
 					<button type="submit" class="accountDeleteButton" name="accountDeleteButton">Delete User</button>
 					<button class="toggleUserList">Back</button>
 				</div>
