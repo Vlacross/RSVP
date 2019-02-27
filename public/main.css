@@ -57,7 +57,7 @@ fieldset input {
     margin-left: auto;
     margin-right:  auto;
     width: 94vh;
-    height: 94vh;
+    height: 100%;
     max-width: 960px
 }
 
@@ -464,39 +464,44 @@ a:hover {
 @media only screen and (max-width: 1000px) {
 
     .preUse {
-        border-radius: 12;
-        color: rgba(0, 0, 0, 0.815);
-        margin-left: auto;
-        margin-right:  auto;
         width: 84vh;
-        height: 94vh;
-        max-width: 960px
     }
 }
 
 @media only screen and (max-width: 900px) {
 
     .preUse {
-        border-radius: 12;
-        color: rgba(0, 0, 0, 0.815);
-        margin-left: auto;
-        margin-right:  auto;
         width: 74vh;
-        height: 94vh;
-        max-width: 960px
+    }
+
+    .siteNav {
+        padding: 8px;
+        max-width: initial;
+        width: 155px;
+    }
+
+    .viewWrapper {
+        max-width: 72%;
+
     }
 }
 
 @media only screen and (max-width: 800px) {
 
     .preUse {
-        border-radius: 12;
-        color: rgba(0, 0, 0, 0.815);
-        margin-left: auto;
-        margin-right:  auto;
         width: 100%;
-        height: 94vh;
-        max-width: 960px
+    }
+
+    .siteNav {
+        padding: 0px;
+        max-width: initial;
+        width: 155px;
+    }
+
+    .navButton {
+        width: 100%;
+        height: 4%;
+        margin-top: 20%;
     }
 }
 
@@ -504,10 +509,14 @@ a:hover {
 
 @media only screen and (max-width: 700px) {
 
+    .viewWrapper {
+        max-width: 60%;
+
+    }
+
     button {
-        width: 30%;
-        height: 25px;
-        border-radius: 8px;
+        width: 96%;
+        margin: 3% 2% 0% 2%; 
     }
 
     .introButton {
@@ -515,130 +524,101 @@ a:hover {
         height: 25px;
         border-radius: 8px;
         margin-bottom: 8%;
-        
     }
 
     .banner {
         font-size: 5em;
-        text-decoration: underline;
-        font-family: 'Yellowtail', cursive;
-        margin: 8px;
     }
 
-    .navButton {
+    /* .navButton {
         width: 85px;
         height: 4%;
         margin-top: 20%;
-    }
+    } */
 
-    .preUse {
-        border-radius: 12;
-        color: rgba(0, 0, 0, 0.815);
-        margin-left: auto;
-        margin-right:  auto;
-        width: 100%;
-        height: 94vh;
-        max-width: 960px
-    }
 
 
 
     .eventNameCheckLabel {
-        font-size: 1.4em;
+        font-size: 1.2em;
     }
     
     .eventNameInput {
-        font-size: 1.4em;
-     
+        font-size: 1.2em;
     }
     
+    input[class~="event"] {
+        font-size: initial;
+    }
+    
+    label[class~="event"] {
+        font-size: initial;
+    }
+
 }
 
 @media only screen and (max-width: 600px) {
 
+    .siteNav {
+        width: 132px;
+    }
+
     button {
         width: 40%;
-        height: 25px;
-        border-radius: 8px;
+        
     }
 
     .introButton {
-        width: 40%;
-        height: 25px;
-        border-radius: 8px;
-        margin-bottom: 8%;
-        
+        width: 40%;    
     }
 
     .banner {
         font-size: 4em;
-        text-decoration: underline;
-        font-family: 'Yellowtail', cursive;
-        margin: 8px;
     }
 
-    .navButton {
+    /* .navButton {
         width: 70px;
         height: 3%;
         margin-top: 20%;
-    }
+    } */
 
     
 }
 
 @media only screen and (max-width: 500px) {
 
+    main {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .viewWrapper {
+        max-width: 50%;
+
+    }
+
     button {
         width: 50%;
-        height: 25px;
-        border-radius: 8px;
+     
     }
 
     .introButton {
         width: 50%;
-        height: 25px;
-        border-radius: 8px;
-        margin-bottom: 8%;
         
     }
 
     .banner {
         font-size: 3em;
-        text-decoration: underline;
-        font-family: 'Yellowtail', cursive;
-        margin: 8px;
     }
 
-    .preUse {
-        border-radius: 12;
-        color: rgba(0, 0, 0, 0.815);
-        margin-left: auto;
-        margin-right:  auto;
-        width: 100%;
-        height: 100%;
-        max-width: 960px
-    }
+ 
 }
 
 
 @media only screen and (max-width: 400px) {
 
 
-    .banner {
-        font-size: 3em;
-        text-decoration: underline;
-        font-family: 'Yellowtail', cursive;
-        margin: 8px;
-    }
 
-    .preUse {
-        border-radius: 12;
-        color: rgba(0, 0, 0, 0.815);
-        margin-left: auto;
-        margin-right:  auto;
-        width: 100%;
-        height: 100%;
-        max-width: 960px
-    }
+
 }
 

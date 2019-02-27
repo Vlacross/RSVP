@@ -315,7 +315,7 @@ function newEventForm(name) {
 
 			<div class="adminInputGroups">
 
-				<h2>Enter details for your new Event-Host account!</h2>
+				<h2>Enter details for your new account!</h2>
 
 				<label for="fullNameInput" class="fullNameLabel event" >FullName</label>
 					<input id="fullNameInput" name="fullNameInput" class="fullNameInput event" type="text">
@@ -329,7 +329,7 @@ function newEventForm(name) {
 					<input id="userPassInput" name="userPassInput" class="userPassInput event" type="text" required>
 				
 
-				<label for="userContactInfoInput class="userContactInfoLabel event">Enter an e-mail</label>
+				<label for="userContactInfoInput" class="userContactInfoLabel event">Enter an e-mail</label>
 					<input id="userContactInfoInput" name="userContactInfoInput" class="userContactInfoInput event" type="email" required>
 				
 				</div>
