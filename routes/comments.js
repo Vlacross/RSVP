@@ -2,31 +2,25 @@ const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
-
 const mongoose = require('mongoose');
 
 const jwtStrategy = require('../passport');
-
 const passport = require('passport');
-passport.use('JWT', jwtStrategy);
 const jwtAuth = passport.authenticate('JWT', { session: false });
+passport.use('JWT', jwtStrategy);
 
 const CommentPost = require('../models/comments');
 const Post = require('./../models/posts');
-const { levelOne, levelTwo } = require('../Roles/checkWare')
 
 router.use(bodyParser.json());
 router.use('*', jwtAuth);
 
-router.get('/', (req, res) => {
-	console.log('got to the Comments!')
-});
 
 	/*Can create a new CommentPost */
-	/*Access to All */
+	/*Access to All roles */
 router.post('/create', jsonParser, (req, res) => {
 
-	/*forEach wasn't handling err - allowed to pass to create */
+	/*forEach wasn't breaking script on 'return' - continued to pass to create */
 	const requiredFields = ['text', 'userId', 'event', 'postId']
 	let missing = requiredFields.filter(field => (!req.body[field]))
 	if (missing.length > 0) {
@@ -61,7 +55,7 @@ router.post('/create', jsonParser, (req, res) => {
 
 
 	/*Admin or author only can update details */
-router.put('/details/:id', levelOne, (req, res) => {
+router.put('/details/:id', (req, res) => {
 	if (!req.params.id || !req.body.id || req.body.id !== req.params.id) {
 		let msg = `Incomplete credentials!`
 		console.error(msg)

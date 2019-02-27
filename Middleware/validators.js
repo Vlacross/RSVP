@@ -6,57 +6,6 @@ const EventPlan = require('../models/events');
 
 /*write express middleware here */
 
-/*Allows eventAdmins and masterAdmin through */
-var levelOne = function(req, res, next) {
-
-    console.log('lvl1 checker', req.body)
-    let role = req.user.role;
-    
-
-    if(!role) {
-        console.log('no role')
-        return Promise.reject({message: 'No role detected', reason: 'Unauthorized'})
-    }
-
-    if(role === 1) {
-        console.log('here')
-        return next()
-    }
-
-    if(role > 2) {
-        
-        console.log("level One Restriction: access denied!", 'current role', role)
-        return Promise.reject({message: 'This account does not hold eventAdmin privileges', reason: 'Unauthorized'})
-    }
-    console.log("lvl1-pass")
-    next()
-};
-
-
-/*Allows only masterAdmins through */
-var levelTwo = function(req, res, next) {
-    let role = req.user.role;
-
-    if(!role) {
-        return Promise.reject({message: 'No role detected', reason: 'Unauthorized'})
-    }
-
-    if(role !== 1) {
-        console.log("level Two Restriction: access denied!", 'current role', role)
-        return Promise.reject({message: 'This account does not hold masterAdmin privileges', reason: 'Unauthorized'})
-    }
-    console.log("lvl2-pass")
-    next()
-};
-
-
-
-
-
-
-
-
-
 validateEvent = function (req, res, next) {
 
     
@@ -140,4 +89,4 @@ validateEvent = function (req, res, next) {
 
 
 
-module.exports = { levelOne, levelTwo, validateEvent, validateAttendance, checkEventName }
+module.exports = { validateEvent, validateAttendance, checkEventName }

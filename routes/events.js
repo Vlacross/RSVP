@@ -13,26 +13,10 @@ const CommentPost = require('../models/comments');
 const Post = require('../models/posts');
 const User = require('../models/users');
 const EventPlan = require('../models/events');
-const { levelOne, levelTwo, validateEvent, validateAttendance } = require('../Roles/checkWare')
+const { validateEvent, validateAttendance } = require('../Middleware/validators');
 
 router.use(bodyParser.json());
 router.use('*', jwtAuth);
-
-router.get('/', (req, res) => {
-	console.log(req.headers)
-	console.log('got to the events!')
-});
-
-
-// router.post('/validate', validateEvent, validateAttendance, (req, res) => {
-
-// 	console.log(req.body)
-
-
-// 	console.log('past it')
-	
-// });
-
 
 router.get('/find/:id', (req, res) => {
 	EventPlan.findOne({_id: req.params.id})
@@ -40,8 +24,6 @@ router.get('/find/:id', (req, res) => {
 			res.json(event.serialize())
 		})
 });
-
-
 
 
 /*MasterAdmin only can update details */

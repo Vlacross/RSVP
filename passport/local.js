@@ -5,15 +5,15 @@ const { User } = require('../models')
 
 
 const localStrategy = new LocalStrategy(
-	function (userName, passWord, done) {
+	function (username, password, done) {
 		let user;
-		User.findOne({ username: userName })
+		User.findOne({ username: username })
 		.then(_user => {
 			user = _user
 			if(!user) {
 				return Promise.reject({message: 'Invalid username!', reason: 'loginFail'})
 			}
-			return user.checkPass(passWord)
+			return user.checkPass(password)
 		})
 		.then(valid => {
 			if(!valid) {
