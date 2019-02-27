@@ -88,6 +88,34 @@ button {
     border-radius: 8px;
 }
 
+/****************************INTRO*CREATE*EVENT********/
+
+.eventNameCheckLabel {
+    font-size: 2em;
+}
+
+.eventCheck {
+    display: flex;
+    flex-direction: column;
+}
+
+.eventCheckButtons {
+    display: flex;
+    justify-content: space-around;
+   
+}
+
+.eventNameInput {
+    font-size: 2em;
+    width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+    margin: 20px auto 20px auto;
+}
+
+
+/****************************INTRO*CREATE*EVENT********/
+
 .appInfo {
     margin-top: 8%;
     margin-left: 14%;
@@ -96,14 +124,12 @@ button {
     font-size: 1.5em;
 }
 
-.introButton {
-    width: 40%;
-    height: 35px;
-    border-radius: 8px;
-    margin-bottom: 8%;
-    
+.appInfoButton {
+    margin-left: auto;
+    margin-right: auto;
 }
 
+/*******************************INTRO*VIEWS********/
 .introLabel {
     margin-top: 20%;
 }
@@ -112,13 +138,20 @@ button {
     text-align: center;
     display: flex;
     flex-direction: column;
-  
 }
 
 .introSelections {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.introButton {
+    width: 40%;
+    height: 35px;
+    border-radius: 8px;
+    margin-bottom: 8%;
+    
 }
 
 .introPageFieldset {
@@ -130,12 +163,82 @@ button {
     margin: 4px
 }
 
+.accessView {
+    width: 80%;
+   
+}
+
 .accessFieldset {
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
+    align-content: center;
 }
 
+.toggleIntro {
+
+}
+
+.authForm {
+   display: flex;
+   flex-direction: column;
+   align-content: center;
+}
+
+.authFormDiv {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.loginBackButton {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.accessFieldsetDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+.eventInputGroup {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+}
+
+input[class~="event"] {
+    font-size: 1.7em;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+label[class~="event"] {
+    font-size: 1.4em;
+   
+}
+
+fieldset[class~="event"] {
+    text-align: center;
+}
+
+.adminInputGroups {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+}
+
+
+
+/*******************************INTRO*VIEWS********/
 /* .attending {
     display: flex;
     flex-direction: column;
@@ -391,7 +494,7 @@ a:hover {
         color: rgba(0, 0, 0, 0.815);
         margin-left: auto;
         margin-right:  auto;
-        width: 60vh;
+        width: 100%;
         height: 94vh;
         max-width: 960px
     }
@@ -433,10 +536,22 @@ a:hover {
         color: rgba(0, 0, 0, 0.815);
         margin-left: auto;
         margin-right:  auto;
-        width: 42vh;
+        width: 100%;
         height: 94vh;
         max-width: 960px
     }
+
+
+
+    .eventNameCheckLabel {
+        font-size: 1.4em;
+    }
+    
+    .eventNameInput {
+        font-size: 1.4em;
+     
+    }
+    
 }
 
 @media only screen and (max-width: 600px) {
@@ -499,8 +614,8 @@ a:hover {
         color: rgba(0, 0, 0, 0.815);
         margin-left: auto;
         margin-right:  auto;
-        width: 35vh;
-        height: 94vh;
+        width: 100%;
+        height: 100%;
         max-width: 960px
     }
 }
@@ -521,8 +636,8 @@ a:hover {
         color: rgba(0, 0, 0, 0.815);
         margin-left: auto;
         margin-right:  auto;
-        width: 30vh;
-        height: 94vh;
+        width: 100%;
+        height: 100%;
         max-width: 960px
     }
 }

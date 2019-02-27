@@ -4,6 +4,7 @@
 function toggleIntro() {
 	$('.introView').removeClass('hidden');
 	$('.accessView').remove();
+	$('.banner').removeClass('hidden')
 	
 };
 
@@ -71,7 +72,8 @@ function checkEvent(route) {
 	.then(res => res.json())
 	.then(resj => {
 		if(resj.message === 'false') {
-		 flashNoEvent()
+			let type = 'noEvent'
+		 handleIntroFail(type)
 		}
 		if(resj.message === 'true') {
 			console.log('logDog')
@@ -174,9 +176,13 @@ function checkEventName(route) {
 	.then(resj => {
 		console.log(resj)
 		if(resj.message === 'false') {
+			$('.banner').addClass('hidden')
 			$('.accessView').replaceWith(introViewSwitch(newEventForm(name)))
+			
 		}
 		if(resj.message === 'true') {
+			let type = 'nameTaken'
+			handleIntroFail(type)
 		}
 	})
 	.catch(err => {
@@ -732,6 +738,10 @@ function checkRole() {
 	let user = JSON.parse(localStorage.getItem('user'));
 	if (user.role === 1) {
 		$('.siteNav').append(eventAdminButton)
+		$('.siteNav').append(eventLeadButton)
+	}
+	if(user.role === 2) {
+		$('.siteNav').append(eventLeadButton)
 	}
 
 };
@@ -789,6 +799,35 @@ function handleFail(type) {
 
 };
 
+function handleIntroFail(type) {
+console.log('introFAY', type)
+	let msg;
+	switch(type) {
+		case 'nameTaken':
+			msg = duplicateName;
+			break;
+		case 'noEvent':
+			msg = eventNotFound;
+			break;
+		// case '':
+		// 	msg = ;
+		// 	break;
+		// case '':
+		// 	msg = ;	
+		};
+
+$('.accessView').replaceWith(introViewSwitch(msg))
+
+$('.failedIntroButton').one('click', function (e) {
+	e.preventDefault();
+
+	$('.accessView').remove()
+	$('.introView').removeClass('hidden')
+	$('.banner').removeClass('hidden')
+});
+
+}
+
 function handleLoginFail() {
 
 	$('.accessView').addClass('hidden')
@@ -811,15 +850,6 @@ function routeFail() {
 	
 };
 
-function flashNoEvent() {
-
-	$('.accessView').replaceWith(introViewSwitch(noEvent))
-
-	$('.noEventButton').one('click', function (e) {
-			e.preventDefault();
-			$('.accessView').replaceWith(introViewSwitch(eventCheck))
-		});
-}
 
 /*********^***********^**********************************************************************************^*SITE*FLOW*ACTIONS*^**********************************/
 
@@ -964,11 +994,13 @@ function watchFetchActions() {
 	});
 	$('body').on('click', 'button.eventNameButton', function (e) {
 		e.preventDefault();
+	
 		route = 'login/eventCheck'
 		checkEvent(route);
 	});
 		$('body').on('click', 'button.signUpSubmit', function (e) {
 		e.preventDefault();
+		
 		route = 'login/create';
 		signUp(route);
 	});
@@ -980,11 +1012,13 @@ function watchFetchActions() {
 	});
 	$('body').on('click', 'button.newEventNameInput', function (e) {
 		e.preventDefault();
+		
 		route = 'login/eventCheck'
 		checkEventName(route);
 	});
 	$('body').on('click', 'button.newEventSubmit', function (e) {
 		e.preventDefault()
+		$('.banner').removeClass('hidden')
 		buildEvent();
 	});
 	
