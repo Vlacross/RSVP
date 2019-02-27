@@ -52,6 +52,8 @@ BUGS AND BREAKS
 ***************
 -make a new template for Post create success and tie the back button to getPost with new post id(currently sharing with )
 
+-currently reFiring pre-save User id push to event when user updates
+
 
 
 
