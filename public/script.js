@@ -215,7 +215,7 @@ function getEventInfo() {
 
 
 function accountRemove(accountId) {
-
+console.log(accountId)
 
 };
 
@@ -273,9 +273,10 @@ function accountManage(route, accountId) {
 
 /*********deeletes current user account and related data*********** */
 
-function deleteUser() {
+function deleteUser(usr) {
 
-	let user = JSON.parse(localStorage.getItem('user'));
+	let account = JSON.parse(localStorage.getItem('user'));
+	let user = usr || account;
 	let route = `users/delete/${user.id}`
 	let method = 'delete'
 	console.log(`removing user at ${route}`, user);
@@ -283,7 +284,10 @@ function deleteUser() {
 	quickFetch(route, method)
 		.then(res => {
 			console.log('deletion suxess!', res.status)
-			logOut()
+			if(account.id === usr.id) {
+				logOut()
+			}
+			showUsers()
 		})
 		.catch(err => {
 			console.log('updateFail', err)
@@ -1118,7 +1122,9 @@ function watchPageActions() {
 		e.preventDefault();
 		console.log('Just drop the ship then...')
 		let accountId = $(this).parent().attr('data')
-		accountRemove(accountId)
+		let usr = {id: accountId}
+		deleteUser(usr)
+		
 	});
 
 
