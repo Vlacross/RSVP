@@ -57,11 +57,7 @@ fieldset input {
     margin-left: auto;
     margin-right:  auto;
     width: 94vh;
-<<<<<<< HEAD
-    height: 94vh;
-=======
     height: 100%;
->>>>>>> fix/delete-node_modules
     max-width: 960px
 }
 
