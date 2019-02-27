@@ -470,32 +470,13 @@ a:hover {
 @media only screen and (max-width: 1000px) {
 
     .preUse {
-<<<<<<< HEAD
-        border-radius: 12;
-        color: rgba(0, 0, 0, 0.815);
-        margin-left: auto;
-        margin-right:  auto;
         width: 84vh;
-        height: 94vh;
-        max-width: 960px
-=======
-        width: 84vh;
->>>>>>> fix/delete-node_modules
     }
 }
 
 @media only screen and (max-width: 900px) {
 
     .preUse {
-<<<<<<< HEAD
-        border-radius: 12;
-        color: rgba(0, 0, 0, 0.815);
-        margin-left: auto;
-        margin-right:  auto;
-        width: 74vh;
-        height: 94vh;
-        max-width: 960px
-=======
         width: 74vh;
     }
 
@@ -508,22 +489,12 @@ a:hover {
     .viewWrapper {
         max-width: 72%;
 
->>>>>>> fix/delete-node_modules
     }
 }
 
 @media only screen and (max-width: 800px) {
 
     .preUse {
-<<<<<<< HEAD
-        border-radius: 12;
-        color: rgba(0, 0, 0, 0.815);
-        margin-left: auto;
-        margin-right:  auto;
-        width: 60vh;
-        height: 94vh;
-        max-width: 960px
-=======
         width: 100%;
     }
 
@@ -537,7 +508,6 @@ a:hover {
         width: 100%;
         height: 4%;
         margin-top: 20%;
->>>>>>> fix/delete-node_modules
     }
 }
 
@@ -545,12 +515,6 @@ a:hover {
 
 @media only screen and (max-width: 700px) {
 
-<<<<<<< HEAD
-    button {
-        width: 30%;
-        height: 25px;
-        border-radius: 8px;
-=======
     .viewWrapper {
         max-width: 60%;
 
@@ -559,7 +523,6 @@ a:hover {
     button {
         width: 96%;
         margin: 3% 2% 0% 2%; 
->>>>>>> fix/delete-node_modules
     }
 
     .introButton {
@@ -567,78 +530,19 @@ a:hover {
         height: 25px;
         border-radius: 8px;
         margin-bottom: 8%;
-<<<<<<< HEAD
-        
-=======
->>>>>>> fix/delete-node_modules
     }
 
     .banner {
         font-size: 5em;
-<<<<<<< HEAD
-        text-decoration: underline;
-        font-family: 'Yellowtail', cursive;
-        margin: 8px;
-=======
->>>>>>> fix/delete-node_modules
     }
-
-    /* .navButton {
-        width: 85px;
-        height: 4%;
-        margin-top: 20%;
-    } */
-
-
-
-
-    .eventNameCheckLabel {
-        font-size: 1.2em;
-    }
-    
-    .eventNameInput {
-        font-size: 1.2em;
-    }
-    
-    input[class~="event"] {
-        font-size: initial;
-    }
-<<<<<<< HEAD
-
-    .preUse {
-        border-radius: 12;
-        color: rgba(0, 0, 0, 0.815);
-        margin-left: auto;
-        margin-right:  auto;
-        width: 42vh;
-        height: 94vh;
-        max-width: 960px
-    }
-=======
-    
     label[class~="event"] {
         font-size: initial;
     }
 
->>>>>>> fix/delete-node_modules
 }
 
 @media only screen and (max-width: 600px) {
 
-<<<<<<< HEAD
-    button {
-        width: 40%;
-        height: 25px;
-        border-radius: 8px;
-    }
-
-    .introButton {
-        width: 40%;
-        height: 25px;
-        border-radius: 8px;
-        margin-bottom: 8%;
-        
-=======
     .siteNav {
         width: 132px;
     }
@@ -650,7 +554,6 @@ a:hover {
 
     .introButton {
         width: 40%;    
->>>>>>> fix/delete-node_modules
     }
 
     .banner {
@@ -661,53 +564,13 @@ a:hover {
         width: 70px;
         height: 3%;
         margin-top: 20%;
-<<<<<<< HEAD
-    }
-=======
     } */
->>>>>>> fix/delete-node_modules
 
     
 }
 
 @media only screen and (max-width: 500px) {
 
-<<<<<<< HEAD
-    button {
-        width: 50%;
-        height: 25px;
-        border-radius: 8px;
-    }
-
-    .introButton {
-        width: 50%;
-        height: 25px;
-        border-radius: 8px;
-        margin-bottom: 8%;
-        
-    }
-
-    .banner {
-        font-size: 3em;
-        text-decoration: underline;
-        font-family: 'Yellowtail', cursive;
-        margin: 8px;
-    }
-
-    .preUse {
-        border-radius: 12;
-        color: rgba(0, 0, 0, 0.815);
-        margin-left: auto;
-        margin-right:  auto;
-        width: 35vh;
-        height: 94vh;
-        max-width: 960px
-    }
-}
-
-
-@media only screen and (max-width: 400px) {
-=======
     main {
         padding-left: 0;
         padding-right: 0;
@@ -717,7 +580,6 @@ a:hover {
         max-width: 50%;
 
     }
->>>>>>> fix/delete-node_modules
 
     button {
         width: 50%;
@@ -733,17 +595,6 @@ a:hover {
         font-size: 3em;
     }
 
-<<<<<<< HEAD
-    .preUse {
-        border-radius: 12;
-        color: rgba(0, 0, 0, 0.815);
-        margin-left: auto;
-        margin-right:  auto;
-        width: 30vh;
-        height: 94vh;
-        max-width: 960px
-    }
-=======
  
 }
 
@@ -753,6 +604,5 @@ a:hover {
 
 
 
->>>>>>> fix/delete-node_modules
 }
 
