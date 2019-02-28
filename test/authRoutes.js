@@ -66,7 +66,7 @@ var mockEvent = {
     host: 'mockHost',
     dateOfEvent: new Date(),
     contactInfo: 'mock@mock.com',
-    summary: ''
+    summary: 'mockSummary'
 }
 
 
@@ -81,6 +81,8 @@ var mockUser = {
 
 var mockEmptyUser = {};
 
+/********************************************************************************************************************************USER*CREATE************* */
+
 /*User create fails work properly        */
 describe('user Create field validation', function () {
 
@@ -94,17 +96,7 @@ describe('user Create field validation', function () {
 			})
 	});
 
-	it('should create a new user', function() {
-
-        return chai.request(app)
-        .post('/login/create')
-        .send(mockUser)
-        .then(res => {
-            expect(res).to.have.status(200)
-        })
-	});
-
-	it.only('should deny a username in use', function() {
+	it('should deny a username in use', function() {
 
         return chai.request(app)
         .post('/login/create')
@@ -140,8 +132,6 @@ describe('user Create field validation', function () {
         .post('/login/create')
         .send(mockUser)
         .then(res => {
-			
-			console.log(mockUser)
 			expect(res).to.be.an('object')
 			expect(res.body.code).to.be.eql(422)
 			expect(res.body.message).to.eql('Username must be between 6-14 characters')
@@ -155,8 +145,6 @@ describe('user Create field validation', function () {
         .post('/login/create')
         .send(mockUser)
         .then(res => {
-			
-			console.log(mockUser)
 			expect(res).to.be.an('object')
 			expect(res.body.code).to.be.eql(422)
 			expect(res.body.message).to.eql('Username must be between 6-14 characters')
@@ -167,20 +155,75 @@ describe('user Create field validation', function () {
 		return chai.request(app)
 			.get('/users')
 			.then(function (res) {
-				console.log(res.text)
 				expect(res.text).to.be.eql('Unauthorized')
 			})
 	})
 
 })
 
-// /*user create success works properly */
-// describe('user create success', function() {
-	
-// 	it.only('should return new user data', function() {
+/*user create success works properly */
+describe('user create success', function() {
 
-// 	})
-// })
+	testHooks()
+
+	it('should create a new user', function() {
+
+        return chai.request(app)
+        .post('/login/create')
+        .send(mockUser)
+        .then(res => {
+            expect(res).to.have.status(200)
+        })
+	});
+
+	
+	it('should return token and user data', function() {
+
+        return chai.request(app)
+        .post('/login/create')
+        .send(mockUser)
+        .then(res => {
+			expect(res.body).to.include.keys('token', 'user')
+        })
+	});
+
+	it('should return token in form of string', function() {
+
+        return chai.request(app)
+        .post('/login/create')
+        .send(mockUser)
+        .then(res => {
+			expect(res.body.token).to.be.a('string')
+        })
+	});
+
+	it.only('should return user data in an object', function() {
+
+        return chai.request(app)
+        .post('/login/create')
+        .send(mockUser)
+        .then(res => {
+			expect(res.body.user).to.be.an('object')
+			expect(res.body.user).to.contain.keys('username', 'fullname', 'event', 'attending', 'joinDate', 'role', 'id')
+        })
+	});
+
+	it('should return user data matching submited data', function() {
+
+        return chai.request(app)
+        .post('/login/create')
+        .send(mockUser)
+        .then(res => {
+			expect(res.body.user.username).to.be.eql(mockUser.username)
+			expect(res.body.user.fullname).to.be.eql(mockUser.fullname)
+			expect(res.body.user.event).to.be.eql(mockUser.event)
+			expect(res.body.user).to.not.contain.keys('password')
+        })
+	})
+
+})
+/********************************************************************************************************************************USER*CREATE************* */
+
 
 
 

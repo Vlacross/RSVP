@@ -71,11 +71,9 @@ router.post('/create', checkUsername, (req, res) => {
 		console.error(msg)
 		return res.status(400).json(msg).end()
 	}
-	console.log(missing)
 
 	const trimmed = ['username', 'password'];
 	let untrimmed = trimmed.find(field => req.body[field].trim() !== req.body[field])
-	console.log(untrimmed)
 	if(untrimmed) {
 		let msg = {
 			code: 422,
@@ -86,21 +84,6 @@ router.post('/create', checkUsername, (req, res) => {
 	
 	const { fullname: full, username: user, password: pass, event, role, attending } = req.body
 
-
-
-	// User.count({username: user}, function(err, user) {
-	// 	if(err) {
-	// 		return err}
-	// 	if(user !== 0) {
-	// 		let msg = {
-	// 			code: 422,
-	// 			message: "username already in use!",
-	// 			reason: 'username is already in use'}
-	// 		return res.status(422).json(msg).end()
-	// 	}
-	// })
-
-	
 	if(user.length <= 5 || user.length >= 15) {
 		let msg = {
 			code: 422,
