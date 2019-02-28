@@ -4,7 +4,6 @@ const ObjectId = Schema.Types.ObjectId;
 const bcrypt = require('bcryptjs');
 
 const EventPlan = require('./events');
-const { User } = require('./')
 
 /*User Schema */
 
