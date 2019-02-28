@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
 
 const EventPlan = require('../models/events');
+const User = require('../models/users')
 
 /*write express middleware here */
 
@@ -102,8 +103,32 @@ validateEvent = function (req, res, next) {
         })
   };
 
+  checkUsername = function(req, res, next) {
+    let user = req.body.username
+
+    return User.findOne({username: user}, function(err, user) {
+      if (err) {
+        let msg = 'usernameCheck error!'
+      console.log(msg)
+      return Promise.reject({message: msg})
+    }
+    if(user) {
+			let msg = {
+				code: 422,
+				message: "username already in use!",
+				reason: 'username is already in use'}
+			return res.status(422).json(msg).end()
+    }
+    console.log('username available!')
+    return next()
+
+
+    })
+
+  }
 
 
 
 
-module.exports = { validateEvent, validateAttendance, checkEventName }
+
+module.exports = { validateEvent, validateAttendance, checkEventName, checkUsername }

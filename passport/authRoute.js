@@ -17,7 +17,7 @@ const jwtAuth = passport.authenticate('JWT', { session: false})
 const { JWT_SECRET, ALG, EXP } = require('../config')
 const { User } = require('../models')
 const EventPlan = require('../models/events');
-const { validateEvent, validateAttendance, checkEventName } = require('../Middleware/validators')
+const { validateEvent, validateAttendance, checkEventName, checkUsername } = require('../Middleware/validators')
 
 const opts = {
 	algorithm: ALG,
@@ -58,7 +58,7 @@ router.post('/eventCheck', validateEvent, (req, res) => {
 
 /*Can create a new user account */
 
-router.post('/create', (req, res) => {
+router.post('/create', checkUsername, (req, res) => {
 
 	const requiredFields = ['fullname', 'username', 'password', 'event', 'role', 'attending']
 	let missing = requiredFields.filter(field => (!req.body[field]))
@@ -81,22 +81,24 @@ router.post('/create', (req, res) => {
 			code: 422,
 			message: "whiteSpace found in credentials! Username and password can't start or end with a space!",
 			reason: 'whiteSpace found in user/pass'}
-		return res.status(422).json(msg).end()
+		return res.status(400).json(msg).end()
 	}
 	
 	const { fullname: full, username: user, password: pass, event, role, attending } = req.body
 
-	User.count({username: user}, function(err, user) {
-		if(err) {
-			return err}
-		if(user !== 0) {
-			let msg = {
-				code: 422,
-				message: "username already in use!",
-				reason: 'username is already in use'}
-			return res.status(422).json(msg).end()
-		}
-	})
+
+
+	// User.count({username: user}, function(err, user) {
+	// 	if(err) {
+	// 		return err}
+	// 	if(user !== 0) {
+	// 		let msg = {
+	// 			code: 422,
+	// 			message: "username already in use!",
+	// 			reason: 'username is already in use'}
+	// 		return res.status(422).json(msg).end()
+	// 	}
+	// })
 
 	
 	if(user.length <= 5 || user.length >= 15) {
