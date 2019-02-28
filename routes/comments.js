@@ -80,7 +80,19 @@ router.delete('/delete/:id', (req, res) => {
 		console.error('missing \'id\'!!')
 		return res.status(400)
 	};
-	CommentPost.findByIdAndDelete(req.params.id)
+	CommentPost.findOne({_id: req.params.id})
+	.then(comment => {
+		console.log(comment.postId)
+		Post.findByIdAndUpdate(comment.postId, { $pull: { 'comments': req.params.id }}, function (err, post) {
+			console.log('pre', post)
+			post.update({ $pull: { 'comments': req.params.id}})
+			console.log('post', post)
+			
+		}
+		)
+	})
+
+	CommentPost.findByIdAndRemove(req.params.id)
 		.then(res.status(204).end()
 		)
 });

@@ -10,8 +10,10 @@ const { MONGODB_URI_TEST } = require('../config');
 
 const Post = require('../models/posts');
 const User = require('../models/users');
-const Comments = require('../models/comments');
+const CommentPost = require('../models/comments');
+const EventPlan = require('../models/events');
 
+const seedEvents = require('../db/events');
 const seedPosts = require('../db/posts');
 const seedUsers = require('../db/users');
 const seedComments = require('../db/comments');
@@ -45,7 +47,8 @@ function testHooks() {
 				return Promise.all([
 					Post.insertMany(seedPosts),
 					User.insertMany(seedUsers),
-					Comments.insertMany(seedComments),
+					CommentPost.insertMany(seedComments),
+					EventPlan.insertMany(seedEvents)
 				]);
 			})
 			.catch(err => {
@@ -66,7 +69,7 @@ describe('user login', function () {
 
 	it('should perform a Unit test', function () {
 
-		return User.find()
+		return CommentPost.find()
 			.then(function (res) {
 				expect(res).to.be.an('array')
 			})

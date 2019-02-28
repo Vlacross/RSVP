@@ -37,6 +37,7 @@ commentSchema.post('save', function() {
 });
 
 commentSchema.pre('remove', function() {
+	console.log('harharhar')
 	Post.findByIdAndUpdate(this.postId, { $pull: { 'comments': this.id }})
   
  

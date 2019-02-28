@@ -260,17 +260,20 @@ function accountManage(route, accountId) {
 			},
 			body: JSON.stringify(updatedUser)
 		})
-		.then(res => res.json())
+		.then(res => {
+			if(res.status === 203)
+			
+			{console.log('udpatedRole!', res.status)
+			let type = 'update'
+			promptSuccess(type)}
+		})
 		.then(resj => {
 			
-			console.log('udpatedRole!', resj)
-			let type = 'update'
-			promptSuccess(type)
+			
 		})
 		.catch(err => {
 			console.log('updateFail', err)
 			let type = 'update'
-					type = 'unauthorized'
 				handleFail(type)
 				
 			
@@ -384,16 +387,14 @@ function submitEdit(route) {
 	let fullName = $('.fullNameInput').val();
 	let userName = $('.userNameInput').val();
 	let pwd = $('.userPassInput').val();
-	let newPwd = $('.userNewPassInput').val()
+	
 	const att = $('input[name=attendance]:checked').val()
 	
 	let updatedUser = {
 		id: user.id,
-		username: user.username,
+		username: userName,
 		fullname: fullName,
-		newUsername: userName,
 		password: pwd,
-		newPassword: newPwd,
 		event: user.event,
 		role: user.role,
 		attending: att
@@ -410,13 +411,13 @@ function submitEdit(route) {
 		body: JSON.stringify(updatedUser)
 	})
 		.then(res => {
-			if(res.status === 422 || res.status === 400 || res.status === 422) {
-				console.log('unauthow')
-				return Promise.reject({message: 'unauthorized'})
-			}
+			console.log(res.status)
 			return res.json()})
 		.then(resj => {
-			
+			if(resj.code === 422) {
+				let area = 1
+				return $('.viewWrapper').replaceWith(viewSwitch(displayReject(resj, area)))
+			}
 			console.log('update suxess!', resj)
 			localStorage.removeItem('user')
 			localStorage.removeItem('token')
@@ -661,35 +662,21 @@ function deleteComment(removalId, postId, authorId) {
 		},
 		body: JSON.stringify()
 	})
-	.then(res => console.log(res.status))
-	
-		console.log('middleFetch', removalId)
-		route = `posts/decomment/${removalId}`
-		let unPopulate = {
-			postId: postId,
-			commentId: removalId
-		}
-		fetch(route, {
-			method: 'put',
-			headers: {
-				'Accept': 'application/json',
-				'Content-Type': 'application/json',
-				'Authorization': 'Bearer' + ' ' + token
-			},
-			body: JSON.stringify(unPopulate)
-		})
-		.then(res => res.json())
-		.then(resj => {
-		console.log('depopulation suxess!', resj)
+	.then(res => {
+		console.log(res.status)
+		if(res.status === 204) {
+			console.log('depopulation suxess!')
 		let type = 'delete'
-		promptSuccess(type)
-
-		})
-		.catch(err => {
+		return promptSuccess(type)
+		}
+	})
+	.catch(err => {
 			console.log('updateFail', err)
 			let type = 'delete'
 			handleFail(type)
-		});
+	});
+		
+		
 };
 
 /********^***********^**********************************************************************************^**COMMENT*ACTIONS*^***********************************/
@@ -698,11 +685,11 @@ function deleteComment(removalId, postId, authorId) {
 function checkRole() {
 	let user = JSON.parse(localStorage.getItem('user'));
 	if (user.role === 1) {
-		$('.siteNav').append(eventAdminButton)
-		$('.siteNav').append(eventLeadButton)
+		$('.siteNav').prepend(eventAdminButton)
+		$('.siteNav').prepend(eventLeadButton)
 	}
 	if(user.role === 2) {
-		$('.siteNav').append(eventLeadButton)
+		$('.siteNav').prepend(eventLeadButton)
 	}
 
 };
@@ -1045,6 +1032,7 @@ function watchPageActions() {
 	$('body').on('click', 'a.postTitle', function (e) {
 		e.preventDefault();
 		postId = $(this).attr('id')
+		localStorage.setItem('postId', postId)
 		console.log('Just Building a home for the console dwarves!', postId)
 		getPost(postId)
 	});
@@ -1094,7 +1082,16 @@ function watchPageActions() {
 		route = `posts/delete/${postId}`;
 		deletePost(route, postId)
 	});
+	/*toggles back from update reject */
+	$('body').on('click', 'button.failedRejectButton', function (e) {
+		e.preventDefault();
+		console.log('clickter')
+		getFeed()
+	});
 	
+	
+
+
 /**************************************************************MasterAdmin */
 
 	/*Allows MasterAdmin to change user details and role */
@@ -1128,14 +1125,13 @@ function watchPageActions() {
 		showUsers()
 	});
 
-
+	/*explains itself really... */
 	$('body').on('click', 'button.accountDeleteButton', function (e) {
 		e.preventDefault();
 		console.log('Just drop the ship then...')
 		let accountId = $(this).parent().attr('data')
 		let usr = {id: accountId}
 		deleteUser(usr)
-		
 	});
 
 

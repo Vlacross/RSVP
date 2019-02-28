@@ -81,7 +81,7 @@ router.put('/details/', (req, res) => {
 			reason: `Missing ${missing} in header!`
 		}
 		console.error(msg)
-		return res.status(400).json(msg).end()
+		return res.status(418).json(msg).end()
 	}
 	console.log(missing)
 	

@@ -13,7 +13,7 @@ const User = require('../models/users');
 const CommentPost = require('../models/comments');
 const EventPlan = require('../models/events');
 
-const seedEvents = require('../db/events');;
+const seedEvents = require('../db/events');
 const seedPosts = require('../db/posts');
 const seedUsers = require('../db/users');
 const seedComments = require('../db/comments');
@@ -47,8 +47,8 @@ function testHooks() {
 				return Promise.all([
 					Post.insertMany(seedPosts),
 					User.insertMany(seedUsers),
-					CommentPost.insertMany(seedComments),
-					EventPlan.insertMany(seedEvents)
+                    CommentPost.insertMany(seedComments),
+                    EventPlan.insertMany(seedEvents)
 				]);
 			})
 			.catch(err => {
@@ -61,11 +61,15 @@ function testHooks() {
 	});
 }
 
+var mockEvent = {
+
+}
+
 var mockUser = {
 	fullname: 'mockFull',
 	username: 'mockUser',
-	password: 'mockPass',
-	event: 242424242424242424242424,
+    password: 'mockPass',
+    event: 242424242424242424242424,
 	role: 3,
 	attending: true
 };
