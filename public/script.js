@@ -733,7 +733,7 @@ function promptReject(resj) {
 	
 	$('.failedIntroButton').one('click', function (e) {
 		e.preventDefault();
-	
+		localStorage.clear()
 		$('.accessView').remove()
 		$('.introView').removeClass('hidden')
 		$('.banner').removeClass('hidden')
