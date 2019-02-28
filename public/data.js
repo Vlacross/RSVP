@@ -175,6 +175,27 @@ var unauthorizedAccess =
 
 /**************PROMPTS*******************************************************************************************PROMPTS*************** */
 
+function displayReject(resj) {
+
+	let msg = resj.message
+
+	var rejectResponse =
+	`<section class="unauthorized prompt" >
+		<h1>Woops!</h1>
+		<h3>Something went wrong!</h3>
+		<p>${msg} </p>
+		<button class="failedIntroButton" name="failedIntroButton">Retry</button>
+	</section>
+`;
+
+	return rejectResponse;
+
+}
+
+
+
+/**************PROMPTS*******************************************************************************************PROMPTS*************** */
+
 /*************V*LOGIN*REGISTER*V*****************************************************************************************V*LOGIN*REGISTER*V************** */
 
 /*for existing users to log in */

@@ -11,6 +11,23 @@ validateEvent = function (req, res, next) {
     
     let name = req.body.eventName
 
+   
+	if (!name) {
+		msg = {
+			code: 422,
+			message: `Missing Event Name in header!`
+		}
+		return res.status(400).json(msg).end()
+  }
+  
+  if(name.trim() !== name) {
+		let msg = {
+			code: 422,
+			message: "WhiteSpace found in credentials! Username and password can't start or end with a space!",
+			reason: 'WhiteSpace found in user/pass'}
+		return res.status(422).json(msg).end()
+	}
+
        return EventPlan.findOne({name: name}, function (err, event) {
           if (err) {
               let msg = 'eventValidation error!'

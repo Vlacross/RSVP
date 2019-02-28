@@ -33,12 +33,9 @@ const buildToken = function (user) {
 router.use(bodyParser.json())
 
 router.post('/', localAuth, (req, res) => {
-	if(!req) {console.log('err')}
-	console.log('maider This farm!')
 	let token = buildToken(req.user.username)
 	User.findOne({_id: req.user.id})
 	.then(user => {
-		console.log(user.serialize())
 		let userData = user.serialize()
 		res.json({ token, userData })
 		
@@ -47,8 +44,7 @@ router.post('/', localAuth, (req, res) => {
 
 /*Check event before signup */
 router.post('/eventCheck', validateEvent, (req, res) => {
-	if(!req) {console.log('err')}
-	console.log(req.body)
+
 	EventPlan.find({name: req.body.eventName})
 	.then(event => {
 		let succ = {
@@ -61,10 +57,9 @@ router.post('/eventCheck', validateEvent, (req, res) => {
 })
 
 /*Can create a new user account */
-router.post('/create', (req, res) => {
-	console.log(req.body)
 
-	/*forEach wasn't handling err - allowed to pass to create */
+router.post('/create', (req, res) => {
+
 	const requiredFields = ['fullname', 'username', 'password', 'event', 'role', 'attending']
 	let missing = requiredFields.filter(field => (!req.body[field]))
 	if (missing.length > 0) {
@@ -153,9 +148,10 @@ router.post('/newEvent', checkEventName, (req, res) => {
 	const requiredFields = ['name', 'host', 'dateOfEvent', 'contactInfo', 'summary']
 	let missing = requiredFields.filter(field => (!req.body[field]))
 	if (missing.length > 0) {
-		msg = `Missing ${missing} in header!`
-		console.error(msg)
-		return res.status(400).json(msg).end()
+		let msg = {
+			message: `Missing ${missing} in header!`
+		}
+		return res.status(422).json(msg).end()
 	}
 
 	/*validate masterAdmin account details gathered before create */

@@ -71,6 +71,9 @@ function checkEvent(route) {
 		body: JSON.stringify(event)})
 	.then(res => res.json())
 	.then(resj => {
+		if(resj.code === 422) {
+			return promptReject(resj)
+		}
 		if(resj.message === 'false') {
 			let type = 'noEvent'
 		 handleIntroFail(type)
@@ -122,6 +125,9 @@ function buildEvent() {
 		body: JSON.stringify(newEvent)})
 		.then(res => res.json())
 		.then(resj => {
+			if(resj.code === 422) {
+			 return promptReject(resj)
+			}
 
 			let eventAdmin = {
 					fullname: fullName,
@@ -142,6 +148,9 @@ function buildEvent() {
 				body: JSON.stringify(eventAdmin)})
 				.then(res => res.json())
 				.then(resj => {
+					if(resj.code === 422) {
+						return promptReject(resj)
+					   }
 					console.log(resj)
 					localStorage.setItem('user', JSON.stringify(resj.user))
 					localStorage.setItem('token', `${resj.token}`)
@@ -175,6 +184,10 @@ function checkEventName(route) {
 	.then(res => res.json())
 	.then(resj => {
 		console.log(resj)
+		if(resj.code === 422) {
+			return promptReject(resj)
+		}
+
 		if(resj.message === 'false') {
 			$('.banner').addClass('hidden')
 			$('.accessView').replaceWith(introViewSwitch(newEventForm(name)))
@@ -339,11 +352,10 @@ function signUp(route) {
 		.then(resj => {
 			console.log(resj, 'resj.user')
 			if(resj.code === 422) {
-				return new Error(res.message)
+				return promptReject(resj)
 			}
 			localStorage.setItem('user', JSON.stringify(resj.user))
 			localStorage.setItem('token', `${resj.token}`)
-			// let user = JSON.parse(localStorage.getItem('user'))
 			buildHome()
 		})
 		.catch(err => {
@@ -571,57 +583,6 @@ function getPost(postId) {
 	
 }
 
-/*******************************************************************************************************incomplete*************************************/
-/*********SINGLE*POST*EDIT********** */
-
-/*user(admin or lead) can edit post */
-function editPost() {
-
-}
-
-/* */
-function updatePost(route) {
-
-	console.log(`sending update to ${route}`)
-	let user = JSON.parse(localStorage.getItem('user'))
-	let token = localStorage.getItem('token')
-
-	let fullName = $('.fullNameInput').val();
-	let userName = $('.userNameInput').val();
-	let pwd = $('.userPassInput').val();
-	let updatedUser = {
-		id: user.id,
-		fullname: fullName,
-		username: userName,
-		password: pwd
-	};
-	console.log(updatedUser, 'preUpdate send')
-	fetch(route, {
-		method: 'put',
-		headers: {
-			'Accept': 'application/json',
-			'Content-Type': 'application/json',
-			'Authorization': 'Bearer' + ' ' + token
-		},
-		body: JSON.stringify(updatedUser)
-	})
-		.then(res => res.json())
-		.then(resj => {
-			console.log('update suxess!', resj)
-			localStorage.removeItem('user')
-			localStorage.setItem('user', JSON.stringify(resj.user))
-			let type = 'update'
-			promptSuccess(type)
-
-		})
-		.catch(err => {
-			console.log('updateFail', err)
-			let type = 'update'
-			handleFail(type)
-		})
-}
-
-/*******************************************************************************************************incomplete*************************************/
 /*********SINGLE*POST*DELETE********** */
 
 /*removes a post(eventually would like only the author and admin) */
@@ -778,6 +739,22 @@ function promptSuccess(type) {
 };
 
 /*********HANDLEFAIL*********** */
+
+function promptReject(resj) {
+	
+	$('.accessView').replaceWith(introViewSwitch(displayReject(resj)))
+	
+	$('.failedIntroButton').one('click', function (e) {
+		e.preventDefault();
+	
+		$('.accessView').remove()
+		$('.introView').removeClass('hidden')
+		$('.banner').removeClass('hidden')
+	})
+
+};
+
+
 function handleFail(type) {
 	console.log('faylin', type)
 	let msg;
