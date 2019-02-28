@@ -175,6 +175,34 @@ var unauthorizedAccess =
 
 /**************PROMPTS*******************************************************************************************PROMPTS*************** */
 
+function displayReject(resj, area) {
+
+	let msg = resj.message
+	let button;
+	button = 'failedRejectButton';
+if(!area) {
+ button = 'failedIntroButton'
+};
+
+	var rejectResponse =
+	`<section class="unauthorized prompt" >
+		<h1>Woops!</h1>
+		<h3>Something went wrong!</h3>
+		<p>${msg} </p>
+		<button class="${button}" name="failedIntroButton">Retry</button>
+	</section>
+`;
+
+	return rejectResponse;
+
+
+
+}
+
+
+
+/**************PROMPTS*******************************************************************************************PROMPTS*************** */
+
 /*************V*LOGIN*REGISTER*V*****************************************************************************************V*LOGIN*REGISTER*V************** */
 
 /*for existing users to log in */
@@ -370,8 +398,8 @@ let homePage =
 					<nav class="siteNav">
 
 						<button type="submit" class="eventNewsfeedLink navButton" name="eventNewsfeedLink">Event News Feed</button>
-						<button type="submit" class="accountLink navButton" name="accountLink">Account</button>
 						<button type="submit" class="eventDetailsLink navButton" name="eventDetailsLink">Event Details</button>
+						<button type="submit" class="accountLink navButton" name="accountLink">Account</button>
 						<button type="submit" class="logOut navButton" name="Logout">Logout</button>
 					</nav>
 

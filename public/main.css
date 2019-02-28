@@ -86,12 +86,6 @@ button {
     width: 40%;
     height: 35px;
     border-radius: 8px;
-    margin-bottom: 8%;
-    
-}
-
-.introLabel {
-    margin-top: 20%;
 }
 
 /****************************INTRO*CREATE*EVENT********/
@@ -535,6 +529,28 @@ a:hover {
     .banner {
         font-size: 5em;
     }
+
+    /* .navButton {
+        width: 85px;
+        height: 4%;
+        margin-top: 20%;
+    } */
+
+
+
+
+    .eventNameCheckLabel {
+        font-size: 1.2em;
+    }
+    
+    .eventNameInput {
+        font-size: 1.2em;
+    }
+    
+    input[class~="event"] {
+        font-size: initial;
+    }
+    
     label[class~="event"] {
         font-size: initial;
     }
