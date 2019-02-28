@@ -214,12 +214,16 @@ const loginForm =
 	<div class="accessFieldsetDiv">
 		<input autocomplete="false" name="hidden" type="text" style="display:none;">
 
+
 				<label for="userNameInput">UserId--demoUser: "big"</label>
 					<input id="userNameInput" name="userNameInput" class="userNameInput" type="text" required>
 				
 
 				<label for="userPassInput">PassWord-demoPassword: "ben"	</label>
 					<input id="userPassInput" name="userPassInput" class="userPassInput" type="text" required>
+
+					<span class="demoSpanTop">DemoUser: <span class="demoNames">basicUser</span>    DemoPassword: <span class="demoNames">basicPass</span></span>
+					<span class="demoSpanBottom">DemoAdmin: <span class="demoNames">big</span>         DemoAdminPass: <span class="demoNames">ben</span></span>
 			
 
 				<button class="loginSubmit" type="submit" name="submitButton">Submit</button>
@@ -446,7 +450,9 @@ function usersListing(usr) {
 function accountProfile() {
 	let user = JSON.parse(localStorage.getItem('user'));
 	console.log(user, "inprof");
-	let { fullname, username, attending } = user;
+	let { fullname, username, attending, joinDate } = user;
+	let since = new Date(joinDate).toDateString();
+	
 	let accountDetails =
 		`
 	<section class="accountProfile">
@@ -454,6 +460,7 @@ function accountProfile() {
 					<span class="fullnameSpan">Fullname: ${fullname}</span>
 					<span class="usernameSpan">Username: ${username}</span>
 					<span class="attending">Attending: ${attending}</span>
+					<span class="joinDate">Member Since: ${since}</span>
 				</div>
 
 				<div class="accountButton">
