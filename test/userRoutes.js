@@ -139,55 +139,55 @@ describe('user route basic interactions', function () {
 
 });
 
-describe('User Get routes', function() {
+describe('User Get routes', function () {
 
 	testHooks()
 
-		it('should return Unauthorized without valid JWT', function () {
-			return chai.request(app)
-				.get('/users')
-				.then(function (res) {
-					console.log(res.text)
-					expect(res.text).to.be.eql('Unauthorized')
-				})
-		})
+	it('should return Unauthorized without valid JWT', function () {
+		return chai.request(app)
+			.get('/users')
+			.then(function (res) {
+				console.log(res.text)
+				expect(res.text).to.be.eql('Unauthorized')
+			})
+	})
 
-		it('should return a single user', function () {
+	it('should return a single user', function () {
 
-					return chai.request(app)
-						.post(`/login/create`)
-						.send(mockUser)
-						.then(res => {
-							let userId = res.body.user.id
-							let token = res.body.token
-							
-							return chai.request(app)
-							.get(`/users/findOne/${userId}`)
-							.set('Authorization', `Bearer ${token}`)
-							.set('Application', 'application/json')
-							.set('Content-Type', 'application/json')
-							.then(res => {
-								console.log(res.body)
-								expect(res.body).to.be.a('object')
-								expect(res.body).to.not.be.an('array')
-								expect(res.body).to.contain.keys('id', 'fullname', 'username', 'event', 'attending', 'createdAt', 'role')
-								expect(res.body.id).to.eql(userId)
-							})
-							
-						})
-				});
+		return chai.request(app)
+			.post(`/login/create`)
+			.send(mockUser)
+			.then(res => {
+				let userId = res.body.user.id
+				let token = res.body.token
 
-		it('should return a list of users', function () {
+				return chai.request(app)
+					.get(`/users/findOne/${userId}`)
+					.set('Authorization', `Bearer ${token}`)
+					.set('Application', 'application/json')
+					.set('Content-Type', 'application/json')
+					.then(res => {
+						console.log(res.body)
+						expect(res.body).to.be.a('object')
+						expect(res.body).to.not.be.an('array')
+						expect(res.body).to.contain.keys('id', 'fullname', 'username', 'event', 'attending', 'createdAt', 'role')
+						expect(res.body.id).to.eql(userId)
+					})
 
-			return chai.request(app)
-				.post(`/login/create`)
-				.send(mockUser)
-				.then(res => {
-					let eventId = res.body.user.event
-					let token = res.body.token
-					
-					
-					return chai.request(app)
+			})
+	});
+
+	it('should return a list of users', function () {
+
+		return chai.request(app)
+			.post(`/login/create`)
+			.send(mockUser)
+			.then(res => {
+				let eventId = res.body.user.event
+				let token = res.body.token
+
+
+				return chai.request(app)
 					.get(`/users/find/${eventId}`)
 					.set('Authorization', `Bearer ${token}`)
 					.set('Application', 'application/json')
@@ -200,89 +200,102 @@ describe('User Get routes', function() {
 						expect(res.body[0]).to.contain.keys('id', 'fullname', 'username', 'event', 'attending', 'joinDate', 'role')
 						expect(res.body[0].event.id).to.eql(eventId)
 					})
-					
-				})
-		});
 
-			it('should update a single user and return updated data and token', function () {
+			})
+	});
 
-					return chai.request(app)
-						.post(`/login/create`)
-						.send(mockUser)
-						.then(res => {
-							let token = res.body.token
-							mockUserUpdate.id = res.body.user.id
-							return chai.request(app)
-							.put(`/users/details/`)
+})
+
+describe('User Put routes', function () {
+
+	testHooks()
+
+
+	it('should update a single user and return updated data and token', function () {
+
+		return chai.request(app)
+			.post(`/login/create`)
+			.send(mockUser)
+			.then(res => {
+				let token = res.body.token
+				mockUserUpdate.id = res.body.user.id
+				return chai.request(app)
+					.put(`/users/details/`)
+					.set('Authorization', `Bearer ${token}`)
+					.set('Application', 'application/json')
+					.set('Content-Type', 'application/json')
+					.send(mockUserUpdate)
+					.then(res => {
+						expect(res.body).to.be.a('object')
+						expect(res.body).to.contain.keys('user', 'token')
+						expect(res.body.token).to.not.eql(token)
+						expect(res.body.user.fullname).to.eql(mockUserUpdate.fullname)
+						expect(res.body.user.username).to.eql(mockUserUpdate.username)
+					})
+
+			})
+	});
+
+	it('should change a user role from basic to masterAdmin', function () {
+
+		return chai.request(app)
+			.post(`/login/create`)
+			.send(mockUser)
+			.then(res => {
+				let token = res.body.token
+				mockUserPromoteRole.id = res.body.user.id
+				console.log(mockUserUpdate)
+				return chai.request(app)
+					.put(`/users/roles/`)
+					.set('Authorization', `Bearer ${token}`)
+					.set('Application', 'application/json')
+					.set('Content-Type', 'application/json')
+					.send(mockUserPromoteRole)
+					.then(res => {
+						return chai.request(app)
+							.get(`/users/findOne/${mockUserPromoteRole.id}`)
 							.set('Authorization', `Bearer ${token}`)
 							.set('Application', 'application/json')
 							.set('Content-Type', 'application/json')
-							.send(mockUserUpdate)
 							.then(res => {
+								console.log(res.body)
+								expect(res).to.have.status(200)
 								expect(res.body).to.be.a('object')
-								expect(res.body).to.contain.keys('user', 'token')
-								expect(res.body.token).to.not.eql(token)
-								expect(res.body.user.fullname).to.eql(mockUserUpdate.fullname)
-								expect(res.body.user.username).to.eql(mockUserUpdate.username)
+								expect(res.body.role).to.eql(mockUserPromoteRole.role)
+								expect(res.body.role).to.not.eql(mockUser.role)
 							})
-							
-						})
-				});
 
-				it('should change a user role from basic to masterAdmin', function () {
+					})
 
-					return chai.request(app)
-						.post(`/login/create`)
-						.send(mockUser)
-						.then(res => {
-							let token = res.body.token
-							mockUserPromoteRole.id = res.body.user.id
-							console.log(mockUserUpdate)
-							return chai.request(app)
-							.put(`/users/roles/`)
-							.set('Authorization', `Bearer ${token}`)
-							.set('Application', 'application/json')
-							.set('Content-Type', 'application/json')
-							.send(mockUserPromoteRole)
-							.then(res => {
-								return chai.request(app)
-								.get(`/users/findOne/${mockUserPromoteRole.id}`)
-								.set('Authorization', `Bearer ${token}`)
-								.set('Application', 'application/json')
-								.set('Content-Type', 'application/json')
-								.then(res => {
-									console.log(res.body)
-									expect(res).to.have.status(200)
-									expect(res.body).to.be.a('object')
-									expect(res.body.role).to.eql(mockUserPromoteRole.role)
-									expect(res.body.role).to.not.eql(mockUser.role)
-								})
+			})
+	});
 
-							})
-							
-						})
-				});
+})
 
-				it('should delete a single user', function () {
+describe('User delete route', function () {
 
-					return chai.request(app)
-						.post(`/login/create`)
-						.send(mockUser)
-						.then(res => {
-							let token = res.body.token
-							
-							return chai.request(app)
-							.delete(`/users/delete/${res.body.user.id}`)
-							.set('Authorization', `Bearer ${token}`)
-							.set('Application', 'application/json')
-							.set('Content-Type', 'application/json')
-							.then(res => {
-								expect(res).to.have.status(204)							
-							})
-							
-						})
-				});
-	
+	testHooks()
+
+	it('should delete a single user', function () {
+
+		return chai.request(app)
+			.post(`/login/create`)
+			.send(mockUser)
+			.then(res => {
+				let token = res.body.token
+
+				return chai.request(app)
+					.delete(`/users/delete/${res.body.user.id}`)
+					.set('Authorization', `Bearer ${token}`)
+					.set('Application', 'application/json')
+					.set('Content-Type', 'application/json')
+					.then(res => {
+						expect(res).to.have.status(204)
+					})
+
+			})
+	});
+
 
 
 })

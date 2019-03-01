@@ -61,9 +61,20 @@ function testHooks() {
 	});
 }
 
+var mockUser = {
+	fullname: 'mockFull',
+	username: 'mockUser',
+	password: 'mockPass',
+	event: '242424242424242424242424',
+	role: 3,
+	attending: true
+};
 
 
-describe('user login', function () {
+
+
+
+describe('post route basic interactions', function () {
 
 	testHooks()
 
@@ -75,7 +86,8 @@ describe('user login', function () {
 			})
 	})
 
-	it.only('should perform an integration test', function () {
+
+	it('should perform a simple integration test', function () {
 		return chai.request(app)
 			.get('/posts')
 			.then(function (res) {
@@ -84,9 +96,127 @@ describe('user login', function () {
 			})
 	})
 
-})
+	it('should return token and user data', function () {
+
+		return chai.request(app)
+			.post('/login/create')
+			.send(mockUser)
+			.then(res => {
+				console.log(res.body)
+				expect(res.body).to.include.keys('token', 'user')
+			})
+	});
+
+});
+
+describe('Post Model Get routes', function () {
+
+	testHooks()
+
+		it('should find all posts for event', function () {
+
+				return chai.request(app)
+					.post(`/login/create`)
+					.send(mockUser)
+					.then(res => {
+						let token = res.body.token
+						let event = res.body.user.event
+
+						return chai.request(app)
+							.get(`/posts/find/${event}`)
+							.set('Authorization', `Bearer ${token}`)
+							.set('Application', 'application/json')
+							.set('Content-Type', 'application/json')
+							.then(res => {
+								console.log(res.body)
+								expect(res).to.have.status(200)
+								expect(res.body).to.be.an('array')
+								expect(res.body[0]).to.be.an('object')
+								expect(res.body[0]).to.contain.keys('id', 'title', 'author', 'body', 'event', 'comments', 'createdAt')
+								expect(res.body[0].event).to.eql(mockUser.event)
+							})
+
+					})
+			});
+
+			it.only('should find a single post', function () {
+
+				return chai.request(app)
+					.post(`/login/create`)
+					.send(mockUser)
+					.then(res => {
+						let token = res.body.token
+						let event = res.body.user.event
+
+						return chai.request(app)
+							.get(`/posts/find/${event}`)
+							.set('Authorization', `Bearer ${token}`)
+							.set('Application', 'application/json')
+							.set('Content-Type', 'application/json')
+							.then(res => {
+								console.log(res.body[0].id)
+								let post = res.body[0].id
+								return chai.request(app)
+								.get(`/posts/findPost/${post}`)
+								.set('Authorization', `Bearer ${token}`)
+								.set('Application', 'application/json')
+								.set('Content-Type', 'application/json')
+								.then(res => {
+									console.log(res.body)
+									expect(res).to.have.status(200)
+									expect(res.body).to.be.an('object')
+									expect(res.body.comments).to.be.an('array')
+									expect(res.body).to.contain.keys('id', 'title', 'author', 'body', 'event', 'comments', 'createdAt')
+									expect(res.body.id).to.eql(post)
+								})
+							})
+
+					})
+			});
 
 
+
+
+
+
+});
+
+describe('Post Model update (sub-doc populate/remove) routes', function () {
+
+	testHooks()
+
+	
+
+
+});
+
+describe('Post Model delete route', function () {
+
+	testHooks()
+
+	// it('should delete a single post', function () {
+
+	// 	return chai.request(app)
+	// 		.post(`/login/create`)
+	// 		.send(mockUser)
+	// 		.then(res => {
+	// 			let token = res.body.token
+
+	// 			return chai.request(app)
+	// 				.delete(`/users/delete/${res.body.user.id}`)
+	// 				.set('Authorization', `Bearer ${token}`)
+	// 				.set('Application', 'application/json')
+	// 				.set('Content-Type', 'application/json')
+	// 				.then(res => {
+	// 					expect(res).to.have.status(204)
+	// 				})
+
+	// 		})
+	// });
+
+
+
+});
 
 
 
