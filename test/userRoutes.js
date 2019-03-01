@@ -262,25 +262,27 @@ describe('User Get routes', function() {
 							
 						})
 				});
+
+				it('should delete a single user', function () {
+
+					return chai.request(app)
+						.post(`/login/create`)
+						.send(mockUser)
+						.then(res => {
+							let token = res.body.token
+							
+							return chai.request(app)
+							.delete(`/users/delete/${res.body.user.id}`)
+							.set('Authorization', `Bearer ${token}`)
+							.set('Application', 'application/json')
+							.set('Content-Type', 'application/json')
+							.then(res => {
+								expect(res).to.have.status(204)							
+							})
+							
+						})
+				});
 	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 })
