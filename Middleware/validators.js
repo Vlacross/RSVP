@@ -18,7 +18,7 @@ validateEvent = function (req, res, next) {
 			code: 422,
 			message: `Missing Event Name in header!`
 		}
-		return res.status(400).json(msg).end()
+		return res.status(422).json(msg).end()
   }
   
   if(name.trim() !== name) {
@@ -64,12 +64,12 @@ validateEvent = function (req, res, next) {
           if (!name) {
               let msg = 'No name is given'
             console.log(msg)
-            return Promise.reject({message: msg})
+            return res.status(400).json({message: msg})
           }
           if (event) {
             let msg = 'Event name already exists'
           console.log(msg)
-          return Promise.reject({message: msg})
+          return res.status(422).json({message: msg})
         }
           if (!event) {
               let msg = 'Event name not taken, success!'

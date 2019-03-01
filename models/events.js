@@ -7,11 +7,11 @@ const ObjectId = Schema.Types.ObjectId;
 
 /* Event style schema */
 const eventSchema = new Schema({
-    name: String,
+    name: {type: String, index: true},
     host: String,
     dateOfEvent: String,
     contactInfo: String,
-    attendees: [{ type: ObjectId, ref: 'User' }],
+    attendees: [{ type: ObjectId, ref: 'User' , unique: true}],
     summary: String
   }, {
     timestamps: true

@@ -92,7 +92,7 @@ userSchema.pre('findOneAndUpdate', function(next) {
 });
 
 /*password check */
-userSchema.methods.checkPass = function (pwd) {
+userSchema.methods.checkPass = function(pwd) {
   return bcrypt.compareSync(pwd, this.password)
 };
 

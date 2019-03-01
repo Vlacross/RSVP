@@ -45,7 +45,7 @@ router.post('/', localAuth, (req, res) => {
 /*Check event before signup */
 router.post('/eventCheck', validateEvent, (req, res) => {
 
-	EventPlan.find({name: req.body.eventName})
+	EventPlan.findOne({name: req.body.eventName})
 	.then(event => {
 		let succ = {
 			event: event,
