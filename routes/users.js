@@ -23,6 +23,7 @@ const User = require('../models/users');
 const EventPlan = require('../models/events');
 
 const { JWT_SECRET, ALG, EXP } = require('../config')
+
 router.use(bodyParser.json());
 router.use('*', jwtAuth);
 
@@ -36,7 +37,7 @@ const buildToken = function (user) {
 	)
 }
 
-/*Find One User */
+/*Find One User w. userId*/
 router.get('/findOne/:id', (req, res) => {
 	User.findOne({_id: req.params.id})
 		.then(user => {
@@ -46,8 +47,9 @@ router.get('/findOne/:id', (req, res) => {
 	res.status(200)
 })
 
-/*can search user*/
+/*can search users by eventId*/
 router.get('/find/:id', (req, res) => {
+	console.log('intro')
 	User.find({event: req.params.id})
 		.then(users => {
 			let list = [];
@@ -58,8 +60,7 @@ router.get('/find/:id', (req, res) => {
 		})
 	res.status(200)
 });
-
-// (!req.params.id || !req.body.id || req.body.id !== req.params.id) 
+ 
 
 /*Admin or own User only can update details */
 router.put('/details/', (req, res) => {
@@ -102,7 +103,7 @@ router.put('/details/', (req, res) => {
 				user: updatedUser.serialize(),
 				token: token
 			}
-			console.log('obj', obj)
+			
 			return res.json(obj).status(203).end()
 
 		})
