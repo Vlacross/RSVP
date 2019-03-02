@@ -53,27 +53,6 @@ router.post('/create', jsonParser, (req, res) => {
 
 });
 
-
-	/*Admin or author only can update details */
-router.put('/details/:id', (req, res) => {
-	if (!req.params.id || !req.body.id || req.body.id !== req.params.id) {
-		let msg = `Incomplete credentials!`
-		console.error(msg)
-		return res.status(400).json(msg).end()
-	}
-
-	const { text, userId } = req.body
-	const newDetails = {
-		text,
-		userId
-	}
-	CommentPost.findByIdAndUpdate(userIdd, { $set: newDetails }, { new: true })
-		.then(updatedComment => {
-			return res.json(updatedComment).status(203).end()
-		})
-		.catch(err => console.log(err, 27))
-});
-
 		/*Admin or author only can delete details */
 router.delete('/delete/:id', (req, res) => {
 	if (!req.params.id) {

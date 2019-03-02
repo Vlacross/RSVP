@@ -337,7 +337,7 @@ function signUp(route) {
 		fullname: fullname,
 		username: userName,
 		password: pwd,
-		event: eventName[0].id,
+		event: eventName.id,
 		role: 3,
 		attending: att
 	};

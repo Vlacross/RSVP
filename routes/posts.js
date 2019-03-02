@@ -55,9 +55,11 @@ router.post('/create', jsonParser, (req, res) => {
 	const requiredFields = ['title', 'author', 'body', 'event']
 	let missing = requiredFields.filter(field => (!req.body[field]))
 	if (missing.length > 0) {
-		msg = `Missing ${missing} in header!`
+		msg = {
+			message: `Missing ${missing} in header!`
+		}
 		console.error(msg)
-		return res.status(400).json(msg).end()
+		return res.status(422).json(msg).end()
 	}
 
 	/*add validation for user/author */
@@ -70,55 +72,14 @@ router.post('/create', jsonParser, (req, res) => {
 		event
 	})
 		.then(newPost => {
-			res.json(newPost.serialize())
-			res.status(202)
+			res.status(202).json(newPost.serialize())
+			
 		})
 		.catch(err => {
 			return res.json(err.message).status(400)
 		})
 
 });
-
-
-/*Admin only can update details */
-router.put('/details/:id', (req, res) => {
-	if (!req.params.id || !req.body.id || req.body.id !== req.params.id) {
-		let msg = `Incomplete credentials!`
-		console.error(msg)
-		return res.status(400).json(msg).end()
-	}
-
-	const { title, author, body, id, postId, commentId } = req.body
-	const newDetails = {
-		title,
-		author,
-		body
-	}
-	Post.findByIdAndUpdate(id, { $set: newDetails }, { new: true })
-		.then(updatedPost => {
-			return res.json(updatedPost.serialize()).status(203).end()
-		})
-		.catch(err => console.log(err, 23))
-});
-
-
-/*Added / populate comments with newly created comment IDs */
-router.put('/comment/:id', (req, res) => {
-	if (!req.params.id) {
-		let msg = `Incomplete credentials!`
-		console.error(msg)
-		return res.status(400).json(msg).end()
-	}
-
-	const { postId, commentId } = req.body
-
-	Post.findByIdAndUpdate(postId, { $push: { 'comments': commentId } }, { new: true })
-		.then(updatedPost => {
-			return res.json(updatedPost.serialize()).status(203).end()
-		})
-		.catch(err => console.log(err, 23))
-});
-
 
 router.delete('/purgeComments/:id', (req, res) => {
 	if (!req.params.id) {
