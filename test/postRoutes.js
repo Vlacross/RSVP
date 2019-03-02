@@ -24,10 +24,45 @@ chai.use(chaiHttp)
 
 const { app } = require('../server');
 
+const jwt = require('jsonwebtoken')
+const { JWT_SECRET, ALG, EXP } = require('../config')
+
+
+const opts = {
+	algorithm: ALG,
+	expiresIn: EXP
+}
 
 
 
-function testHooks() {
+const buildToken = function (user) {
+	return jwt.sign({ user }, JWT_SECRET, opts
+	)
+}
+
+
+
+var mockUser = {
+	fullname: 'mockFull',
+	username: 'mockUser',
+	password: 'mockPass',
+	event: '242424242424242424242424',
+	role: 3,
+	attending: true
+};
+
+var mockPost = {
+	title: 'mockTitle',
+	body: 'mockBody',
+	event: '242424242424242424242424'
+}
+
+var emptyMockPost = {};
+
+var TOKEN = buildToken(mockUser)
+
+describe('post route actions', function() {
+
 
 	before(function () {
 		console.log('mounting DB: ', MONGODB_URI_TEST)
@@ -59,26 +94,15 @@ function testHooks() {
 	after(function () {
 		return mongoose.disconnect();
 	});
-}
-
-var mockUser = {
-	fullname: 'mockFull',
-	username: 'mockUser',
-	password: 'mockPass',
-	event: '242424242424242424242424',
-	role: 3,
-	attending: true
-};
-
 
 
 
 
 describe('post route basic interactions', function () {
 
-	testHooks()
+	
 
-	it('should perform a Unit test', function () {
+	it('should return fail', function () {
 
 		return Post.find()
 			.then(function (res) {
@@ -111,7 +135,7 @@ describe('post route basic interactions', function () {
 
 describe('Post Model Get routes', function () {
 
-	testHooks()
+
 
 		it('should find all posts for event', function () {
 
@@ -139,7 +163,7 @@ describe('Post Model Get routes', function () {
 					})
 			});
 
-			it.only('should find a single post', function () {
+			it('should find a single post', function () {
 
 				return chai.request(app)
 					.post(`/login/create`)
@@ -181,45 +205,100 @@ describe('Post Model Get routes', function () {
 
 });
 
-describe('Post Model update (sub-doc populate/remove) routes', function () {
+describe('Post model create route', function() {
 
-	testHooks()
+		it('should return fail with insufficient data', function() {
 
-	
+			return chai.request(app)
+			.post('/login/create')
+			.send(mockUser)
+			.then(res => {
+				console.log(res.body)
+				let token = res.body.token
+				return chai.request(app)
+				.post('/posts/create')
+				.set('Authorization', `Bearer ${token}`)
+				.set('Application', 'application/json')
+				.set('Content-Type', 'application/json')
+				.send(emptyMockPost)
+				.then(res => {
+					console.log('nootynooty', res.body)
+					expect(res).to.have.status(422)
+					expect(res.body.message).to.eql('Missing title,author,body,event in header!')
+				})
+			})
+		});
 
+
+
+		it('should create a post', function() {
+
+			return chai.request(app)
+			.post('/login/create')
+			.send(mockUser)
+			.then(res => {
+				let token = res.body.token
+				mockPost.author = res.body.user.id
+					return chai.request(app)
+					.post('/posts/create')
+					.set('Authorization', `Bearer ${token}`)
+					.set('Application', 'application/json')
+					.set('Content-Type', 'application/json')
+					.send(mockPost)
+					.then(res => {
+						console.log(res.body)
+						expect(res).to.have.status(202)
+						expect(res.body).to.be.an('object')
+						expect(res.body).to.contain.keys('id', 'title', 'body', 'event', 'comments', 'createdAt')
+						expect(res.body.title).is.eql(mockPost.title)
+					})
+			})
+		});
 
 });
 
-describe('Post Model delete route', function () {
 
-	testHooks()
+	describe('Post Model delete route', function () {
 
-	// it('should delete a single post', function () {
+		it('should delete a single post', function () {
 
-	// 	return chai.request(app)
-	// 		.post(`/login/create`)
-	// 		.send(mockUser)
-	// 		.then(res => {
-	// 			let token = res.body.token
 
-	// 			return chai.request(app)
-	// 				.delete(`/users/delete/${res.body.user.id}`)
-	// 				.set('Authorization', `Bearer ${token}`)
-	// 				.set('Application', 'application/json')
-	// 				.set('Content-Type', 'application/json')
-	// 				.then(res => {
-	// 					expect(res).to.have.status(204)
-	// 				})
+			console.log(4342, TOKEN)
 
-	// 		})
-	// });
+			return chai.request(app)
+			.post('/login/create')
+			.send(mockUser)
+			.then(res => {
+				let token = res.body.token
+				mockPost.author = res.body.user.id
+					return chai.request(app)
+					.post('/posts/create')
+					.set('Authorization', `Bearer ${token}`)
+					.set('Application', 'application/json')
+					.set('Content-Type', 'application/json')
+					.send(mockPost)
+					.then(res => {
+						console.log(22, res.body)
+						let post = res.body.id
+						return chai.request(app)
+						.delete(`/posts/delete/${post}`)
+						.set('Authorization', `Bearer ${token}`)
+						.set('Application', 'application/json')
+						.set('Content-Type', 'application/json')
+						.then(res => {
+							expect(res).to.have.status(204)
+						})
+					})
 
+				})
+		});
+
+
+
+	});
 
 
 });
-
-
-
 
 
 

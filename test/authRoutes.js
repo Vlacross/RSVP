@@ -27,40 +27,6 @@ const { app } = require('../server');
 
 
 
-function testHooks() {
-
-	before(function () {
-		console.log('mounting DB: ', MONGODB_URI_TEST)
-		return mongoose.connect(MONGODB_URI_TEST, { useNewUrlParser: true, useCreateIndex: true })
-
-	})
-	beforeEach(function () {
-
-		console.info('Dropping Database');
-		return mongoose.connection.db.dropDatabase()
-			.then(() => {
-				return Promise.all(seedUsers.map(user => bcrypt.hash(user.password, 10)));
-			})
-			.then((digests) => {
-				seedUsers.forEach((user, i) => user.password = digests[i]);
-				console.log('Seeding database')
-				return Promise.all([
-					Post.insertMany(seedPosts),
-					User.insertMany(seedUsers),
-					CommentPost.insertMany(seedComments),
-					EventPlan.insertMany(seedEvents)
-				]);
-			})
-			.catch(err => {
-				console.error(`ERROR: ${err.message}`);
-				console.error(err);
-			});
-	});
-	after(function () {
-		console.log('dismounting DB')
-		return mongoose.disconnect();
-	});
-}
 
 
 
@@ -136,442 +102,463 @@ var nonExistantEventName = {
 
 /********************************************************************************************************************************USER*CREATE************* */
 
-/*User create fails work properly        */
-describe('user Create field validation', function () {
 
-	testHooks()
+describe('all user route actions', function () {
 
-	it('should perform a Unit test', function () {
+	before(function () {
+		console.log('mounting DB: ', MONGODB_URI_TEST)
+		return mongoose.connect(MONGODB_URI_TEST, { useNewUrlParser: true, useCreateIndex: true })
 
-		return User.find()
-			.then(function (res) {
-				expect(res).to.be.an('array')
-			})
-	});
-
-	it('should deny a username in use', function () {
-
-		return chai.request(app)
-			.post('/login/create')
-			.send(mockUser)
-			.then(res => {
-				return chai.request(app)
-					.post('/login/create')
-					.send(mockUser)
-					.then(res => {
-						expect(res).to.be.an('object')
-						expect(res.body.code).to.eql(422)
-						expect(res.body.message).to.eql('username already in use!')
-					})
-			})
-	});
-
-	it('should return Promise reject stating missing fields', function () {
-
-		return chai.request(app)
-			.post('/login/create')
-			.send(mockEmptyUser)
-			.then(res => {
-				expect(res).to.be.an('object')
-				expect(res.body.code).to.eql(422)
-				expect(res.body.message).to.eql('Missing fullname,username,password,event,role,attending in header!')
-			})
-	});
-
-	it('should reject username under 6 letters', function () {
-		mockUser.username = 'user'
-
-		return chai.request(app)
-			.post('/login/create')
-			.send(mockUser)
-			.then(res => {
-				expect(res).to.be.an('object')
-				expect(res.body.code).to.be.eql(422)
-				expect(res.body.message).to.eql('Username must be between 6-14 characters')
-			})
-	});
-
-	it('should reject username over 15 letters', function () {
-		mockUser.username = 'fifteenLettersO'
-
-		return chai.request(app)
-			.post('/login/create')
-			.send(mockUser)
-			.then(res => {
-				expect(res).to.be.an('object')
-				expect(res.body.code).to.be.eql(422)
-				expect(res.body.message).to.eql('Username must be between 6-14 characters')
-			})
-	});
-
-	it('should perform an integration test', function () {
-		mockUser.username = 'mockUser'
-		return chai.request(app)
-			.get('/users')
-			.then(function (res) {
-				expect(res.text).to.be.eql('Unauthorized')
-			})
 	})
+	beforeEach(function () {
 
-});
-
-/*user create success works properly */
-describe('user create success', function () {
-
-	testHooks()
-
-	it('should create a new user', function () {
-
-		return chai.request(app)
-			.post('/login/create')
-			.send(mockUser)
-			.then(res => {
-				console.log(res.body)
-				expect(res).to.have.status(200)
+		console.info('Dropping Database');
+		return mongoose.connection.db.dropDatabase()
+			.then(() => {
+				return Promise.all(seedUsers.map(user => bcrypt.hash(user.password, 10)));
 			})
+			.then((digests) => {
+				seedUsers.forEach((user, i) => user.password = digests[i]);
+				console.log('Seeding database')
+				return Promise.all([
+					Post.insertMany(seedPosts),
+					User.insertMany(seedUsers),
+					CommentPost.insertMany(seedComments),
+					EventPlan.insertMany(seedEvents)
+				]);
+			})
+			.catch(err => {
+				console.error(`ERROR: ${err.message}`);
+				console.error(err);
+			});
+	});
+	after(function () {
+		console.log('dismounting DB')
+		return mongoose.disconnect();
 	});
 
+	/*User create fails work properly        */
+	describe('user Create field validation', function () {
 
-	it('should return token and user data', function () {
 
-		return chai.request(app)
-			.post('/login/create')
-			.send(mockUser)
-			.then(res => {
-				console.log(res.body)
-				expect(res.body).to.include.keys('token', 'user')
-			})
+
+		it('should perform a Unit test', function () {
+
+			return User.find()
+				.then(function (res) {
+					expect(res).to.be.an('array')
+				})
+		});
+
+		it('should deny a username in use', function () {
+
+			return chai.request(app)
+				.post('/login/create')
+				.send(mockUser)
+				.then(res => {
+					return chai.request(app)
+						.post('/login/create')
+						.send(mockUser)
+						.then(res => {
+							expect(res).to.be.an('object')
+							expect(res.body.code).to.eql(422)
+							expect(res.body.message).to.eql('username already in use!')
+						})
+				})
+		});
+
+		it('should return Promise reject stating missing fields', function () {
+
+			return chai.request(app)
+				.post('/login/create')
+				.send(mockEmptyUser)
+				.then(res => {
+					expect(res).to.be.an('object')
+					expect(res.body.code).to.eql(422)
+					expect(res.body.message).to.eql('Missing fullname,username,password,event,role,attending in header!')
+				})
+		});
+
+		it('should reject username under 6 letters', function () {
+			mockUser.username = 'user'
+
+			return chai.request(app)
+				.post('/login/create')
+				.send(mockUser)
+				.then(res => {
+					expect(res).to.be.an('object')
+					expect(res.body.code).to.be.eql(422)
+					expect(res.body.message).to.eql('Username must be between 6-14 characters')
+				})
+		});
+
+		it('should reject username over 15 letters', function () {
+			mockUser.username = 'fifteenLettersO'
+
+			return chai.request(app)
+				.post('/login/create')
+				.send(mockUser)
+				.then(res => {
+					expect(res).to.be.an('object')
+					expect(res.body.code).to.be.eql(422)
+					expect(res.body.message).to.eql('Username must be between 6-14 characters')
+				})
+		});
+
+		it('should perform an integration test', function () {
+			mockUser.username = 'mockUser'
+			return chai.request(app)
+				.get('/users')
+				.then(function (res) {
+					expect(res.text).to.be.eql('Unauthorized')
+				})
+		})
+
 	});
 
-	it('should return token in form of string', function () {
+	/*user create success works properly */
+	describe('user create success', function () {
 
-		return chai.request(app)
-			.post('/login/create')
-			.send(mockUser)
-			.then(res => {
-				expect(res.body.token).to.be.a('string')
-			})
-	});
 
-	it('should return user data in an object', function () {
 
-		return chai.request(app)
-			.post('/login/create')
-			.send(mockUser)
-			.then(res => {
-				expect(res.body.user).to.be.an('object')
-				expect(res.body.user).to.contain.keys('username', 'fullname', 'event', 'attending', 'joinDate', 'role', 'id')
-			})
-	});
+		it('should create a new user', function () {
 
-	it('should return user data matching submited data', function () {
+			return chai.request(app)
+				.post('/login/create')
+				.send(mockUser)
+				.then(res => {
+					console.log(res.body)
+					expect(res).to.have.status(200)
+				})
+		});
 
-		return chai.request(app)
-			.post('/login/create')
-			.send(mockUser)
-			.then(res => {
-				expect(res.body.user.username).to.be.eql(mockUser.username)
-				expect(res.body.user.fullname).to.be.eql(mockUser.fullname)
-				expect(res.body.user.event).to.be.eql(mockUser.event)
-				expect(res.body.user).to.not.contain.keys('password')
-			})
+
+		it('should return token and user data', function () {
+
+			return chai.request(app)
+				.post('/login/create')
+				.send(mockUser)
+				.then(res => {
+					console.log(res.body)
+					expect(res.body).to.include.keys('token', 'user')
+				})
+		});
+
+		it('should return token in form of string', function () {
+
+			return chai.request(app)
+				.post('/login/create')
+				.send(mockUser)
+				.then(res => {
+					expect(res.body.token).to.be.a('string')
+				})
+		});
+
+		it('should return user data in an object', function () {
+
+			return chai.request(app)
+				.post('/login/create')
+				.send(mockUser)
+				.then(res => {
+					expect(res.body.user).to.be.an('object')
+					expect(res.body.user).to.contain.keys('username', 'fullname', 'event', 'attending', 'joinDate', 'role', 'id')
+				})
+		});
+
+		it('should return user data matching submited data', function () {
+
+			return chai.request(app)
+				.post('/login/create')
+				.send(mockUser)
+				.then(res => {
+					expect(res.body.user.username).to.be.eql(mockUser.username)
+					expect(res.body.user.fullname).to.be.eql(mockUser.fullname)
+					expect(res.body.user.event).to.be.eql(mockUser.event)
+					expect(res.body.user).to.not.contain.keys('password')
+				})
+		})
+
 	})
+	/********************************************************************************************************************************USER*CREATE************* */
 
-})
-/********************************************************************************************************************************USER*CREATE************* */
-
-/********************************************************************************************************************************USER*LOGIN************* */
+	/********************************************************************************************************************************USER*LOGIN************* */
 
 
-// describe('user login fail', function () {
-
-// 	testHooks()
-
-// 	it('should return fail with bad username', function () {
-
-// 		return chai.request(app)
-// 			.post('/login/')
-// 			.send(badUsername)
-// 			.then(res => {
-// 				expect(res).to.has.status(401)
-// 				expect(res.text).to.eql('Unauthorized')
-// 			})
-// 	});
-
-// 	it('should return fail with bad password', function () {
-
-// 		return chai.request(app)
-// 			.post('/login/')
-// 			.send(badPassword)
-// 			.then(res => {
-// 				expect(res).to.has.status(401)
-// 				expect(res.text).to.eql('Unauthorized')
-// 			})
-// 	});
-
-// });
-
-// describe('user login success', function () {
-
-// 	testHooks()
-
-// 	it('should return something', async function () {
-
-// 		let res = await chai.request(app)
-// 			.post('/login/')
-// 			.send(existingUser)
-// 		expect(res).to.have.status(200)
-// 		expect(res.body).to.contain.keys('token', 'userData')
-// 		expect(res.body.token).to.be.a('string')
-// 		expect(res.body.userData).to.be.an('object')
-// 		expect(res.body.userData).to.contain.keys('username', 'fullname', 'event', 'attending', 'joinDate', 'role', 'id')
-// 		expect(res.body.userData.username).to.be.eql(existingUser.username)
-// 		expect(res.body.userData).to.not.contain.keys('password')
-// 	})
-
-
-// 	it('should return success status', function () {
-
-// 		return chai.request(app)
-// 			.post('/login/')
-// 			.send(existingUser)
-// 			.then(res => {
-// 				console.log(res.body)
-// 				expect(res).to.have.status(200)
-// 				expect(res.body).to.contain.keys('token', 'userData')
-// 				expect(res.body.token).to.be.a('string')
-// 				expect(res.body.userData).to.be.an('object')
-// 				expect(res.body.userData).to.contain.keys('username', 'fullname', 'event', 'attending', 'joinDate', 'role', 'id')
-// 				expect(res.body.userData.username).to.be.eql(existingUser.username)
-// 				expect(res.body.userData).to.not.contain.keys('password')
-// 			})
-// 	});
+	// describe('user login fail', function () {
 
 
 
-// 	// Maybe a Race issue of some sort causing first to pass and the rest to finally. maybe needs a delay in line?
-// 	/*not hitting 'comparePass' method in userSchema file */
+	// 	it('should return fail with bad username', function () {
 
-// 	it('should return a token and user data obj', function () {
-// 		return chai.request(app)
-// 			.post('/login/')
-// 			.send(existingUser)
-// 			.then(res => {
-// 				console.log(res.status)
-// 				expect(res.body).to.contain.keys('token', 'userData')
-// 				expect(res.body.token).to.be.a('string')
-// 			})
-// 	});
+	// 		return chai.request(app)
+	// 			.post('/login/')
+	// 			.send(badUsername)
+	// 			.then(res => {
+	// 				expect(res).to.has.status(401)
+	// 				expect(res.text).to.eql('Unauthorized')
+	// 			})
+	// 	});
 
-// 	it('should return proper user data in form of an object', function () {
-// 		return chai.request(app)
-// 			.post('/login/')
-// 			.send(existingUser)
-// 			.then(res => {
-// 				expect(res.body.userData).to.be.an('object')
-// 				expect(res.body.userData).to.contain.keys('username', 'fullname', 'event', 'attending', 'joinDate', 'role', 'id')
-// 			})
-// 	});
+	// 	it('should return fail with bad password', function () {
 
-// 	it('should return proper user data', function () {
+	// 		return chai.request(app)
+	// 			.post('/login/')
+	// 			.send(badPassword)
+	// 			.then(res => {
+	// 				expect(res).to.has.status(401)
+	// 				expect(res.text).to.eql('Unauthorized')
+	// 			})
+	// 	});
 
-		
-// 		return chai.request(app)
-// 		.post('/login/')
-// 		.send(existingUser)
-// 		.then(res => {
-// 			console.log(res.body)
-// 			expect(res).to.have.status(200)
-// 			expect(res.body).to.contain.keys('token', 'userData')
-// 			expect(res.body.token).to.be.a('string')
-// 			expect(res.body.userData).to.be.an('object')
-// 			expect(res.body.userData).to.contain.keys('username', 'fullname', 'event', 'attending', 'joinDate', 'role', 'id')
-// 			expect(res.body.userData.username).to.be.eql(existingUser.username)
-// 			expect(res.body.userData).to.not.contain.keys('password')
-// 		})
-// 	});
+	// });
+
 	
-// 	it('should return success status', function () {
+	// describe('user login success', function () {
 
-// 		return chai.request(app)
-//       .post('/login/')
-// 			.send(existingUser)
-// 			.then(res => {
-// 				expect(res.body.userData.username).to.be.eql(existingUser.username)
-// 				expect(res.body.userData).to.not.contain.keys('password')
-// 			})
-// 	})
+	// 	it('should return success status', function () {
 
-// });
+	// 		return chai.request(app)
+	// 			.post('/login/')
+	// 			.send(existingUser)
+	// 			.then(res => {
+	// 				console.log(res.body)
+	// 				expect(res).to.have.status(200)
+	// 				expect(res.body).to.contain.keys('token', 'userData')
+	// 				expect(res.body.token).to.be.a('string')
+	// 				expect(res.body.userData).to.be.an('object')
+	// 				expect(res.body.userData).to.contain.keys('username', 'fullname', 'event', 'attending', 'joinDate', 'role', 'id')
+	// 				expect(res.body.userData.username).to.be.eql(existingUser.username)
+	// 				expect(res.body.userData).to.not.contain.keys('password')
+	// 			})
+	// 	});
 
-/********************************************************************************************************************************USER*LOGIN************* */
-
-/***************************************************************************************************************************'local-strategy' *****CHECK*EVENT************* */
 
 
-describe('event name validation', function () {
+		// 	// Maybe a Race issue of some sort causing first to pass and the rest to finally. maybe needs a delay in line?
+		// 	/*not hitting 'comparePass' method in userSchema file */
 
-	testHooks()
+		// 	it('should return a token and user data obj', function () {
+		// 		return chai.request(app)
+		// 			.post('/login/')
+		// 			.send(existingUser)
+		// 			.then(res => {
+		// 				console.log(res.status)
+		// 				expect(res.body).to.contain.keys('token', 'userData')
+		// 				expect(res.body.token).to.be.a('string')
+		// 			})
+		// 	});
 
-	it('should fail when event name starts with whiteSpace', function () {
+		// 	it('should return proper user data in form of an object', function () {
+		// 		return chai.request(app)
+		// 			.post('/login/')
+		// 			.send(existingUser)
+		// 			.then(res => {
+		// 				expect(res.body.userData).to.be.an('object')
+		// 				expect(res.body.userData).to.contain.keys('username', 'fullname', 'event', 'attending', 'joinDate', 'role', 'id')
+		// 			})
+		// 	});
 
-		return chai.request(app)
-			.post('/login/eventCheck')
-			.send(whiteSpaceStart)
-			.then(res => {
+		// 	it('should return proper user data', function () {
 
-				expect(res).to.have.status(422)
-				expect(res.body.message).to.be.eql('WhiteSpace found in credentials! Username and password can\'t start or end with a space!')
-			})
+
+		// 		return chai.request(app)
+		// 		.post('/login/')
+		// 		.send(existingUser)
+		// 		.then(res => {
+		// 			console.log(res.body)
+		// 			expect(res).to.have.status(200)
+		// 			expect(res.body).to.contain.keys('token', 'userData')
+		// 			expect(res.body.token).to.be.a('string')
+		// 			expect(res.body.userData).to.be.an('object')
+		// 			expect(res.body.userData).to.contain.keys('username', 'fullname', 'event', 'attending', 'joinDate', 'role', 'id')
+		// 			expect(res.body.userData.username).to.be.eql(existingUser.username)
+		// 			expect(res.body.userData).to.not.contain.keys('password')
+		// 		})
+		// 	});
+
+		// 	it('should return success status', function () {
+
+		// 		return chai.request(app)
+		//       .post('/login/')
+		// 			.send(existingUser)
+		// 			.then(res => {
+		// 				expect(res.body.userData.username).to.be.eql(existingUser.username)
+		// 				expect(res.body.userData).to.not.contain.keys('password')
+		// 			})
+		// 	})
+
+	// });
+
+	/********************************************************************************************************************************USER*LOGIN************* */
+
+	/***************************************************************************************************************************'local-strategy' *****CHECK*EVENT************* */
+
+
+	describe('event name validation', function () {
+
+
+
+		it('should fail when event name starts with whiteSpace', function () {
+
+			return chai.request(app)
+				.post('/login/eventCheck')
+				.send(whiteSpaceStart)
+				.then(res => {
+
+					expect(res).to.have.status(422)
+					expect(res.body.message).to.be.eql('WhiteSpace found in credentials! Username and password can\'t start or end with a space!')
+				})
+		});
+
+		it('should fail when event name ends with whiteSpace', function () {
+
+			return chai.request(app)
+				.post('/login/eventCheck')
+				.send(whiteSpaceEnd)
+				.then(res => {
+
+					expect(res).to.have.status(422)
+					expect(res.body.message).to.be.eql('WhiteSpace found in credentials! Username and password can\'t start or end with a space!')
+				})
+		});
+
+		it('should return status 200 and message of false', function () {
+
+			return chai.request(app)
+				.post('/login/eventCheck')
+				.send(nonExistantEventName)
+				.then(res => {
+
+					expect(res).to.have.status(200)
+					expect(res.body.message).to.eql('false')
+				})
+		});
+
+		it('should return status 200 and message of success', function () {
+
+			return chai.request(app)
+				.post('/login/eventCheck')
+				.send(existingEventName)
+				.then(res => {
+
+					expect(res).to.have.status(200)
+					expect(res.body.message).to.eql('true')
+					expect(res.body).to.contain.keys('message', 'event')
+				})
+		});
+
+		it('should sufficient, matching data based on given name', function () {
+
+			return chai.request(app)
+				.post('/login/eventCheck')
+				.send(existingEventName)
+				.then(res => {
+
+					expect(res.body.event.name).to.eql(existingEventName.eventName)
+					expect(res.body.event).to.contain.keys('attendees', 'name', 'host', 'dateOfEvent', 'contactInfo', 'summary', 'createdAt', 'id')
+				})
+		});
+
+
+
+	})
+
+
+
+
+	/********************************************************************************************************************************CHECK*EVENT************* */
+
+
+	/********************************************************************************************************************************CHECK*EVENT************* */
+
+	describe('new event validation', function () {
+
+
+
+
+		it('should', function () {
+
+		});
+
+		it('should perform a Unit test', function () {
+
+			return EventPlan.find()
+				.then(function (res) {
+					expect(res).to.be.an('array')
+				})
+		});
+
+		it('should deny an event name in use', function () {
+
+			return chai.request(app)
+				.post('/login/newEvent')
+				.send(mockEvent)
+				.then(res => {
+					return chai.request(app)
+						.post('/login/newEvent')
+						.send(mockEvent)
+						.then(res => {
+
+							expect(res).to.have.status(422)
+							expect(res).to.be.an('object')
+							expect(res.body.message).to.eql('Event name already exists')
+						})
+				})
+		});
+
+		it('should deny empty obj', function () {
+
+			return chai.request(app)
+				.post('/login/newEvent')
+				.send(emptyEvent)
+				.then(res => {
+
+					expect(res).to.has.status(400)
+					expect(res.body.message).to.eql('No name is given')
+				})
+		});
+
+		it('should return rejection stating missing fields', function () {
+
+			return chai.request(app)
+				.post('/login/newEvent')
+				.send(nameOnlyEvent)
+				.then(res => {
+
+					expect(res).to.have.status(422)
+					expect(res.body.message).to.eql('Missing host,dateOfEvent,contactInfo,summary in header!')
+				})
+		});
+
 	});
 
-	it('should fail when event name ends with whiteSpace', function () {
-
-		return chai.request(app)
-			.post('/login/eventCheck')
-			.send(whiteSpaceEnd)
-			.then(res => {
-
-				expect(res).to.have.status(422)
-				expect(res.body.message).to.be.eql('WhiteSpace found in credentials! Username and password can\'t start or end with a space!')
-			})
-	});
-
-	it('should return status 200 and message of false', function () {
-
-		return chai.request(app)
-			.post('/login/eventCheck')
-			.send(nonExistantEventName)
-			.then(res => {
-
-				expect(res).to.have.status(200)
-				expect(res.body.message).to.eql('false')
-			})
-	});
-
-	it('should return status 200 and message of success', function () {
-
-		return chai.request(app)
-			.post('/login/eventCheck')
-			.send(existingEventName)
-			.then(res => {
-
-				expect(res).to.have.status(200)
-				expect(res.body.message).to.eql('true')
-				expect(res.body).to.contain.keys('message', 'event')
-			})
-	});
-
-	it('should sufficient, matching data based on given name', function () {
-
-		return chai.request(app)
-			.post('/login/eventCheck')
-			.send(existingEventName)
-			.then(res => {
-
-				expect(res.body.event.name).to.eql(existingEventName.eventName)
-				expect(res.body.event).to.contain.keys('attendees', 'name', 'host', 'dateOfEvent', 'contactInfo', 'summary', 'createdAt', 'id')
-			})
-	});
+	describe('new event create', function () {
 
 
 
-})
+		it('should create a new event and return event data', function () {
+
+			return chai.request(app)
+				.post('/login/newEvent')
+				.send(mockEvent)
+				.then(res => {
+					console.log(res.body, res.status)
+					expect(res).to.have.status(200)
+					expect(res.body).to.be.an('object')
+					expect(res.body).to.contain.keys('id', 'name', 'host', 'dateOfEvent', 'contactInfo', 'attendees', 'createdAt', 'summary')
+					expect(res.body.name).to.eql(mockEvent.name)
+				})
+		});
 
 
 
 
-/********************************************************************************************************************************CHECK*EVENT************* */
 
 
-/********************************************************************************************************************************CHECK*EVENT************* */
+	})
 
-describe('new event validation', function () {
-
-	testHooks()
-
-
-	it('should', function () {
-
-	});
-
-	it('should perform a Unit test', function () {
-
-		return EventPlan.find()
-			.then(function (res) {
-				expect(res).to.be.an('array')
-			})
-	});
-
-	it('should deny an event name in use', function () {
-
-		return chai.request(app)
-			.post('/login/newEvent')
-			.send(mockEvent)
-			.then(res => {
-				return chai.request(app)
-					.post('/login/newEvent')
-					.send(mockEvent)
-					.then(res => {
-
-						expect(res).to.have.status(422)
-						expect(res).to.be.an('object')
-						expect(res.body.message).to.eql('Event name already exists')
-					})
-			})
-	});
-
-	it('should deny empty obj', function () {
-
-		return chai.request(app)
-			.post('/login/newEvent')
-			.send(emptyEvent)
-			.then(res => {
-
-				expect(res).to.has.status(400)
-				expect(res.body.message).to.eql('No name is given')
-			})
-	});
-
-	it('should return rejection stating missing fields', function () {
-
-		return chai.request(app)
-			.post('/login/newEvent')
-			.send(nameOnlyEvent)
-			.then(res => {
-
-				expect(res).to.have.status(422)
-				expect(res.body.message).to.eql('Missing host,dateOfEvent,contactInfo,summary in header!')
-			})
-	});
 
 });
-
-describe('new event create', function() {
-
-	testHooks()
-
-	it('should create a new event and return event data', function() {
-
-		return chai.request(app)
-        .post('/login/newEvent')
-        .send(mockEvent)
-        .then(res => {
-			console.log(res.body, res.status)
-			expect(res).to.have.status(200)
-			expect(res.body).to.be.an('object')
-			expect(res.body).to.contain.keys('id', 'name', 'host', 'dateOfEvent', 'contactInfo', 'attendees', 'createdAt', 'summary')
-			expect(res.body.name).to.eql(mockEvent.name)
-        })
-	});
-
-
-
-
-
-
-})
-
 
 /********************************************************************************************************************************CHECK*EVENT************* */
 

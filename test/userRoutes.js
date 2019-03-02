@@ -25,44 +25,6 @@ chai.use(chaiHttp)
 const { app } = require('../server');
 
 
-
-
-function testHooks() {
-
-	before(function () {
-		console.log('mounting DB: ', MONGODB_URI_TEST)
-		return mongoose.connect(MONGODB_URI_TEST, { useNewUrlParser: true })
-
-	})
-	beforeEach(function () {
-
-		console.info('Dropping Database');
-		return mongoose.connection.db.dropDatabase()
-			.then(() => {
-				return Promise.all(seedUsers.map(user => bcrypt.hash(user.password, 10)));
-			})
-			.then((digests) => {
-				seedUsers.forEach((user, i) => user.password = digests[i]);
-				console.log('Seeding database')
-				return Promise.all([
-					Post.insertMany(seedPosts),
-					User.insertMany(seedUsers),
-					CommentPost.insertMany(seedComments),
-					EventPlan.insertMany(seedEvents)
-				]);
-			})
-			.catch(err => {
-				console.error(`ERROR: ${err.message}`);
-				console.error(err);
-			});
-	});
-	after(function () {
-		console.log('dismounting DB')
-		return mongoose.disconnect();
-	});
-}
-
-
 var existingUser = {
 	username: "user1",
 	password: "password1"
@@ -102,11 +64,46 @@ var mockUserPromoteRole = {
 
 var mockEmptyUser = {};
 
+describe('all userRoute actions', function() {
 
+
+	before(function () {
+		console.log('mounting DB: ', MONGODB_URI_TEST)
+		return mongoose.connect(MONGODB_URI_TEST, { useNewUrlParser: true })
+
+	})
+
+	beforeEach(function () {
+
+		console.info('Dropping Database');
+		return mongoose.connection.db.dropDatabase()
+			.then(() => {
+				return Promise.all(seedUsers.map(user => bcrypt.hash(user.password, 10)));
+			})
+			.then((digests) => {
+				seedUsers.forEach((user, i) => user.password = digests[i]);
+				console.log('Seeding database')
+				return Promise.all([
+					Post.insertMany(seedPosts),
+					User.insertMany(seedUsers),
+					CommentPost.insertMany(seedComments),
+					EventPlan.insertMany(seedEvents)
+				]);
+			})
+			.catch(err => {
+				console.error(`ERROR: ${err.message}`);
+				console.error(err);
+			});
+	});
+
+	after(function () {
+		console.log('dismounting DB')
+		return mongoose.disconnect();
+	});
 
 describe('user route basic interactions', function () {
 
-	testHooks()
+
 
 	it('should perform a Unit test', function () {
 
@@ -141,7 +138,7 @@ describe('user route basic interactions', function () {
 
 describe('User Get routes', function () {
 
-	testHooks()
+
 
 	it('should return Unauthorized without valid JWT', function () {
 		return chai.request(app)
@@ -208,7 +205,7 @@ describe('User Get routes', function () {
 
 describe('User Put routes', function () {
 
-	testHooks()
+
 
 
 	it('should update a single user and return updated data and token', function () {
@@ -274,7 +271,7 @@ describe('User Put routes', function () {
 
 describe('User delete route', function () {
 
-	testHooks()
+	
 
 	it('should delete a single user', function () {
 
@@ -299,6 +296,10 @@ describe('User delete route', function () {
 
 
 })
+
+
+
+});
 
 
 

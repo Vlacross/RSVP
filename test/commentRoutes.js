@@ -75,7 +75,7 @@ describe('user login', function () {
 			})
 	})
 
-	it.only('should perform an integration test', function () {
+	it('should perform an integration test', function () {
 		return chai.request(app)
 			.get('/users')
 			.then(function (res) {

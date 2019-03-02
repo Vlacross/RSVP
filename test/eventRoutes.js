@@ -87,16 +87,16 @@ describe('user login', function () {
 			})
 	})
 
-	it.only('should return array of missing fields on user create', function() {
+	// it('should return array of missing fields on user create', function() {
 
 		
 		
-		return User.create(mockUser)
-			.then(function(res) {
-				expect(res).to.be.an('object')
-			})
+	// 	return User.create(mockUser)
+	// 		.then(function(res) {
+	// 			expect(res).to.be.an('object')
+	// 		})
 
-	})
+	// })
 
 
 
