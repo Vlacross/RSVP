@@ -26,45 +26,6 @@ router.get('/find/:id', (req, res) => {
 });
 
 
-/*************************************************************************************************/
-				/*ATTENDEE POPULATION/DEPOPULATION */
-/*************************************************************************************************/
-/*Added / populate Event attendees with newly created User IDs */
-router.put('/attendee/:id', (req, res) => {
-	if (!req.params.id) {
-		let msg = `Incomplete credentials!`
-		console.error(msg)
-		return res.status(400).json(msg).end()
-	}
-
-	const { eventId, userId } = req.body
-
-	EventPlan.findByIdAndUpdate(eventId, { $push: { 'comments': userId } }, { new: true })
-		.then(updatedEvent => {
-			return res.json(updatedEvent.serialize()).status(203).end()
-		})
-		.catch(err => console.log(err, 23))
-});
-
-/*remove/ depopulate event attendees */
-router.put('/attendee-remove/:id', (req, res) => {
-	if (!req.params.id) {
-		let msg = `Incomplete credentials!`
-		console.error(msg)
-		return res.status(400).json(msg).end()
-	}
-
-	const { eventId, userId } = req.body
-
-	Post.findByIdAndUpdate(eventId, { $pull: { 'comments': userId } }, { new: true })
-		.then(updatedEvent => {
-			return res.json(updatedEvent.serialize()).status(203).end()
-		})
-		.catch(err => console.log(err, 23))
-});
-/*************************************************************************************************/
-
-
 /*
 Purge all comments with event name ref
 Then posts

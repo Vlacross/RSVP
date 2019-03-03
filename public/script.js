@@ -298,7 +298,7 @@ function accountManage(route, accountId) {
 function deleteUser(usr) {
 
 	let account = JSON.parse(localStorage.getItem('user'));
-	let user = usr || account;
+	let user = !usr ? account : usr
 	let route = `users/delete/${user.id}`
 	let method = 'delete'
 	console.log(`removing user at ${route}`, user);
@@ -306,8 +306,8 @@ function deleteUser(usr) {
 	quickFetch(route, method)
 		.then(res => {
 			console.log('deletion suxess!', res.status)
-			if(account.id === usr.id) {
-				logOut()
+			if(account.id === user.id) {
+				return	logOut()
 			}
 			showUsers()
 		})

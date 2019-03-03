@@ -29,18 +29,22 @@ commentSchema.virtual('listing').get(function () {
 	
 });
 
-commentSchema.post('save', function() {
-	Post.findByIdAndUpdate(this.postId, { $push: { 'comments': this.id }})
+commentSchema.post('save', function(next) {
+	return Post.findByIdAndUpdate(this.postId, { $push: { 'comments': this.id }})
   .then(comment => {
-    console.log(comment)
+	  next(comment)
   })
 });
 
-commentSchema.pre('remove', function() {
-	console.log('harharhar')
-	Post.findByIdAndUpdate(this.postId, { $pull: { 'comments': this.id }})
-  
+
+/*Can't seem to fire pre-remove depop */
+// commentSchema.pre('remove', function(next) {
+// 	console.log('harharhar')
+// 	 return Post.findByIdAndUpdate(this.postId, { $pull: { 'comments': this.id }})
+// 	.then(post => {
+// 		next(post)
+// 	})
  
-})
+// })
 
 module.exports = mongoose.model('Comment', commentSchema)
