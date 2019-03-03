@@ -26,28 +26,6 @@ router.get('/find/:id', (req, res) => {
 });
 
 
-/*MasterAdmin only can update details */
-router.put('/details/:id', (req, res) => {
-	if (!req.params.id || !req.body.id || req.body.id !== req.params.id) {
-		let msg = `Incomplete credentials!`
-		console.error(msg)
-		return res.status(400).json(msg).end()
-	}
-
-	const { name, host, body, id, postId, commentId } = req.body
-	const newDetails = {
-		title,
-		author,
-		body
-	}
-	Post.findByIdAndUpdate(id, { $set: newDetails }, { new: true })
-		.then(updatedPost => {
-			return res.json(updatedPost.serialize()).status(203).end()
-		})
-		.catch(err => console.log(err, 23))
-});
-
-
 /*************************************************************************************************/
 				/*ATTENDEE POPULATION/DEPOPULATION */
 /*************************************************************************************************/

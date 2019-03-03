@@ -26,14 +26,69 @@ const { app } = require('../server');
 
 
 
+const jwt = require('jsonwebtoken')
+const { JWT_SECRET, ALG, EXP } = require('../config')
 
-function testHooks() {
+
+const opts = {
+	algorithm: ALG,
+	expiresIn: EXP
+}
+
+
+
+const buildToken = function (user) {
+	return jwt.sign({ user }, JWT_SECRET, opts
+	)
+}
+
+
+var mockEvent = {
+	name: 'mockEvent',
+	host: 'mockHost',
+	dateOfEvent: new Date(),
+	contactInfo: 'mock@mock.com',
+	summary: 'mockSummary'
+};
+
+
+var preMockEvent = {
+	name: 'preMockEvent',
+	host: 'preMockHost',
+	dateOfEvent: new Date(),
+	contactInfo: 'preMock@mock.com',
+	summary: 'preMockSummary'
+};
+
+var mockUser = {
+	fullname: 'mockFull',
+	username: 'mockUser',
+    password: 'mockPass',
+    event: '242424242424242424242424',
+	role: 3,
+	attending: true
+};
+
+var preMockUser = {
+	fullname: 'preMockFull',
+	username: 'preMockUser',
+    password: 'preMockPass',
+    event: '242424242424242424242424',
+	role: 3,
+	attending: true
+};
+
+
+
+describe('event routes actions', function() {
+
 
 	before(function () {
+
 		console.log('mounting DB: ', MONGODB_URI_TEST)
 		return mongoose.connect(MONGODB_URI_TEST, { useNewUrlParser: true })
-
 	})
+
 	beforeEach(function () {
 
 		console.info('Dropping Database');
@@ -47,8 +102,10 @@ function testHooks() {
 				return Promise.all([
 					Post.insertMany(seedPosts),
 					User.insertMany(seedUsers),
-                    CommentPost.insertMany(seedComments),
-                    EventPlan.insertMany(seedEvents)
+					CommentPost.insertMany(seedComments),
+					EventPlan.insertMany(seedEvents),
+					User.create(preMockUser),
+					EventPlan.create(preMockEvent)
 				]);
 			})
 			.catch(err => {
@@ -56,67 +113,88 @@ function testHooks() {
 				console.error(err);
 			});
 	});
+
 	after(function () {
+		console.log('dismounting DB')
 		return mongoose.disconnect();
 	});
-}
-
-var mockEvent = {
-
-}
-
-var mockUser = {
-	fullname: 'mockFull',
-	username: 'mockUser',
-    password: 'mockPass',
-    event: 242424242424242424242424,
-	role: 3,
-	attending: true
-};
 
 
-describe('user login', function () {
+	describe('post route basic interactions', function () {
 
-	testHooks()
+	
 
-	it('should perform a Unit test', function () {
+		it('should return fail', function () {
+	
+			return EventPlan.find()
+				.then(function (res) {
+					expect(res).to.be.an('array')
+				})
+		})
+	
+	
+		it('should perform a simple integration test', function () {
+			return chai.request(app)
+				.get('/posts')
+				.then(function (res) {
+					console.log(res.text)
+					expect(res.text).to.be.eql('Unauthorized')
+				})
+		})
+	
+		it('should return token and user data', function () {
+	
+			return chai.request(app)
+				.post('/login/create')
+				.send(mockUser)
+				.then(res => {
+					console.log(res.body)
+					expect(res.body).to.include.keys('token', 'user')
+				})
+		});
+	
+	});
 
-		return User.find()
-			.then(function (res) {
-				expect(res).to.be.an('array')
-			})
-	})
-
-	// it('should return array of missing fields on user create', function() {
+	describe('event GET route', function() {
 
 		
-		
-	// 	return User.create(mockUser)
-	// 		.then(function(res) {
-	// 			expect(res).to.be.an('object')
-	// 		})
+		it.only('should find an event by id', async function() {
 
-	// })
+			let eventId;
+			await EventPlan.findOne({name: 'preMockEvent'})
+			.then(res => {
+				eventId = res.id	
+				})
+	
+			let token = await buildToken(preMockUser.username)
 
-
-
-
-
-
-
-
-	it('should perform an integration test', function () {
 		return chai.request(app)
-			.get('/users')
-			.then(function (res) {
-				console.log(res.text)
-				expect(res.text).to.be.eql('Unauthorized')
+			.get(`/events/find/${eventId}`)
+			.set('Authorization', `Bearer ${token}`)
+			.set('Application', 'application/json')
+			.set('Content-Type', 'application/json')
+			.then(res => {
+				console.log(res.body)
+				expect(res).to.have.status(200)
+				expect(res.body).to.be.an('object')
+				expect(res.body.id).to.eql(eventId)
 			})
+	
+	
+		})
+	
+	
+	
+	
+	
 	})
+
+
+
+
+
 
 })
-
-
 
 
 
