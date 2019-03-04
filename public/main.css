@@ -7,7 +7,8 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.815);
+    /* background-color: rgba(0, 0, 0, 0.815); */
+    background-color: rgba(255, 255, 255, 0.931);
     
 }
 
@@ -52,11 +53,12 @@ fieldset input {
 
 .wrapper {
     
-    background: rgba(255, 255, 255, 0.952);
+    background: rgba(255, 255, 255, 0.849);
     /* background: rgba(54, 53, 48, 0.1); */
-    border: solid 1px white;
-    border-radius: 12;
-    color: rgba(0, 0, 0, 0.815);
+    
+    border-radius: 12px;
+    box-shadow: 0 0 15px black;
+    color: rgba(255, 254, 254, 0.863);
    
     margin-right: 25%;
     margin-left: 18%;
@@ -72,12 +74,6 @@ fieldset input {
     width: 94vh;
     height: 100%;
     max-width: 960px
-}
-
-main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 }
 
 .sinkBack {
@@ -99,7 +95,14 @@ button {
     width: 40%;
     height: 35px;
     border-radius: 8px;
+    background-color: rgba(143, 0, 0, 0.801);
+    color: rgb(216, 217, 253);
+    font-weight: 700;
 }
+
+button:hover {
+    background-color: rgb(100, 8, 8)
+} 
 
 /****************************INTRO*CREATE*EVENT********/
 
@@ -110,6 +113,7 @@ button {
 .eventCheck {
     display: flex;
     flex-direction: column;
+    text-align: center;
 }
 
 .eventCheckButtons {
@@ -252,11 +256,6 @@ fieldset[class~="event"] {
 
 
 /*******************************INTRO*VIEWS********/
-/* .attending {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-} */
 
 /***********userListings************/
 .userListing {
@@ -264,9 +263,13 @@ fieldset[class~="event"] {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    border: solid 0.4px black;
-    border-left: none;
-    border-right: none;
+
+    border-radius: 12px;
+    box-shadow: 0 0 15px black;
+    padding: 12px;
+    margin: 8px;
+    width: 92%;
+    
 }
 
 .userManageButton {
@@ -291,14 +294,17 @@ fieldset[class~="event"] {
 }
 
 .siteNav {
-    border: solid 1px red;
+   
+
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgb(100, 8, 8);
     position: fixed;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
     padding: 20px;
-    background: rgb(255, 255, 255, 0.7);
+    background: rgba(245, 250, 255, 0.931);
     height: 100%;
     left: 0;
     max-width: 18%;
@@ -312,13 +318,41 @@ fieldset[class~="event"] {
     margin-top: 20%;
 }
 
+.menuTab {
+    border: solid 4px rgb(42, 42, 42);
+    border-radius: 50px;
+    width: 80px;
+    height: 80px;
+    position: fixed;
+    left: 0;
+    top: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    margin: 8px
+}
+
+.menuTab .tabText {
+    color: rgb(243, 243, 243);
+    visibility: hidden;
+}
+
+.menuTab:hover {
+    background: rgba(42, 42, 42, 0.952);
+}
+
+.menuTab:hover .tabText {
+    visibility: visible;
+
+}
+
 .viewWrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
-    border: solid 1px white;
+ 
     /* background: rgb(255, 255, 255); */
-    background: rgb(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.671);
     position: absolute;
     right: 2%;
     width: 80%;
@@ -338,13 +372,13 @@ fieldset[class~="event"] {
 }
 
 .updatePosts {
-    border: solid 1px blue;
+
     padding: 25px;
 }
 
 a {
     font-size: 1rem;
-    border: solid 1px goldenrod;
+
     margin: 20px;
     padding: 12px;
     transition-duration: 500ms;
@@ -362,10 +396,15 @@ a:hover {
     flex-direction: row;
     justify-content: center;
     align-content: center;
-    border: solid 1px silver;
-    width: 60%;
-    height: 40vh;
+
+    border-radius: 12px;
+    box-shadow: 0 0 15px black;
+    padding: 12px;
+    margin: 8px;
+    width: 92%;
 }
+
+
 
 .accountSpans {
     display: flex;
@@ -429,16 +468,28 @@ a:hover {
 .eventPost {
     display: flex;
     flex-direction: column;
-    border: solid 1px black;
+    border-radius: 12px;
+    box-shadow: 0 0 15px black;
     padding: 12px;
     margin: 8px;
     width: 92%;
    
 }
 
+.eventPost:hover {
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.234);
+}
+
 .subPostTitle {
     text-align: center;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.234);
 }
+
+.subPostTitle:hover {
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.567);
+}
+
 
 .subPost {
     display: flex;
@@ -459,15 +510,32 @@ a:hover {
 }
 
 .commentListing {
-    border: solid 1px black;
+
     padding: 12px;
     margin: 8px;
 }
 
 .palette {
-    border: solid 1px black;
+
     padding: 12px;
     margin: 8px;
+}
+
+.commentContentInput {
+    width: 100%;
+}
+
+.detailPage {
+    display: flex;
+    flex-direction: column;
+
+    border-radius: 12px;
+    box-shadow: 0 0 15px black;
+    padding: 12px;
+    margin: 8px;
+    width: 92%;
+    text-align: center;
+   
 }
 
 .hidden {
@@ -487,15 +555,11 @@ a:hover {
         width: 74vh;
     }
 
-    .siteNav {
-        padding: 8px;
-        max-width: initial;
-        width: 155px;
-    }
+   
 
     .viewWrapper {
-        max-width: 72%;
-
+        max-width: 84%;
+        
     }
 }
 
@@ -505,16 +569,10 @@ a:hover {
         width: 100%;
     }
 
-    .siteNav {
-        padding: 0px;
+     .siteNav {
+        padding: 8px;
         max-width: initial;
         width: 155px;
-    }
-
-    .navButton {
-        width: 100%;
-        height: 4%;
-        margin-top: 20%;
     }
 }
 
@@ -522,14 +580,73 @@ a:hover {
 
 @media only screen and (max-width: 700px) {
 
-    .viewWrapper {
-        max-width: 60%;
 
+.siteNav {
+        display: none;
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        height: 100vh;
+        background: rgba(245, 250, 255, 0.931);
+        z-index: 2;
+        top: 0;
+    }
+
+    .navButton {
+        width: 80%;
+        height: 10%;
+        margin-top: initial;
+
+    }
+
+    .viewWrapper {
+        position: static;
+        right: initial;
+        margin-left: auto;
+    }
+
+    .homePageView {
+        padding-top: 100px;
+    }
+
+    ul {
+        padding: 0;
+    }
+
+    .commentList {
+        margin: 0;
+        width: 100%;
+    }
+
+    .commentListing {
+        padding: 0;
+        margin: 0;
+    }
+
+    .postForm {
+        max-width: 100%;
+    }
+
+    .eventPostContentInput {
+        max-width: 100%;
+    }
+
+    .form-inputs {
+        max-width: 180px;
     }
 
     button {
         width: 96%;
         margin: 3% 2% 0% 2%; 
+    }
+
+    .commentFormSubmit {
+        width: 100%;
+    }
+
+    .profileEditButton {
+        width: 100%;
+        height: 25%;
     }
 
     .introButton {
@@ -543,14 +660,12 @@ a:hover {
         font-size: 5em;
     }
 
-    /* .navButton {
-        width: 85px;
-        height: 4%;
-        margin-top: 20%;
-    } */
-
-
-
+    .menuTab {
+       margin-left: 0;
+       top: 0;
+        writing-mode: vertical-lr;
+        text-orientation: upright;
+    }
 
     .eventNameCheckLabel {
         font-size: 1.2em;
@@ -572,13 +687,9 @@ a:hover {
 
 @media only screen and (max-width: 600px) {
 
-    .siteNav {
-        width: 132px;
-    }
 
     button {
         width: 40%;
-        
     }
 
     .introButton {
@@ -589,13 +700,23 @@ a:hover {
         font-size: 4em;
     }
 
-    /* .navButton {
-        width: 70px;
-        height: 3%;
-        margin-top: 20%;
-    } */
+    .userAccountButton {
+        width: 100%;
+        height: 30%;
+    }
 
-    
+    .accountDeleteButton {
+        width: 100%;
+        height: 30%;
+    }
+
+    .postTitle {
+        font-size: 1.3em;
+    }
+
+    .postAuthor {
+        font-size: 1em;
+    }
 }
 
 @media only screen and (max-width: 500px) {
@@ -605,10 +726,7 @@ a:hover {
         padding-right: 0;
     }
 
-    .viewWrapper {
-        max-width: 50%;
 
-    }
 
     button {
         width: 50%;

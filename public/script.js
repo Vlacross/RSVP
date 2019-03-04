@@ -152,7 +152,7 @@ function buildEvent() {
 
 		})
 		.catch(err => {
-			console.err(err)
+			console.error(err)
 		});
 	
 };
@@ -794,38 +794,64 @@ function logIn(route) {
 		});
 };
 /********^*LOGIN*^*************************************************************************************************^*LOGIN*^********************** */
+function handleMobile() {
 
+	if($(window).width() < 800) {
+		$('.menuTab').show()
+		$('.siteNav').hide()
+	}
+}
 
 /********V*NAVBAR*V*************************************************************************************************V*NAVBAR*V********************** */
 function handleNav() {
 
 	$('body').on('click', 'button.eventDetailsLink', function (e) {
 		e.preventDefault();
+		handleMobile()
 		getEventInfo()
 	});
 	$('body').on('click', 'button.usersListLink', function (e) {
 		e.preventDefault();
 		showUsers()
+		handleMobile()
 	});
 	$('body').on('click', 'button.eventNewsfeedLink', function (e) {
 		e.preventDefault();
 		getFeed()
+		handleMobile()
 	});
 	$('body').on('click', 'button.accountLink', function (e) {
 		e.preventDefault();
 		getAccount()
+		handleMobile()
 	});
 	$('body').on('click', 'button.logOut', function (e) {
 		e.preventDefault();
 		logOut()
+		handleMobile()
 	});
 	$('body').on('click', 'button.addPost', function (e) {
 		e.preventDefault();
 		createPost()
+		handleMobile()
 	});
+
+/********V*MOBILE-TAB*V***********************V*MOBILE-TAB*V********************** */
+
+$('body').on('click', '.menuTab', function (e) {
+	e.preventDefault();
+	$(this).hide()
+	$('.siteNav').show()
+});
+
 };
 
 /********^*NAVBAR*^**************************************************************************************************^*NAVBAR*^********************** */
+
+
+
+
+
 
 /********V*LISTENERS*V**************************************************************************************************V*LISTENERS*V********************** */
 
