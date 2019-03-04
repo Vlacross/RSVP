@@ -2,27 +2,23 @@ const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
-const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const mongoose = require('mongoose');
 
-const localStrategy = require('../passport')
 const jwtStrategy = require('../passport');
 
 const passport = require('passport');
 passport.use('JWT', jwtStrategy);
-passport.use('local', localStrategy);
 
 const jwtAuth = passport.authenticate('JWT', { session: false });
-const localAuth = passport.authenticate('local', { session: false });
 
 const CommentPost = require('../models/comments');
 const Post = require('../models/posts');
 const User = require('../models/users');
 const EventPlan = require('../models/events');
 
-const { JWT_SECRET, ALG, EXP } = require('../config')
+const { JWT_SECRET, ALG, EXP } = require('../config');
+
 router.use(bodyParser.json());
 router.use('*', jwtAuth);
 
@@ -30,23 +26,25 @@ router.use('*', jwtAuth);
 const opts = {
 	algorithm: ALG,
 	expiresIn: EXP
-}
+};
+
 const buildToken = function (user) {
 	return jwt.sign({ user }, JWT_SECRET, opts
 	)
-}
+};
 
-/*Find One User */
+
+/*Find One User w. userId*/
 router.get('/findOne/:id', (req, res) => {
 	User.findOne({_id: req.params.id})
 		.then(user => {
-			
 			res.json(user)
 		})
 	res.status(200)
-})
+});
 
-/*can search user*/
+
+/*can search users by eventId*/
 router.get('/find/:id', (req, res) => {
 	User.find({event: req.params.id})
 		.then(users => {
@@ -58,14 +56,12 @@ router.get('/find/:id', (req, res) => {
 		})
 	res.status(200)
 });
-
-// (!req.params.id || !req.body.id || req.body.id !== req.params.id) 
+ 
 
 /*Admin or own User only can update details */
 router.put('/details/', (req, res) => {
 	if (!req.body.id) {
 		let msg = `Incomplete credentials!`
-		console.error(msg)
 		return res.status(400).json(msg).end()
 	}
 
@@ -80,10 +76,9 @@ router.put('/details/', (req, res) => {
 			message: `Missing ${missing} in header!`,
 			reason: `Missing ${missing} in header!`
 		}
-		console.error(msg)
+
 		return res.status(418).json(msg).end()
 	}
-	console.log(missing)
 	
 	const newDetails = {
 		fullname,
@@ -96,18 +91,18 @@ router.put('/details/', (req, res) => {
 	User.findByIdAndUpdate(id, { $set: newDetails }, { new: true })
 		
 		.then(updatedUser => {
-			console.log('updatedUSER', updatedUser)
 			let token = buildToken(updatedUser.username)
 			let obj = {
 				user: updatedUser.serialize(),
 				token: token
 			}
-			console.log('obj', obj)
+			
 			return res.json(obj).status(203).end()
 
 		})
-		.catch(err => console.log(err, 22))
+		.catch(err => console.error(err, 22))
 });
+
 
 /*strictly for setting userRole */
 router.put('/roles', (req, res) => {
@@ -134,7 +129,6 @@ router.put('/roles', (req, res) => {
 
 	User.findByIdAndUpdate(id, { $set: { role: parseInt(role) } }, { new: true })
 		.then(updatedUser => {
-			console.log('updatedUSER', updatedUser)
 			return res.status(203).end()
 		})
 		.catch(err => console.log(err, 22))
@@ -165,7 +159,12 @@ router.delete('/delete/:id', (req, res) => {
 		.then(comments => {
 			comments.forEach(comment => comment.remove())
 		})
-     User.findOne({ _id: userId }).remove()
+     User.findOne({ _id: userId }, function(err, usr) {
+		 if(err) {
+			 return
+		 }
+		 usr.remove()
+	 })
 	.then(res.status(204).end()) 
 });
 

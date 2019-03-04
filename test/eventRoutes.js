@@ -18,20 +18,19 @@ const seedPosts = require('../db/posts');
 const seedUsers = require('../db/users');
 const seedComments = require('../db/comments');
 
+
 chai.use(chaiHttp);
 
 const { app } = require('../server');
 
-
 const jwt = require('jsonwebtoken')
 const { JWT_SECRET, ALG, EXP } = require('../config');
+
 
 const opts = {
 	algorithm: ALG,
 	expiresIn: EXP
 };
-
-
 
 const buildToken = function (user) {
 	return jwt.sign({ user }, JWT_SECRET, opts
@@ -39,17 +38,12 @@ const buildToken = function (user) {
 };
 
 
-var mockPost = {
-	title: 'mockTitle',
-	body: 'mockBody',
-	event: '242424242424242424242424'
-};
-
-
-var preMockPost = {
-	title: 'preMockTitle',
-	body: 'preMockBody',
-	event: '242424242424242424242424'
+var preMockEvent = {
+	name: 'preMockEvent',
+	host: 'preMockHost',
+	dateOfEvent: new Date(),
+	contactInfo: 'preMock@mock.com',
+	summary: 'preMockSummary'
 };
 
 var mockUser = {
@@ -70,31 +64,8 @@ var preMockUser = {
 	attending: true
 };
 
-var preMockEvent = {
-	name: 'preMockEvent',
-	host: 'preMockHost',
-	dateOfEvent: new Date(),
-	contactInfo: 'preMock@mock.com',
-	summary: 'preMockSummary'
-};
 
-
-var mockComment = {
-	text: 'mockText'
-};
-
-var preMockComment = {
-	_id: "878787878787878787878787",
- 	text: "gorganzanta",
-	event: "242424242424242424242424",
-	userId: "333333333333333333333301"
-};
-
-var emptyComment = {};
-
-
-
-describe('Comment routes actions', function() {
+describe('Event routes actions', function() {
 
 
 	before(function () {
@@ -118,9 +89,8 @@ describe('Comment routes actions', function() {
 					User.insertMany(seedUsers),
 					CommentPost.insertMany(seedComments),
 					EventPlan.insertMany(seedEvents),
-					Post.create(preMockPost),
-					User.create(preMockUser),
-					EventPlan.insertMany(preMockEvent)
+					EventPlan.create(preMockEvent),
+					User.create(preMockUser)
 				]);
 			})
 			.catch(err => {
@@ -135,13 +105,13 @@ describe('Comment routes actions', function() {
 	});
 
 
-	describe('Comment route basic interactions', function () {
+
+	describe('Event route basic interactions', function () {
 
 	
-
 		it('should prove unit functions', function () {
 	
-			return CommentPost.find()
+			return EventPlan.find()
 				.then(function (res) {
 					expect(res).to.be.an('array')
 				})
@@ -158,73 +128,45 @@ describe('Comment routes actions', function() {
 	
 	});
 
-	describe('Comment Post route', function() {
 
+	describe('Event GET route', function() {
 
-		it('should create a new comment', async function() {
-
-			let token = await buildToken(preMockUser.username)
+		
+		it('should find an event by id', async function() {
 
 			let eventId;
-			let postId;
-			let userId;
 
 			await EventPlan.findOne({name: 'preMockEvent'})
 			.then(res => {
 				eventId = res.id	
-			})
-			await Post.findOne({title: 'preMockTitle'})
-			.then(res => {
-				postId = res.id
-			})
-			await User.findOne({username: 'preMockUser'})
-			.then(res => {
-				userId = res.id
-			})
-			mockComment.event = eventId;
-			mockComment.postId = postId;
-			mockComment.userId = userId;
-			return chai.request(app)
-			.post('/comments/create')
-			.set('Authorization', `Bearer ${token}`)
-			.set('Application', 'application/json')
-			.set('Content-Type', 'application/json')
-			.send(mockComment)
-			.then(res => {
-				expect(res).to.have.status(200)
-			
-
-			})
-
-		});
-
-	});
-
-
-	describe('Comment Delete Route', function() {
-
-		it('should delete a comment', async function() {
-
-			let comment;
-			await Post.findOne({_id: "000000000000000000000003"})
-			.then(res => {
-				comment = res.comments[0]
-			})
-
+				})
+	
 			let token = await buildToken(preMockUser.username)
 
 			return chai.request(app)
-			.delete(`/comments/delete/${comment.id}`)
-			.set('Authorization', `Bearer ${token}`)
-			.set('Application', 'application/json')
-			.set('Content-Type', 'application/json')
-			.then(res => {
-				expect(res).to.have.status(204)
-			})
-
+				.get(`/events/find/${eventId}`)
+				.set('Authorization', `Bearer ${token}`)
+				.set('Application', 'application/json')
+				.set('Content-Type', 'application/json')
+				.then(res => {
+					expect(res).to.have.status(200)
+					expect(res.body).to.be.an('object')
+					expect(res.body.id).to.eql(eventId)
+				})
+			
 		});
 	});
 
 });
+
+
+
+
+
+
+
+
+
+
 
 

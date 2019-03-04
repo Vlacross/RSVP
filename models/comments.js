@@ -5,7 +5,6 @@ const ObjectId = Schema.Types.ObjectId;
 const Post = require('./posts');
 
 /*comment style schema */
-
 const commentSchema = new Schema({
 	userId: { type: ObjectId, ref: 'User' },
 	postId: {type: ObjectId, ref: 'Post'},
@@ -25,21 +24,23 @@ commentSchema.set('toJSON', {
 
 commentSchema.virtual('listing').get(function () {
 	return this.userId.fullname
-
-	
 });
 
-commentSchema.post('save', function() {
-	Post.findByIdAndUpdate(this.postId, { $push: { 'comments': this.id }})
+commentSchema.post('save', function(next) {
+	return Post.findByIdAndUpdate(this.postId, { $push: { 'comments': this.id }})
   .then(comment => {
-    console.log(comment)
+	  next(comment)
   })
 });
 
-commentSchema.pre('remove', function() {
-	Post.findByIdAndUpdate(this.postId, { $pull: { 'comments': this.id }})
-  
- 
-})
+
+/*Can't seem to fire pre-remove depopulate */
+// commentSchema.pre('remove', function(next) {
+// 	console.log('harharhar')
+// 	 return Post.findByIdAndUpdate(this.postId, { $pull: { 'comments': this.id }})
+// 	.then(post => {
+// 		next(post)
+// 	})
+// })
 
 module.exports = mongoose.model('Comment', commentSchema)

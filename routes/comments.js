@@ -40,10 +40,11 @@ router.post('/create', jsonParser, (req, res) => {
 		postId,
 		event
 	};
+	console.log(comment)
 	CommentPost.create(comment)
 		.then(newComment => {
 			console.log('new commentsial', newComment)
-			res.json(newComment).status(202)
+			res.status(202).json(newComment)
 
 		})
 		.catch(err => {
@@ -51,27 +52,6 @@ router.post('/create', jsonParser, (req, res) => {
 		});
 
 
-});
-
-
-	/*Admin or author only can update details */
-router.put('/details/:id', (req, res) => {
-	if (!req.params.id || !req.body.id || req.body.id !== req.params.id) {
-		let msg = `Incomplete credentials!`
-		console.error(msg)
-		return res.status(400).json(msg).end()
-	}
-
-	const { text, userId } = req.body
-	const newDetails = {
-		text,
-		userId
-	}
-	CommentPost.findByIdAndUpdate(userIdd, { $set: newDetails }, { new: true })
-		.then(updatedComment => {
-			return res.json(updatedComment).status(203).end()
-		})
-		.catch(err => console.log(err, 27))
 });
 
 		/*Admin or author only can delete details */
@@ -83,12 +63,7 @@ router.delete('/delete/:id', (req, res) => {
 	CommentPost.findOne({_id: req.params.id})
 	.then(comment => {
 		console.log(comment.postId)
-		Post.findByIdAndUpdate(comment.postId, { $pull: { 'comments': req.params.id }}, function (err, post) {
-			console.log('pre', post)
-			post.update({ $pull: { 'comments': req.params.id}})
-			console.log('post', post)
-			
-		}
+		return Post.findByIdAndUpdate(comment.postId, { $pull: { 'comments': req.params.id }}
 		)
 	})
 

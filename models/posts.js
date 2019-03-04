@@ -58,26 +58,16 @@ postSchema.pre('findOne', populatePostList);
 
 /*https://github.com/Automattic/mongoose/issues/3054 */
 postSchema.pre('remove', function() {
-	console.log('thissyisis', this)
   let arr = this.comments;
   
   for(let i = 0; i < arr.length; i++) {
     CommentPost.findByIdAndDelete(i)
   }
 
-
-
-
-
   arr.forEach(comment => {
-    console.log(comment)
     CommentPost.findByIdAndDelete(comment)
     })
-    console.log('thisagin', this)
     
- 
-  
- 
-})
+});
 
 module.exports = mongoose.model('Post', postSchema)

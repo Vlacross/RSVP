@@ -1,17 +1,13 @@
-const passport = require('passport')
-const JWT = require('jsonwebtoken')
+const passport = require('passport');
+const JWT = require('jsonwebtoken');
 
 const { Strategy: JwtStrategy } = require('passport-jwt');
 const { ExtractJwt } = require('passport-jwt');
 
 
-const { User } = require('../models')
-const { JWT_SECRET, ALG } = require('../config')
+const { User } = require('../models');
+const { JWT_SECRET, ALG } = require('../config');
 
-
-
-
-/* check for valid jwt ? redirect to app.home : redirect to login(flash msg)*/
 
 var opt = {
 	secretOrKey: JWT_SECRET,
@@ -20,13 +16,11 @@ var opt = {
 };
 
 const jwtStrategy = new JwtStrategy(opt, function (jwt_payload, done) {
-	console.log('made first strat-step')
+
 	User.findOne({ username: jwt_payload.user }, function (err, usr) {
-		console.log('made second strat-step', jwt_payload)
 		if (err) { return done(err, false) };
 		if (usr) { return done(null, usr) }
 		else {
-			console.log('dragger')
 			return done(null, false)
 		};
 	});

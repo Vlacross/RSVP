@@ -11,7 +11,6 @@ function toggleIntro() {
 /*changes the view and prompts login */
 function renderSignIn() {
 
-	console.log('Signing In!');
 	$('.introView').addClass('hidden');
 	$('main').append(introViewSwitch(loginForm))
 	
@@ -21,7 +20,6 @@ function renderSignIn() {
 /*changes the view and prompts for details to create a new user */
 function renderSignUp() {
 
-	console.log('Signing Up!');
 	$('.introView').addClass('hidden');
 	$('main').append(introViewSwitch(eventCheck))
 	
@@ -31,10 +29,9 @@ function renderSignUp() {
 /*changes the view and prompts for details to create an event */
 function createEvent() {
 
-	console.log('invent an Event!')
 	$('.introView').addClass('hidden');
 	$('main').append(introViewSwitch(newEventCheck))
-}
+};
 
 
 function showAppInfo() {
@@ -61,7 +58,7 @@ function checkEvent(route) {
 	let event = {
 		eventName: name
 	}
-	console.log(`Checking eventName @ ${route}`)
+
 	fetch(route, {
 		method: 'post',
 		headers: {
@@ -79,23 +76,22 @@ function checkEvent(route) {
 		 handleIntroFail(type)
 		}
 		if(resj.message === 'true') {
-			console.log('logDog')
+
 		localStorage.setItem('event', JSON.stringify(resj.event))
 		$('.accessView').replaceWith(introViewSwitch(signupForm))
 		}
 	})
 	.catch(err => {
-		console.log('eventFindFail', err)
+
 		let type = 'login'
 		handleFail(type)
 	});
-}
+};
 
 /******************************************************NEW*EVENT*************** */
 
 function buildEvent() {
 
-	// $('.accessView').replaceWith(introViewSwitch(newEventForm(name)))
 	let route;
 	route = 'login/newEvent'
 
@@ -115,7 +111,6 @@ function buildEvent() {
 		contactInfo: contactInfo,
 		summary: description
 	}
-	console.log(newEvent)
 	fetch(route, {
 		method: 'post',
 		headers: {
@@ -137,7 +132,6 @@ function buildEvent() {
 					role: '1',
 					attending: true
 			}
-			console.log(eventAdmin)
 			route = 'login/create'
 			fetch(route, {
 				method: 'post',
@@ -151,7 +145,6 @@ function buildEvent() {
 					if(resj.code === 422) {
 						return promptReject(resj)
 					   }
-					console.log(resj)
 					localStorage.setItem('user', JSON.stringify(resj.user))
 					localStorage.setItem('token', `${resj.token}`)
 					buildHome()
@@ -159,13 +152,10 @@ function buildEvent() {
 
 		})
 		.catch(err => {
-			console.log(err)
-		})
-
-
+			console.err(err)
+		});
 	
-	
-}
+};
 
 
 function checkEventName(route) {
@@ -173,7 +163,7 @@ function checkEventName(route) {
 	let event = {
 		eventName: name
 	}
-	console.log(`Checking eventName @ ${route}`)
+
 	fetch(route, {
 		method: 'post',
 		headers: {
@@ -183,7 +173,7 @@ function checkEventName(route) {
 		body: JSON.stringify(event)})
 	.then(res => res.json())
 	.then(resj => {
-		console.log(resj)
+
 		if(resj.code === 422) {
 			return promptReject(resj)
 		}
@@ -199,30 +189,30 @@ function checkEventName(route) {
 		}
 	})
 	.catch(err => {
-		console.log('eventFindFail', err)
+
 		let type = 'login'
 		handleFail(type)
 	});
-}
+};
 
 function getEventInfo() {
 
 	let user = JSON.parse(localStorage.getItem('user'));
 	let route = `events/find/${user.event}`;
 	let method = 'GET';
-	console.log('route', route)
+
 
 	quickFetch(route, method)
 	.then(res => res.json())
 	.then(resj => {
-		console.log('events', resj)
+
 		$('.viewWrapper').replaceWith(viewSwitch(buildEventDetails(resj)))
 	})
 	.catch(err => {
-		console.log(err)
-	})
 
-}
+	});
+
+};
 
 
 
@@ -233,15 +223,9 @@ function getEventInfo() {
 /********V*******MASTER*ADMIN**********V****************************************************************************************V*MASTER*ADMIN*V*********************** */
 
 
-function accountRemove(accountId) {
-console.log(accountId)
-
-};
-
-
+/* takes Master admin adjustments to change user Roles  */
 function accountManage(route, accountId) {
 
-		console.log(`sending update to ${route}`);
 		let token = localStorage.getItem('token');
 		let role = $('input[name=role]:checked').val()
 		
@@ -250,7 +234,6 @@ function accountManage(route, accountId) {
 			role: role
 		};
 	
-		console.log(updatedUser, 'preUpdate send');
 		fetch(route, {
 			method: 'put',
 			headers: {
@@ -261,58 +244,42 @@ function accountManage(route, accountId) {
 			body: JSON.stringify(updatedUser)
 		})
 		.then(res => {
-			if(res.status === 203)
-			
-			{console.log('udpatedRole!', res.status)
+			if(res.status === 203){
 			let type = 'update'
 			promptSuccess(type)}
 		})
-		.then(resj => {
-			
-			
-		})
 		.catch(err => {
-			console.log('updateFail', err)
 			let type = 'update'
 				handleFail(type)
-				
-			
-				
+	
 		 });
 
 };
-
-
 
 
 /********^*******MASTER*ADMIN**********^****************************************************************************************^*MASTER*ADMIN*^*********************** */
 
 /*********ACCOUNT*********** */
 
-
-
-
-
 /*********deeletes current user account and related data*********** */
 
 function deleteUser(usr) {
 
 	let account = JSON.parse(localStorage.getItem('user'));
-	let user = usr || account;
-	let route = `users/delete/${user.id}`
-	let method = 'delete'
-	console.log(`removing user at ${route}`, user);
+	let user = !usr ? account : usr;
+	let route = `users/delete/${user.id}`;
+	let method = 'delete';
+
 
 	quickFetch(route, method)
 		.then(res => {
-			console.log('deletion suxess!', res.status)
-			if(account.id === usr.id) {
-				logOut()
+
+			if(account.id === user.id) {
+				return	logOut()
 			}
 			showUsers()
 		})
 		.catch(err => {
-			console.log('updateFail', err)
 			let type = 'update'
 			handleFail(type)
 		});
@@ -327,7 +294,6 @@ function deleteUser(usr) {
 
 function signUp(route) {
 
-	console.log(`sending fetch to ${route}`);
 	const fullname = $('.fullNameInput').val();	
 	const userName = $('.userNameInput').val();
 	const pwd = $('.userPassInput').val();
@@ -337,12 +303,11 @@ function signUp(route) {
 		fullname: fullname,
 		username: userName,
 		password: pwd,
-		event: eventName[0].id,
+		event: eventName.id,
 		role: 3,
 		attending: att
 	};
 
-	console.log(createNew, 'preauth newUser send')
 	fetch(route, {
 		method: 'post',
 		headers: {
@@ -353,7 +318,6 @@ function signUp(route) {
 	})
 		.then(res => res.json())
 		.then(resj => {
-			console.log(resj, 'resj.user')
 			if(resj.code === 422) {
 				return promptReject(resj)
 			}
@@ -362,25 +326,16 @@ function signUp(route) {
 			buildHome()
 		})
 		.catch(err => {
-			console.log('loginFail', err)
 			let type = 'post'
 			handleFail(type)
 		});
 };
 
 
-
-
-
-
-
-
-
 /*********updates current user details and info*********** */
 
 function submitEdit(route) {
 
-	console.log(`sending update to ${route}`);
 	let user = JSON.parse(localStorage.getItem('user'));
 	let token = localStorage.getItem('token');
 
@@ -400,7 +355,6 @@ function submitEdit(route) {
 		attending: att
 	};
 
-	console.log(updatedUser, 'preUpdate send');
 	fetch(route, {
 		method: 'put',
 		headers: {
@@ -411,14 +365,13 @@ function submitEdit(route) {
 		body: JSON.stringify(updatedUser)
 	})
 		.then(res => {
-			console.log(res.status)
+
 			return res.json()})
 		.then(resj => {
 			if(resj.code === 422) {
 				let area = 1
 				return $('.viewWrapper').replaceWith(viewSwitch(displayReject(resj, area)))
 			}
-			console.log('update suxess!', resj)
 			localStorage.removeItem('user')
 			localStorage.removeItem('token')
 			localStorage.setItem('user', JSON.stringify(resj.user))
@@ -427,10 +380,8 @@ function submitEdit(route) {
 			promptSuccess(type)
 		})
 		.catch(err => {
-			console.log('updateFail', err)
 			let type = 'update'
 			if(err.message === 'unauthorized') {
-				console.log('handl')
 				 type = 'unauthorized'
 				handleFail(type)
 				return
@@ -480,7 +431,6 @@ function showUsers() {
 			let users = buildUsers(resj)
 			$('.viewWrapper').replaceWith(users)
 		});
-	console.log('showing users list');
 };
 
 /********^*****************^****************************************************************************************^*USER*ACTIONS*^*********************** */
@@ -509,7 +459,6 @@ function shipPost(route) {
 		body: content,
 		event: user.event
 	};
-	console.log(newPost, 'prePost shipment');
 	fetch(route, {
 		method: 'post',
 		headers: {
@@ -521,13 +470,11 @@ function shipPost(route) {
 	})
 		.then(res => res.json())
 		.then(resj => {
-			console.log('update suxess!', resj)
 			localStorage.setItem('postId', resj.id)
 			let type = 'post'
 			promptSuccess(type)
 		})
 		.catch(err => {
-			console.log('postFail', err)
 			let type = 'post'
 			handleFail(type)
 		});
@@ -554,7 +501,6 @@ function buildFeed(arr) {
 function getFeed() {
 
 	let user = JSON.parse(localStorage.getItem('user'))
-	console.log('raving??', user.event)
 	let route = `posts/find/${user.event}`;
 	let method = 'GET';
 	quickFetch(route, method)
@@ -563,7 +509,7 @@ function getFeed() {
 			let thread = buildFeed(resj)
 			$('.viewWrapper').replaceWith(thread)
 		})
-		.catch(err => { console.log(err) });
+		.catch(err => { console.error(err) });
 
 };
 /*********SINGLE*POST*SHOW********** */
@@ -576,40 +522,41 @@ function getPost(postId) {
 	quickFetch(route, method)
 	.then(res => res.json())
 	.then(resj => {
-		console.log('sinlinouts', resj)
 		let singlePost = buildPost(resj)
 		$('.viewWrapper').replaceWith(viewSwitch(singlePost))
 	})
-	.catch(err => { console.log(err) });
+	.catch(err => { console.error(err) });
 	
-}
+};
 
 /*********SINGLE*POST*DELETE********** */
 
 /*removes a post(eventually would like only the author and admin) */
 
 function deletePost(route, postId) {
-	console.log('at deletet')
 	let method = 'delete';
 
 	quickFetch(route, method)
 		.then(res => {
-			console.log('deposter Out', res.status)
 			let type = 'delete'
 			promptSuccess(type)
 		})
-		.catch(err => { console.log(err) });
+		.catch(err => { console.error(err) });
 };
+
 /********^***************^*******************************************************************************^*POST*ACTIONS*^********************************* */
+
 /********V***************V*******************************************************************************V*COMMENT*ACTIONS*V********************************** */
+
 /*********HANDLE*COMMENTS********** */
 
 function createComment() {
-	
+
 	$('.commentsList').append(commentPalette);	
 };
 
 function postComment(route, postId) {
+
 	let user = JSON.parse(localStorage.getItem('user'));
 	let token = localStorage.getItem('token');
 	let text = $('.commentContentInput').val();
@@ -620,7 +567,6 @@ function postComment(route, postId) {
 		postId: postId,
 		event: user.event
 	};
-	console.log(newComment, 'preSnark remark');
 	fetch(route, {
 		method: 'post',
 		headers: {
@@ -632,15 +578,12 @@ function postComment(route, postId) {
 	})
 		.then(res => res.json())
 		.then(resj => {
-			console.log('middleFetch', resj)
 		
-			console.log('update suxess!', resj)
 			let type = 'post'
 			promptSuccess(type)
 
 		})
 		.catch(err => {
-			console.log('updateFail', err)
 			let type = 'post'
 			handleFail(type)
 		});
@@ -651,7 +594,6 @@ function postComment(route, postId) {
 function deleteComment(removalId, postId, authorId) {
 	let route = `comments/delete/${removalId}`;
 	let user = JSON.parse(localStorage.getItem('user'));
-	console.log('route', route);
 	
 	fetch(route, {
 		method: 'delete',
@@ -663,15 +605,12 @@ function deleteComment(removalId, postId, authorId) {
 		body: JSON.stringify()
 	})
 	.then(res => {
-		console.log(res.status)
 		if(res.status === 204) {
-			console.log('depopulation suxess!')
 		let type = 'delete'
 		return promptSuccess(type)
 		}
 	})
 	.catch(err => {
-			console.log('updateFail', err)
 			let type = 'delete'
 			handleFail(type)
 	});
@@ -743,7 +682,6 @@ function promptReject(resj) {
 
 
 function handleFail(type) {
-	console.log('faylin', type)
 	let msg;
 	switch(type) {
 		case 'unauthorized':
@@ -764,7 +702,6 @@ function handleFail(type) {
 };
 
 function handleIntroFail(type) {
-console.log('introFAY', type)
 	let msg;
 	switch(type) {
 		case 'nameTaken':
@@ -772,29 +709,24 @@ console.log('introFAY', type)
 			break;
 		case 'noEvent':
 			msg = eventNotFound;
-			break;
-		// case '':
-		// 	msg = ;
-		// 	break;
-		// case '':
-		// 	msg = ;	
+			break;	
 		};
 
-$('.accessView').replaceWith(introViewSwitch(msg))
+	$('.accessView').replaceWith(introViewSwitch(msg))
 
-$('.failedIntroButton').one('click', function (e) {
-	e.preventDefault();
+	$('.failedIntroButton').one('click', function (e) {
+		e.preventDefault();
 
-	$('.accessView').remove()
-	$('.introView').removeClass('hidden')
-	$('.banner').removeClass('hidden')
-});
+		$('.accessView').remove();
+		$('.introView').removeClass('hidden');
+		$('.banner').removeClass('hidden');
+	});
 
-}
+};
 
 function handleLoginFail() {
 
-	$('.accessView').addClass('hidden')
+	$('.accessView').addClass('hidden');
 
 	$('main').append(failedLogin);
 
@@ -806,7 +738,6 @@ function handleLoginFail() {
 
 
 function routeFail() {
-	console.log('reroute');
 	$('.failedResponse').remove();
 	$('.accessView').removeClass('hidden');
 	$('.userNameInput').val('');
@@ -822,7 +753,6 @@ function routeFail() {
 
 function logOut() {
 
-	console.log('loggingOut!');
 	localStorage.removeItem('token');
 	localStorage.clear();
 	$('.homePageView').remove();
@@ -839,14 +769,12 @@ function logOut() {
 /*Initial User Login */
 function logIn(route) {
 	
-	console.log(`sending fetch to ${route}`);
 	const userName = $('.userNameInput').val();
 	const pwd = $('.userPassInput').val();
 	const logIn = {
 		username: userName,
 		password: pwd
 	};
-	console.log(logIn, 'preauth send')
 	fetch(route, {
 		method: 'post',
 		headers: {
@@ -857,13 +785,11 @@ function logIn(route) {
 	})
 		.then(res => res.json())
 		.then(resj => {
-			console.log(resj, resj.userData)
 			localStorage.setItem('user', JSON.stringify(resj.userData))
 			localStorage.setItem('token', `${resj.token}`)
 			buildHome()
 		})
 		.catch(err => {
-			console.log('loginFail')
 			handleLoginFail()
 		});
 };
@@ -872,7 +798,7 @@ function logIn(route) {
 
 /********V*NAVBAR*V*************************************************************************************************V*NAVBAR*V********************** */
 function handleNav() {
-	console.log('handlinNAV')
+
 	$('body').on('click', 'button.eventDetailsLink', function (e) {
 		e.preventDefault();
 		getEventInfo()
@@ -898,10 +824,10 @@ function handleNav() {
 		createPost()
 	});
 };
+
 /********^*NAVBAR*^**************************************************************************************************^*NAVBAR*^********************** */
 
 /********V*LISTENERS*V**************************************************************************************************V*LISTENERS*V********************** */
-/********^*LISTENERS*^**************************************************************************************************^*LISTENERS*^********************** */
 
 function watchFetchActions() {
 	let route;
@@ -910,17 +836,16 @@ function watchFetchActions() {
 
 	$('body').on('click', 'button.postFormSubmit', function (e) {
 		e.preventDefault();
-		console.log('shipping newPost!')
 		route = 'posts/create'
 		shipPost(route);
 	});
+
 /*STOP POST */
 	/************************ */
 /*START EDIT */
 
 	$('body').on('click', 'button.profileEditButton', function (e) {
 		e.preventDefault();
-		console.log('switching route for update')
 		route = 'users/details'
 		editAccount();
 	});
@@ -930,7 +855,6 @@ function watchFetchActions() {
 	});
 	$('body').on('click', 'button.userDeleteButton', function (e) {
 		e.preventDefault();
-		console.log('This is it ...')
 		deleteUser()
 	});
 	
@@ -942,7 +866,6 @@ function watchFetchActions() {
 
 	$('body').on('click', 'button.introLoginButton', function (e) {
 		e.preventDefault();
-		console.log('switching route for login')
 		route = 'login'
 		renderSignIn();
 	});
@@ -953,7 +876,6 @@ function watchFetchActions() {
 
 	$('body').on('click', 'button.introRegisterButton', function (e) {
 		e.preventDefault();
-		console.log('switching route for user create')
 		renderSignUp();
 	});
 	$('body').on('click', 'button.eventNameButton', function (e) {
@@ -964,19 +886,16 @@ function watchFetchActions() {
 	});
 		$('body').on('click', 'button.signUpSubmit', function (e) {
 		e.preventDefault();
-		
 		route = 'login/create';
 		signUp(route);
 	});
 
 	$('body').on('click', 'button.introCreateEventButton', function (e) {
 		e.preventDefault();
-		console.log('switching route for user create')
 		createEvent()
 	});
 	$('body').on('click', 'button.newEventNameInput', function (e) {
 		e.preventDefault();
-		
 		route = 'login/eventCheck'
 		checkEventName(route);
 	});
@@ -1001,10 +920,8 @@ function watchFetchActions() {
 		toggleAppInfo()
 	});
 
-
-
 /*STOP INTRO */
-}
+};
 
 
 
@@ -1015,7 +932,6 @@ function watchPageActions() {
 	/*success response to home */
 	$('body').on('click', 'button.successResponseButton', function (e) {
 		e.preventDefault();
-		console.log('going to home page!')
 		$('.homePageView').remove()
 		buildHome();
 		localStorage.removeItem('postId')
@@ -1023,7 +939,6 @@ function watchPageActions() {
 	/*failed response to home */
 	$('body').on('click', 'button.failedUpdateButton', function (e) {
 		e.preventDefault();
-		console.log('going to home page!')
 		$('.homePageView').remove()
 		buildHome();
 		localStorage.removeItem('postId')
@@ -1033,22 +948,18 @@ function watchPageActions() {
 		e.preventDefault();
 		postId = $(this).attr('id')
 		localStorage.setItem('postId', postId)
-		console.log('Just Building a home for the console dwarves!', postId)
 		getPost(postId)
 	});
 	/*success response back to post */
 	$('body').on('click', 'button.successResponseReturnButton', function (e) {
 		e.preventDefault();
-		console.log('lets double check what we did...!')
 		postId = localStorage.getItem('postId')
 		getPost(postId);
 		localStorage.removeItem('postId')
-
 	});
 	/*toggle remove create comment form */
 	$('body').on('click', 'button.cancelActionButton', function (e) {
 		e.preventDefault();
-		console.log('backing out, huh?')
 		$('.cancelActionButton').replaceWith(commentButton)
 		$('.palette').remove()
 	});
@@ -1056,13 +967,11 @@ function watchPageActions() {
 	$('body').on('click', 'button.addComment', function (e) {
 		e.preventDefault();
 		$('.addComment').replaceWith(toggleButton)
-		console.log('You may just be a bag full of soil', $(this).siblings())
 		createComment()
 	});
 	/*submit new comment */
 	$('body').on('click', 'button.commentFormSubmit', function (e) {
 		e.preventDefault();
-		console.log('DirtBag', $(this))
 		let route = 'comments/create'
 		postComment(route, postId)
 	});
@@ -1070,7 +979,6 @@ function watchPageActions() {
 		/*comment remove */							/*************************************DELETE */
 	$('body').on('click', 'button.removeComment', function (e) {
 		e.preventDefault();
-		console.log('Just put the Ants in the drawer!')
 		let removalId = $(this).parent().attr('id')
 		let authorId = $(this).parent().attr('data')
 		deleteComment(removalId, postId, authorId)
@@ -1078,26 +986,20 @@ function watchPageActions() {
 	/*post remove */
 	$('body').on('click', 'button.postDeleteButton', function (e) {
 		e.preventDefault();
-		console.log('Just drop the ship then...')
 		route = `posts/delete/${postId}`;
 		deletePost(route, postId)
 	});
 	/*toggles back from update reject */
 	$('body').on('click', 'button.failedRejectButton', function (e) {
 		e.preventDefault();
-		console.log('clickter')
 		getFeed()
 	});
-	
-	
-
 
 /**************************************************************MasterAdmin */
 
 	/*Allows MasterAdmin to change user details and role */
 	$('body').on('click', 'button.userAccountButton', function (e) {
 		e.preventDefault();
-		console.log('administrator managing account')
 		let accountId = $(this).parent().attr('data')
 		route = `users/findOne/${accountId}`
 		method = 'GET'
@@ -1105,7 +1007,6 @@ function watchPageActions() {
 		quickFetch(route, method)
 		.then(res => res.json())
 		.then(resj => {
-			console.log(resj)
 			$('.viewWrapper').replaceWith(viewSwitch(manageAccountProfile(resj)))
 			/*setting radio buttons as value of selected user role */
 			$(`input[name=role][value="${resj.role}"]`).attr('checked', 'checked')
@@ -1114,7 +1015,6 @@ function watchPageActions() {
 	/*submits fetch to update user account */
 	$('body').on('click', 'button.accountManageSubmit', function (e) {
 		e.preventDefault();
-		console.log('managing preFetch')
 		let accountId = $(this).parent().attr('data')
 		route = `users/roles`
 		accountManage(route, accountId)
@@ -1128,7 +1028,6 @@ function watchPageActions() {
 	/*explains itself really... */
 	$('body').on('click', 'button.accountDeleteButton', function (e) {
 		e.preventDefault();
-		console.log('Just drop the ship then...')
 		let accountId = $(this).parent().attr('data')
 		let usr = {id: accountId}
 		deleteUser(usr)
@@ -1139,16 +1038,8 @@ function watchPageActions() {
 /**************************************************************MasterAdmin */
 
 
-
-
-
-
-
 }
 /********^*LISTENERS*^**************************************************************************************************^*LISTENERS*^********************** */
-
-
-
 
 function evalPageState() {
 	/*makes use of stored data on refresh */
@@ -1161,7 +1052,6 @@ function evalPageState() {
 
 
 $(document).ready(function () {
-	console.log('hittingJQscript!')
 	handleNav()
 	watchFetchActions()
 	watchPageActions()
