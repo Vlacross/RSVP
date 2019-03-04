@@ -6,7 +6,6 @@ const bcrypt = require('bcryptjs');
 const EventPlan = require('./events');
 
 /*User Schema */
-
 const userSchema = new Schema({
   fullname: { type: String, require: true },
   username: { type: String, require: true, index: { unique: true } },
@@ -42,7 +41,6 @@ userSchema.pre('save', function (next) {
         return next(err)
       }
 
-      console.log(hash, 11, user.password)
       user.password = hash;
 
       next()
@@ -52,26 +50,20 @@ userSchema.pre('save', function (next) {
 
 userSchema.pre('find', function() {
   this.populate({ path: 'event' });
-})
+});
 
 /*adding user reference from event record */
 userSchema.post('save', function() {
-  // EventPlan.find({_id: this.event}, function(err, event) {
-  //   console.log(event, 33)
-
-  // })
 
   EventPlan.findByIdAndUpdate(this.event, { $push: { 'attendees': this.id }})
   .then(event => {
-    console.log(event)
   })
 });
 
 /*removing user reference from event record */
-userSchema.pre('remove', function() {
+userSchema.post('remove', function() {
   EventPlan.findByIdAndUpdate(this.event, { $pull: { 'attendees': this.id }})
   .then(event => {
-    console.log(event)
   })
 });
 
@@ -86,7 +78,6 @@ userSchema.pre('findOneAndUpdate', function(next) {
   const salt = bcrypt.genSaltSync();
   const hash = bcrypt.hashSync(password, salt);
   this.getUpdate().$set.password = hash
-  console.log(password, hash, 'hookHittin')
   next()
 /*https://github.com/Automattic/mongoose/issues/4575 */
 });

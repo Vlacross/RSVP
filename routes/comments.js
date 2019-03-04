@@ -40,10 +40,11 @@ router.post('/create', jsonParser, (req, res) => {
 		postId,
 		event
 	};
+	console.log(comment)
 	CommentPost.create(comment)
 		.then(newComment => {
 			console.log('new commentsial', newComment)
-			res.json(newComment).status(202)
+			res.status(202).json(newComment)
 
 		})
 		.catch(err => {
@@ -62,12 +63,7 @@ router.delete('/delete/:id', (req, res) => {
 	CommentPost.findOne({_id: req.params.id})
 	.then(comment => {
 		console.log(comment.postId)
-		Post.findByIdAndUpdate(comment.postId, { $pull: { 'comments': req.params.id }}, function (err, post) {
-			console.log('pre', post)
-			post.update({ $pull: { 'comments': req.params.id}})
-			console.log('post', post)
-			
-		}
+		return Post.findByIdAndUpdate(comment.postId, { $pull: { 'comments': req.params.id }}
 		)
 	})
 

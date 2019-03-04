@@ -1,36 +1,36 @@
-const express = require('express')
-const router = express.Router()
-const bodyParser = require('body-parser')
-const jsonParser = bodyParser.json()
-const mongoose = require('mongoose')
-const jwt = require('jsonwebtoken')
+const express = require('express');
+const router = express.Router();
+const bodyParser = require('body-parser');
+const jsonParser = bodyParser.json();
+const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
 
-const jwtStrategy = require('./jwt')
-const localStrategy = require('./local')
+const jwtStrategy = require('./jwt');
+const localStrategy = require('./local');
 
 const passport = require('passport');
-passport.use('local', localStrategy)
-passport.use('JWT', jwtStrategy)
+passport.use('local', localStrategy);
+passport.use('JWT', jwtStrategy);
 const localAuth = passport.authenticate('local', { session: false });
-const jwtAuth = passport.authenticate('JWT', { session: false})
+const jwtAuth = passport.authenticate('JWT', { session: false});
 
-const { JWT_SECRET, ALG, EXP } = require('../config')
-const { User } = require('../models')
+const { JWT_SECRET, ALG, EXP } = require('../config');
+const { User } = require('../models');
 const EventPlan = require('../models/events');
-const { validateEvent, validateAttendance, checkEventName, checkUsername } = require('../Middleware/validators')
+const { validateEvent, checkEventName, checkUsername } = require('../Middleware/validators');
 
 const opts = {
 	algorithm: ALG,
 	expiresIn: EXP
-}
+};
 
 const buildToken = function (user) {
 	return jwt.sign({ user }, JWT_SECRET, opts
 	)
-}
-
+};;
 
 router.use(bodyParser.json())
+
 
 router.post('/', localAuth, (req, res) => {
 	let token = buildToken(req.user.username)
@@ -40,7 +40,8 @@ router.post('/', localAuth, (req, res) => {
 		res.json({ token, userData })
 		
 	})
-})
+});
+
 
 /*Check event before signup */
 router.post('/eventCheck', validateEvent, (req, res) => {
@@ -54,10 +55,10 @@ router.post('/eventCheck', validateEvent, (req, res) => {
 		res.json(succ).status(200).end()
 	})
 	
-})
+});
+
 
 /*Can create a new user account */
-
 router.post('/create', checkUsername, (req, res) => {
 
 	const requiredFields = ['fullname', 'username', 'password', 'event', 'role', 'attending']
@@ -68,7 +69,6 @@ router.post('/create', checkUsername, (req, res) => {
 			message: `Missing ${missing} in header!`,
 			reason: `Missing ${missing} in header!`
 		}
-		console.error(msg)
 		return res.status(400).json(msg).end()
 	}
 
@@ -100,8 +100,6 @@ router.post('/create', checkUsername, (req, res) => {
 			reason: 'Password must be between 10-42 characters'}
 		return res.status(422).json(msg).end()
 	}
-
-	console.log('made it to create!')
 
 	User.create({
 		fullname: full,
@@ -158,8 +156,6 @@ router.post('/newEvent', checkEventName, (req, res) => {
 		})
 
 });
-
-
 
 
 module.exports = router;

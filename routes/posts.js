@@ -16,23 +16,16 @@ const Post = require('../models/posts');
 router.use(bodyParser.json());
 router.use('*', jwtAuth);
 
-router.get('/', (req, res) => {
-	console.log(req.headers)
-	console.log('got to the posts!')
-});
-
 
 /*can search Posts*/
 /*should be available for all accounts */
 router.get('/find/:id', (req, res) => {
-	console.log(req.params.id)
 	Post.find({event: req.params.id})
 		.then(posts => {
 			let list = [];
 			posts.forEach(post => {
 				list.push(post.serialize())
 			})
-			console.log(list.length)
 			res.json(list)
 		})
 	res.status(200)
@@ -71,13 +64,12 @@ router.post('/create', jsonParser, (req, res) => {
 		body,
 		event
 	})
-		.then(newPost => {
-			res.status(202).json(newPost.serialize())
-			
-		})
-		.catch(err => {
-			return res.json(err.message).status(400)
-		})
+	.then(newPost => {
+		res.status(202).json(newPost.serialize())
+	})
+	.catch(err => {
+		return res.json(err.message).status(400)
+	})
 
 });
 
@@ -102,8 +94,8 @@ router.delete('/purgeComments/:id', (req, res) => {
 		})
 	
 	.then(res.status(204).end())
-	.catch(err => console.log(err, 23))
-})
+	.catch(err => console.error(err, 23))
+});
 
 
 router.delete('/delete/:id', (req, res) => {
@@ -118,11 +110,10 @@ router.delete('/delete/:id', (req, res) => {
 
 	Post.findByIdAndDelete(req.params.id)
 		.then(res.status(204).end())
-		.catch(err => console.log(err, 23))
+		.catch(err => console.error(err, 23))
 	
-})
+});
 
 
 module.exports = router
-
 
