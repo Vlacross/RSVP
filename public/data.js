@@ -215,11 +215,11 @@ const loginForm =
 		<input autocomplete="false" name="hidden" type="text" style="display:none;">
 
 
-				<label for="userNameInput">UserId--demoUser: "big"</label>
+				<label for="userNameInput">Username</label>
 					<input id="userNameInput" name="userNameInput" class="userNameInput" type="text" required>
 				
 
-				<label for="userPassInput">PassWord-demoPassword: "ben"	</label>
+				<label for="userPassInput">PassWord</label>
 					<input id="userPassInput" name="userPassInput" class="userPassInput" type="text" required>
 
 					<span class="demoSpanTop">DemoUser: <span class="demoNames">basicUser</span>    DemoPassword: <span class="demoNames">basicPass</span></span>
