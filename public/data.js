@@ -244,7 +244,8 @@ const eventCheck =
 	<input autocomplete="false" name="hidden" type="text" style="display:none;">
 
 	<label for="eventNameCheck" class="eventNameCheckLabel " >Search for an event to sign up for</label>
-		<input id="eventNameInput" name="eventNameInput" class="eventNameInput" type="text">
+		<input id="eventNameInput" name="eventNameInput" class="eventNameInput" type="text" required>
+		<span>DemoEvent: <span class="demoNames">demoEvent</span></span>
 	
 	<div class="eventCheckButtons">
 		<button class="eventNameButton">Find</button>
@@ -261,7 +262,7 @@ const newEventCheck =
 	<input autocomplete="false" name="hidden" type="text" style="display:none;">
 
 	<label for="eventNameInput" class="eventNameCheckLabel " >Pick a name for your event and check for availablility!	</label>
-		<input id="eventNameInput" name="eventNameInput" class="eventNameInput" type="text">
+		<input id="eventNameInput" name="eventNameInput" class="eventNameInput" type="text" required>
 
 
 	<div class="eventCheckButtons">
@@ -283,7 +284,7 @@ const signupForm =
 		<input autocomplete="false" name="hidden" type="text" style="display:none;">
 
 			<label for="fullNameInput" class="fullNameLabel event" >FullName</label>
-				<input id="fullNameInput" name="fullNameInput" class="fullNameInput event" type="text">
+				<input id="fullNameInput" name="fullNameInput" class="fullNameInput event" type="text" required>
 			
 
 				<label for="userNameInput" class="userNameInputLabel event">UserName</label>
@@ -320,7 +321,6 @@ function newEventForm(name) {
 	let m = date.getMonth();
 	let d = date.getDate();
 	let today = `${y} + "-" + ${m} + "-" + ${d}`
-	console.log(today)
 
 	let eventForm =
 
@@ -399,6 +399,8 @@ let homePage =
 	`
 	<section class="homePageView">
 
+	<div class="menuTab"><span class="tabText">MENU</span></div>
+
 					<nav class="siteNav">
 
 						<button type="submit" class="eventNewsfeedLink navButton" name="eventNewsfeedLink">Event News Feed</button>
@@ -449,7 +451,6 @@ function usersListing(usr) {
 
 function accountProfile() {
 	let user = JSON.parse(localStorage.getItem('user'));
-	console.log(user, "inprof");
 	let { fullname, username, attending, joinDate } = user;
 	let since = new Date(joinDate).toDateString();
 	
@@ -595,6 +596,8 @@ return detailPage;
 
 function constructPost() {
 
+	let columns = $(window).width() < 500 ? 30 : 40
+
 	const newPostForm =
 		`
 	<form class="postForm">
@@ -607,7 +610,7 @@ function constructPost() {
 	</label>
 
 											<label for="content-input">Content:
-	<textarea class="eventPostContentInput" cols="40" rows="10" type="text" name="content-input"></textarea>
+	<textarea class="eventPostContentInput" cols="${columns}" rows="10" type="text" name="content-input"></textarea>
 											</label>
 
 											<button class="postFormSubmit" type="submit">Post</button>
@@ -635,7 +638,7 @@ function eventPost(post, count) {
 									</div>
 
 									<div class="subPost">
-										<h3>By: ${author}</h3>
+										<h3 class="postAuthor">By: ${author}</h3>
 										<p>Posted on ${date}</p>
 									</div>
 
@@ -653,7 +656,6 @@ function eventPost(post, count) {
 
 function buildPost(post) {
 	let { title, author, body, comments, id, createdAt } = post;
-	console.log('commies');
 	let remarks = generateRemarks(comments);
 	let date = new Date(createdAt).toDateString();
 
@@ -726,7 +728,6 @@ function buildComment(comment) {
 	let date = new Date(createdAt).toDateString()
 
 	let user = JSON.parse(localStorage.getItem('user'))
-	console.log('lsiting id', comment)
 
 	let deleteButton =
 
