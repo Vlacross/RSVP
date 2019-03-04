@@ -2,9 +2,7 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const expect = chai.expect;
 const mongoose = require('mongoose');
-const faker = require('faker');
-const DB = mongoose.connection;
-const bcrypt = require('bcryptjs')
+const bcrypt = require('bcryptjs');
 
 const { MONGODB_URI_TEST } = require('../config');
 
@@ -18,27 +16,10 @@ const seedPosts = require('../db/posts');
 const seedUsers = require('../db/users');
 const seedComments = require('../db/comments');
 
-
-chai.use(chaiHttp)
-
+chai.use(chaiHttp);
 
 const { app } = require('../server');
 
-
-var existingUser = {
-	username: "user1",
-	password: "password1"
-};
-
-var badUsername = {
-	username: "nonexistant",
-	password: "password1"
-};
-
-var badPassword = {
-	username: "user1",
-	password: "nonexistant"
-};
 
 var mockUser = {
 	fullname: 'mockFull',
@@ -56,13 +37,12 @@ var mockUserUpdate = {
 	event: '242424242424242424242424',
 	role: 3,
 	attending: 'false'
-}
+};
 
 var mockUserPromoteRole = {
 	role: 1
-}
+};
 
-var mockEmptyUser = {};
 
 describe('all userRoute actions', function() {
 
@@ -70,8 +50,7 @@ describe('all userRoute actions', function() {
 	before(function () {
 		console.log('mounting DB: ', MONGODB_URI_TEST)
 		return mongoose.connect(MONGODB_URI_TEST, { useNewUrlParser: true })
-
-	})
+	});
 
 	beforeEach(function () {
 
@@ -101,27 +80,26 @@ describe('all userRoute actions', function() {
 		return mongoose.disconnect();
 	});
 
-describe('user route basic interactions', function () {
+
+describe('User route basic interactions', function () {
 
 
-
-	it('should perform a Unit test', function () {
+	it('should prove Unit functions', function () {
 
 		return User.find()
 			.then(function (res) {
 				expect(res).to.be.an('array')
 			})
-	})
+	});
 
 
-	it('should perform a simple integration test', function () {
+	it('should return Unauthorized without proper credentials', function () {
 		return chai.request(app)
 			.get('/users')
 			.then(function (res) {
-				console.log(res.text)
 				expect(res.text).to.be.eql('Unauthorized')
 			})
-	})
+	});
 
 	it('should return token and user data', function () {
 
@@ -129,25 +107,23 @@ describe('user route basic interactions', function () {
 			.post('/login/create')
 			.send(mockUser)
 			.then(res => {
-				console.log(res.body)
 				expect(res.body).to.include.keys('token', 'user')
 			})
 	});
 
 });
 
-describe('User Get routes', function () {
 
+describe('User Get routes', function () {
 
 
 	it('should return Unauthorized without valid JWT', function () {
 		return chai.request(app)
 			.get('/users')
 			.then(function (res) {
-				console.log(res.text)
 				expect(res.text).to.be.eql('Unauthorized')
 			})
-	})
+	});
 
 	it('should return a single user', function () {
 
@@ -164,7 +140,6 @@ describe('User Get routes', function () {
 					.set('Application', 'application/json')
 					.set('Content-Type', 'application/json')
 					.then(res => {
-						console.log(res.body)
 						expect(res.body).to.be.a('object')
 						expect(res.body).to.not.be.an('array')
 						expect(res.body).to.contain.keys('id', 'fullname', 'username', 'event', 'attending', 'createdAt', 'role')
@@ -190,8 +165,6 @@ describe('User Get routes', function () {
 					.set('Application', 'application/json')
 					.set('Content-Type', 'application/json')
 					.then(res => {
-						console.log(res.body[0])
-						console.log(res.body[0].event.id)
 						expect(res.body).to.be.an('array')
 						expect(res.body[0]).to.be.an('object')
 						expect(res.body[0]).to.contain.keys('id', 'fullname', 'username', 'event', 'attending', 'joinDate', 'role')
@@ -201,11 +174,10 @@ describe('User Get routes', function () {
 			})
 	});
 
-})
+});
+
 
 describe('User Put routes', function () {
-
-
 
 
 	it('should update a single user and return updated data and token', function () {
@@ -241,7 +213,6 @@ describe('User Put routes', function () {
 			.then(res => {
 				let token = res.body.token
 				mockUserPromoteRole.id = res.body.user.id
-				console.log(mockUserUpdate)
 				return chai.request(app)
 					.put(`/users/roles/`)
 					.set('Authorization', `Bearer ${token}`)
@@ -255,7 +226,6 @@ describe('User Put routes', function () {
 							.set('Application', 'application/json')
 							.set('Content-Type', 'application/json')
 							.then(res => {
-								console.log(res.body)
 								expect(res).to.have.status(200)
 								expect(res.body).to.be.a('object')
 								expect(res.body.role).to.eql(mockUserPromoteRole.role)
@@ -267,11 +237,11 @@ describe('User Put routes', function () {
 			})
 	});
 
-})
+});
+
 
 describe('User delete route', function () {
 
-	
 
 	it('should delete a single user', function () {
 
@@ -295,22 +265,8 @@ describe('User delete route', function () {
 
 
 
-})
-
-
-
 });
 
 
-
-
-
-
-
-
-
-
-
-
-
+});
 

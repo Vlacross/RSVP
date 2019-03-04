@@ -2,9 +2,7 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const expect = chai.expect;
 const mongoose = require('mongoose');
-const faker = require('faker');
-const DB = mongoose.connection;
-const bcrypt = require('bcryptjs')
+const bcrypt = require('bcryptjs');
 
 const { MONGODB_URI_TEST } = require('../config');
 
@@ -18,23 +16,14 @@ const seedPosts = require('../db/posts');
 const seedUsers = require('../db/users');
 const seedComments = require('../db/comments');
 
-
-chai.use(chaiHttp)
-
+chai.use(chaiHttp);
 
 const { app } = require('../server');
 
 
-
-
-
-
-
-
-
 var nameOnlyEvent = {
 	name: 'eventless'
-}
+};
 
 var mockEvent = {
 	name: 'mockEvent',
@@ -103,13 +92,14 @@ var nonExistantEventName = {
 /********************************************************************************************************************************USER*CREATE************* */
 
 
-describe('all user route actions', function () {
+describe('User route actions', function () {
 
 	before(function () {
 		console.log('mounting DB: ', MONGODB_URI_TEST)
 		return mongoose.connect(MONGODB_URI_TEST, { useNewUrlParser: true, useCreateIndex: true })
 
-	})
+	});
+
 	beforeEach(function () {
 
 		console.info('Dropping Database');
@@ -132,18 +122,17 @@ describe('all user route actions', function () {
 				console.error(err);
 			});
 	});
+
 	after(function () {
 		console.log('dismounting DB')
 		return mongoose.disconnect();
 	});
 
-	/*User create fails work properly        */
-	describe('user Create field validation', function () {
+	
+	describe('User Create field validation', function () {
 
 
-
-		it('should perform a Unit test', function () {
-
+		it('shuold prove Unit functions properly', function () {
 			return User.find()
 				.then(function (res) {
 					expect(res).to.be.an('array')
@@ -212,13 +201,12 @@ describe('all user route actions', function () {
 				.then(function (res) {
 					expect(res.text).to.be.eql('Unauthorized')
 				})
-		})
+		});
 
 	});
 
-	/*user create success works properly */
-	describe('user create success', function () {
 
+	describe('user create success', function () {
 
 
 		it('should create a new user', function () {
@@ -227,7 +215,6 @@ describe('all user route actions', function () {
 				.post('/login/create')
 				.send(mockUser)
 				.then(res => {
-					console.log(res.body)
 					expect(res).to.have.status(200)
 				})
 		});
@@ -239,7 +226,6 @@ describe('all user route actions', function () {
 				.post('/login/create')
 				.send(mockUser)
 				.then(res => {
-					console.log(res.body)
 					expect(res.body).to.include.keys('token', 'user')
 				})
 		});
@@ -276,7 +262,7 @@ describe('all user route actions', function () {
 					expect(res.body.user.event).to.be.eql(mockUser.event)
 					expect(res.body.user).to.not.contain.keys('password')
 				})
-		})
+		});
 
 	})
 	/********************************************************************************************************************************USER*CREATE************* */
@@ -321,7 +307,6 @@ describe('all user route actions', function () {
 	// 			.post('/login/')
 	// 			.send(existingUser)
 	// 			.then(res => {
-	// 				console.log(res.body)
 	// 				expect(res).to.have.status(200)
 	// 				expect(res.body).to.contain.keys('token', 'userData')
 	// 				expect(res.body.token).to.be.a('string')
@@ -342,7 +327,6 @@ describe('all user route actions', function () {
 		// 			.post('/login/')
 		// 			.send(existingUser)
 		// 			.then(res => {
-		// 				console.log(res.status)
 		// 				expect(res.body).to.contain.keys('token', 'userData')
 		// 				expect(res.body.token).to.be.a('string')
 		// 			})
@@ -397,14 +381,12 @@ describe('all user route actions', function () {
 	describe('event name validation', function () {
 
 
-
 		it('should fail when event name starts with whiteSpace', function () {
 
 			return chai.request(app)
 				.post('/login/eventCheck')
 				.send(whiteSpaceStart)
 				.then(res => {
-
 					expect(res).to.have.status(422)
 					expect(res.body.message).to.be.eql('WhiteSpace found in credentials! Username and password can\'t start or end with a space!')
 				})
@@ -416,7 +398,6 @@ describe('all user route actions', function () {
 				.post('/login/eventCheck')
 				.send(whiteSpaceEnd)
 				.then(res => {
-
 					expect(res).to.have.status(422)
 					expect(res.body.message).to.be.eql('WhiteSpace found in credentials! Username and password can\'t start or end with a space!')
 				})
@@ -428,7 +409,6 @@ describe('all user route actions', function () {
 				.post('/login/eventCheck')
 				.send(nonExistantEventName)
 				.then(res => {
-
 					expect(res).to.have.status(200)
 					expect(res.body.message).to.eql('false')
 				})
@@ -440,7 +420,6 @@ describe('all user route actions', function () {
 				.post('/login/eventCheck')
 				.send(existingEventName)
 				.then(res => {
-
 					expect(res).to.have.status(200)
 					expect(res.body.message).to.eql('true')
 					expect(res.body).to.contain.keys('message', 'event')
@@ -453,12 +432,10 @@ describe('all user route actions', function () {
 				.post('/login/eventCheck')
 				.send(existingEventName)
 				.then(res => {
-
 					expect(res.body.event.name).to.eql(existingEventName.eventName)
 					expect(res.body.event).to.contain.keys('attendees', 'name', 'host', 'dateOfEvent', 'contactInfo', 'summary', 'createdAt', 'id')
 				})
 		});
-
 
 
 	})
@@ -498,7 +475,6 @@ describe('all user route actions', function () {
 						.post('/login/newEvent')
 						.send(mockEvent)
 						.then(res => {
-
 							expect(res).to.have.status(422)
 							expect(res).to.be.an('object')
 							expect(res.body.message).to.eql('Event name already exists')
@@ -512,7 +488,6 @@ describe('all user route actions', function () {
 				.post('/login/newEvent')
 				.send(emptyEvent)
 				.then(res => {
-
 					expect(res).to.has.status(400)
 					expect(res.body.message).to.eql('No name is given')
 				})
@@ -524,7 +499,6 @@ describe('all user route actions', function () {
 				.post('/login/newEvent')
 				.send(nameOnlyEvent)
 				.then(res => {
-
 					expect(res).to.have.status(422)
 					expect(res.body.message).to.eql('Missing host,dateOfEvent,contactInfo,summary in header!')
 				})
@@ -542,7 +516,6 @@ describe('all user route actions', function () {
 				.post('/login/newEvent')
 				.send(mockEvent)
 				.then(res => {
-					console.log(res.body, res.status)
 					expect(res).to.have.status(200)
 					expect(res.body).to.be.an('object')
 					expect(res.body).to.contain.keys('id', 'name', 'host', 'dateOfEvent', 'contactInfo', 'attendees', 'createdAt', 'summary')
@@ -551,11 +524,7 @@ describe('all user route actions', function () {
 		});
 
 
-
-
-
-
-	})
+	});
 
 
 });

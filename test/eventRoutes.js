@@ -4,7 +4,7 @@ const expect = chai.expect;
 const mongoose = require('mongoose');
 const faker = require('faker');
 const DB = mongoose.connection;
-const bcrypt = require('bcryptjs')
+const bcrypt = require('bcryptjs');
 
 const { MONGODB_URI_TEST } = require('../config');
 
@@ -19,36 +19,22 @@ const seedUsers = require('../db/users');
 const seedComments = require('../db/comments');
 
 
-chai.use(chaiHttp)
-
+chai.use(chaiHttp);
 
 const { app } = require('../server');
 
-
-
 const jwt = require('jsonwebtoken')
-const { JWT_SECRET, ALG, EXP } = require('../config')
+const { JWT_SECRET, ALG, EXP } = require('../config');
 
 
 const opts = {
 	algorithm: ALG,
 	expiresIn: EXP
-}
-
-
+};
 
 const buildToken = function (user) {
 	return jwt.sign({ user }, JWT_SECRET, opts
 	)
-}
-
-
-var mockEvent = {
-	name: 'mockEvent',
-	host: 'mockHost',
-	dateOfEvent: new Date(),
-	contactInfo: 'mock@mock.com',
-	summary: 'mockSummary'
 };
 
 
@@ -79,15 +65,14 @@ var preMockUser = {
 };
 
 
-
-describe('event routes actions', function() {
+describe('Event routes actions', function() {
 
 
 	before(function () {
 
 		console.log('mounting DB: ', MONGODB_URI_TEST)
 		return mongoose.connect(MONGODB_URI_TEST, { useNewUrlParser: true })
-	})
+	});
 
 	beforeEach(function () {
 
@@ -104,8 +89,8 @@ describe('event routes actions', function() {
 					User.insertMany(seedUsers),
 					CommentPost.insertMany(seedComments),
 					EventPlan.insertMany(seedEvents),
-					User.create(preMockUser),
-					EventPlan.create(preMockEvent)
+					EventPlan.create(preMockEvent),
+					User.create(preMockUser)
 				]);
 			})
 			.catch(err => {
@@ -120,47 +105,37 @@ describe('event routes actions', function() {
 	});
 
 
-	describe('post route basic interactions', function () {
+
+	describe('Event route basic interactions', function () {
 
 	
-
-		it('should return fail', function () {
+		it('should prove unit functions', function () {
 	
 			return EventPlan.find()
 				.then(function (res) {
 					expect(res).to.be.an('array')
 				})
-		})
+		});
 	
 	
-		it('should perform a simple integration test', function () {
+		it('should return unauthorized without credentials', function () {
 			return chai.request(app)
-				.get('/posts')
+				.get('/events')
 				.then(function (res) {
-					console.log(res.text)
 					expect(res.text).to.be.eql('Unauthorized')
-				})
-		})
-	
-		it('should return token and user data', function () {
-	
-			return chai.request(app)
-				.post('/login/create')
-				.send(mockUser)
-				.then(res => {
-					console.log(res.body)
-					expect(res.body).to.include.keys('token', 'user')
 				})
 		});
 	
 	});
 
-	describe('event GET route', function() {
+
+	describe('Event GET route', function() {
 
 		
-		it.only('should find an event by id', async function() {
+		it('should find an event by id', async function() {
 
 			let eventId;
+
 			await EventPlan.findOne({name: 'preMockEvent'})
 			.then(res => {
 				eventId = res.id	
@@ -168,33 +143,21 @@ describe('event routes actions', function() {
 	
 			let token = await buildToken(preMockUser.username)
 
-		return chai.request(app)
-			.get(`/events/find/${eventId}`)
-			.set('Authorization', `Bearer ${token}`)
-			.set('Application', 'application/json')
-			.set('Content-Type', 'application/json')
-			.then(res => {
-				console.log(res.body)
-				expect(res).to.have.status(200)
-				expect(res.body).to.be.an('object')
-				expect(res.body.id).to.eql(eventId)
-			})
-	
-	
-		})
-	
-	
-	
-	
-	
-	})
+			return chai.request(app)
+				.get(`/events/find/${eventId}`)
+				.set('Authorization', `Bearer ${token}`)
+				.set('Application', 'application/json')
+				.set('Content-Type', 'application/json')
+				.then(res => {
+					expect(res).to.have.status(200)
+					expect(res.body).to.be.an('object')
+					expect(res.body.id).to.eql(eventId)
+				})
+			
+		});
+	});
 
-
-
-
-
-
-})
+});
 
 
 
