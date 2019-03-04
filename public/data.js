@@ -320,7 +320,6 @@ function newEventForm(name) {
 	let m = date.getMonth();
 	let d = date.getDate();
 	let today = `${y} + "-" + ${m} + "-" + ${d}`
-	console.log(today)
 
 	let eventForm =
 
@@ -449,7 +448,6 @@ function usersListing(usr) {
 
 function accountProfile() {
 	let user = JSON.parse(localStorage.getItem('user'));
-	console.log(user, "inprof");
 	let { fullname, username, attending, joinDate } = user;
 	let since = new Date(joinDate).toDateString();
 	
@@ -653,7 +651,6 @@ function eventPost(post, count) {
 
 function buildPost(post) {
 	let { title, author, body, comments, id, createdAt } = post;
-	console.log('commies');
 	let remarks = generateRemarks(comments);
 	let date = new Date(createdAt).toDateString();
 
@@ -726,7 +723,6 @@ function buildComment(comment) {
 	let date = new Date(createdAt).toDateString()
 
 	let user = JSON.parse(localStorage.getItem('user'))
-	console.log('lsiting id', comment)
 
 	let deleteButton =
 
