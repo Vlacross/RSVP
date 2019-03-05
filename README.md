@@ -1,5 +1,4 @@
 <h1> <a href="https://rsvp-no-regrets.herokuapp.com">RSVP</a> </h1>
-<a id="backToTop"></a>
 
 <p>Applied Technologies: Javascript, JQuery, Express, Mongoose</p>
 
@@ -23,7 +22,6 @@
 
 
 <section id="screenShots">
-<a href="backToTop">Back to the Top</a>
   <h2>ScreenShots</h2>
 
 <h3>App Info</h3>
@@ -87,7 +85,6 @@
 
 <section class="apiRoutes">
 <a id="apiRoutes"><h1>API Routes</h1></a>
-<a href="backToTop">Back to the Top</a>
 
 <p>The api for the app has 5 main routes from the server root</p>
 <h2>Root(/)</h2>
