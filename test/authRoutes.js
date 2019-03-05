@@ -34,7 +34,7 @@ var mockEvent = {
 };
 
 var existingEvent = {
-	name: 'testEvent',
+	name: 'demoEvent',
 	host: 'benji',
 	datOfEvent: 'day after sept 41st',
 	contactInfo: 'benjo@bens.jee',
@@ -80,7 +80,7 @@ var whiteSpaceEnd = {
 };
 
 var existingEventName = {
-	eventName: "testEvent"
+	eventName: "demoEvent"
 };
 
 var nonExistantEventName = {
@@ -426,7 +426,7 @@ describe('User route actions', function () {
 				})
 		});
 
-		it('should sufficient, matching data based on given name', function () {
+		it('should return sufficient, matching data based on given name', function () {
 
 			return chai.request(app)
 				.post('/login/eventCheck')
