@@ -1,5 +1,7 @@
 <h1> <a href="https://rsvp-no-regrets.herokuapp.com">RSVP</a> </h1>
 
+<a id="backToTop"></a>
+
 <p>Applied Technologies: Javascript, JQuery, Express, Mongoose</p>
 
 <p>Simple app to assist in event planning and coordinating.</p>
@@ -85,6 +87,7 @@
 
 
 <section class="apiRoutes">
+
 <a id="apiRoutes"><h1>API Routes</h1></a>
 <a href="#backToTop">Back to the Top</a>
 
@@ -118,8 +121,10 @@
 
 
 <h3>API Routes Tree</h3>
+
 <img src="https://github.com/Vlacross/RSVP/blob/master/public/siteImages/apitTreeDoc.png?raw=true" alt="api-routes-in-terminal-tree-diagram">
 
+<a href="#backToTop">Back to the Top</a>
 </section>
 
 
