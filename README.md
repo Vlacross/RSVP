@@ -3,11 +3,11 @@ s<h1> <a href="https://rsvp-no-regrets.herokuapp.com">RSVP</a> </h1>
 <p>Applied Technologies: Javascript, JQuery, Express, Mongoose</p>
 
 <p>Simple app to assist in event planning and coordinating.</p>
-
-<a href="#userRoles">User Roles</a>
-<a href="#screenShots">ScreenShots</a>
-<a href="#apiRoutes">API Docs</a>
-
+<ul>
+<li><a href="#userRoles">User Roles</a></li>
+<li><a href="#screenShots">ScreenShots</a></li>
+<li><a href="#apiRoutes">API Docs</a></li>
+</ul>
 <section id="userRoles">
 <h2>User Roles</h2>
 
