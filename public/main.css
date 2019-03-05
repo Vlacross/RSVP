@@ -446,6 +446,16 @@ a:hover {
     width: 80%;
 }
 
+.updateFieldset {
+    display: flex;
+    flex-direction: column;
+    border-radius: 12px;
+    box-shadow: 0 0 15px black;
+    padding: 12px;
+    margin: 8px;
+    width: 92%;
+}
+
 
 /*********************************accountProfile****/
 
