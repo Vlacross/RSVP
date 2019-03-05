@@ -22,10 +22,7 @@
 
 
 <section id="screenShots">
-<<<<<<< HEAD
-=======
 <a href="#backToTop">Back to the Top</a>
->>>>>>> 4a52e5c363997c8e209f36214adaddf646af9b67
   <h2>ScreenShots</h2>
 
 <h3>App Info</h3>
@@ -89,10 +86,7 @@
 
 <section class="apiRoutes">
 <a id="apiRoutes"><h1>API Routes</h1></a>
-<<<<<<< HEAD
-=======
 <a href="#backToTop">Back to the Top</a>
->>>>>>> 4a52e5c363997c8e209f36214adaddf646af9b67
 
 <p>The api for the app has 5 main routes from the server root</p>
 <h2>Root(/)</h2>
