@@ -28,22 +28,18 @@ router.post('/create', jsonParser, (req, res) => {
 		console.error(msg)
 		return res.status(400).json(msg).end()
 	}
-	console.log(missing)
 
 	/*add validation for user/author */
 
 	const { text, userId, postId, event } = req.body
-	console.log('made it to create!')
 	const comment = {
 		text,
 		userId,
 		postId,
 		event
 	};
-	console.log(comment)
 	CommentPost.create(comment)
 		.then(newComment => {
-			console.log('new commentsial', newComment)
 			res.status(202).json(newComment)
 
 		})
@@ -62,7 +58,6 @@ router.delete('/delete/:id', (req, res) => {
 	};
 	CommentPost.findOne({_id: req.params.id})
 	.then(comment => {
-		console.log(comment.postId)
 		return Post.findByIdAndUpdate(comment.postId, { $pull: { 'comments': req.params.id }}
 		)
 	})
