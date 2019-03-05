@@ -183,6 +183,7 @@ button:hover {
 .introPageFieldset {
     padding: 8px;
     border: none;
+    align-items:center;
 }
 
 .introPageButton {
@@ -197,7 +198,7 @@ button:hover {
 .accessFieldset {
     display: flex;
     flex-direction: column;
-    align-content: center;
+    align-items: center;
 }
 
 .toggleIntro {

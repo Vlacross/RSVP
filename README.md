@@ -1,4 +1,4 @@
-s<h1> <a href="https://rsvp-no-regrets.herokuapp.com">RSVP</a> </h1>
+<h1> <a href="https://rsvp-no-regrets.herokuapp.com">RSVP</a> </h1>
 
 <p>Applied Technologies: Javascript, JQuery, Express, Mongoose</p>
 
@@ -8,8 +8,9 @@ s<h1> <a href="https://rsvp-no-regrets.herokuapp.com">RSVP</a> </h1>
 <li><a href="#screenShots">ScreenShots</a></li>
 <li><a href="#apiRoutes">API Docs</a></li>
 </ul>
-<section id="userRoles">
-<h2>User Roles</h2>
+<section>
+<a id="userRoles"><h2>User Roles</h2></a>
+
 
 
 <p>MaterAdmin account role becomes so on creation of a new event. Has the ability to delete users, create and delete posts and comments.</p>
@@ -82,8 +83,9 @@ s<h1> <a href="https://rsvp-no-regrets.herokuapp.com">RSVP</a> </h1>
 </section>
 
 
-<section id="apiRoutes">
-<h1>API Routes</h1>
+<section class="apiRoutes">
+<a id="apiRoutes"><h1>API Routes</h1></a>
+
 <p>The api for the app has 5 main routes from the server root</p>
 <h2>Root(/)</h2>
 
