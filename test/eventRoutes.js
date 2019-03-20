@@ -79,7 +79,7 @@ describe('Event routes actions', function() {
 		console.log('Dropping Database');
 		 return mongoose.connection.db.dropDatabase()
 			.then(() => {
-				Promise.all(seedUsers.map(user => bcrypt.hash(user.password, 10)));
+				return Promise.all(seedUsers.map(user => bcrypt.hash(user.password, 10)));
 			})
 			.then(function(digests) {
 				seedUsers.forEach((user, i) => user.password = digests[i]);
@@ -113,7 +113,6 @@ describe('Event routes actions', function() {
 
 			return EventPlan.find()
 				.then(function(res) {
-					console.log(res)
 					expect(res).to.be.an('array')
 				})
 		});
@@ -135,27 +134,27 @@ describe('Event routes actions', function() {
 		
 		it('should find an event by id', function() {
 
-			let eventId;
+				let eventId;
 
-			EventPlan.findOne({name: 'preMockEvent'})
-			.then(res => {
-				eventId = res.id	
-				})
-	
-			let token = buildToken(preMockUser.username)
-
-			return chai.request(app)
-				.get(`/events/find/${eventId}`)
-				.set('Authorization', `Bearer ${token}`)
-				.set('Application', 'application/json')
-				.set('Content-Type', 'application/json')
+				EventPlan.findOne({name: 'preMockEvent'})
 				.then(res => {
-					expect(res).to.have.status(200)
-					expect(res.body).to.be.an('object')
-					expect(res.body.id).to.eql(eventId)
+					eventId = res.id	
+
+					let token = buildToken(preMockUser.username)
+
+					return chai.request(app)
+					.get(`/events/find/${eventId}`)
+					.set('Authorization', `Bearer ${token}`)
+					.set('Application', 'application/json')
+					.set('Content-Type', 'application/json')
+						.then(res => {
+							expect(res).to.have.status(200)
+							expect(res.body).to.be.an('object')
+							expect(res.body.id).to.eql(eventId)
+						})
+					
+					});
 				})
-			
-		});
 	});
 
 });
