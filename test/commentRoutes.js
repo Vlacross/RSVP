@@ -139,9 +139,9 @@ describe('Comment routes actions', function() {
 
 	
 
-		it('should prove unit functions', function () {
+		it('should prove unit functions', async function () {
 	
-			return CommentPost.find()
+			return await CommentPost.find()
 				.then(function (res) {
 					expect(res).to.be.an('array')
 				})

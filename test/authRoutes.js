@@ -451,12 +451,6 @@ describe('User route actions', function () {
 	describe('new event validation', function () {
 
 
-
-
-		it('should', function () {
-
-		});
-
 		it('should perform a Unit test', function () {
 
 			return EventPlan.find()

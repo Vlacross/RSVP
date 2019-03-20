@@ -72,14 +72,14 @@ describe('Event routes actions', function() {
 
 		console.log('mounting DB: ', MONGODB_URI_TEST)
 		return mongoose.connect(MONGODB_URI_TEST, { useNewUrlParser: true })
-	});
+	})
 
 	beforeEach(function () {
 
-		console.info('Dropping Database');
-		return mongoose.connection.db.dropDatabase()
+		console.log('Dropping Database');
+		 return mongoose.connection.db.dropDatabase()
 			.then(() => {
-				return Promise.all(seedUsers.map(user => bcrypt.hash(user.password, 10)));
+			return	Promise.all(seedUsers.map(user => bcrypt.hash(user.password, 10)));
 			})
 			.then((digests) => {
 				seedUsers.forEach((user, i) => user.password = digests[i]);
@@ -91,13 +91,13 @@ describe('Event routes actions', function() {
 					EventPlan.insertMany(seedEvents),
 					EventPlan.create(preMockEvent),
 					User.create(preMockUser)
-				]);
+				])
 			})
 			.catch(err => {
 				console.error(`ERROR: ${err.message}`);
 				console.error(err);
-			});
-	});
+			})
+	})
 
 	after(function () {
 		console.log('dismounting DB')
@@ -110,9 +110,10 @@ describe('Event routes actions', function() {
 
 	
 		it('should prove unit functions', function () {
-	
+
 			return EventPlan.find()
-				.then(function (res) {
+				.then(function(res) {
+					console.log(res)
 					expect(res).to.be.an('array')
 				})
 		});
@@ -132,16 +133,16 @@ describe('Event routes actions', function() {
 	describe('Event GET route', function() {
 
 		
-		it('should find an event by id', async function() {
+		it('should find an event by id', function() {
 
 			let eventId;
 
-			await EventPlan.findOne({name: 'preMockEvent'})
+			EventPlan.findOne({name: 'preMockEvent'})
 			.then(res => {
 				eventId = res.id	
 				})
 	
-			let token = await buildToken(preMockUser.username)
+			let token = buildToken(preMockUser.username)
 
 			return chai.request(app)
 				.get(`/events/find/${eventId}`)

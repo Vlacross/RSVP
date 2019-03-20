@@ -84,9 +84,10 @@ describe('all userRoute actions', function() {
 describe('User route basic interactions', function () {
 
 
-	it('should prove Unit functions', function () {
+	it('should prove Unit functions', async function () {
 
-		return User.find()
+		
+		return await User.find()
 			.then(function (res) {
 				expect(res).to.be.an('array')
 			})

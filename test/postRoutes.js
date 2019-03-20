@@ -97,9 +97,9 @@ describe('post route basic interactions', function () {
 
 	
 
-	it('should prove Unit function', function () {
+	it('should prove Unit function', async function () {
 
-		return Post.find()
+		return await Post.find()
 			.then(function (res) {
 				expect(res).to.be.an('array')
 			})
