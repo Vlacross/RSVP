@@ -79,9 +79,9 @@ describe('Event routes actions', function() {
 		console.log('Dropping Database');
 		 return mongoose.connection.db.dropDatabase()
 			.then(() => {
-			return	Promise.all(seedUsers.map(user => bcrypt.hash(user.password, 10)));
+				Promise.all(seedUsers.map(user => bcrypt.hash(user.password, 10)));
 			})
-			.then((digests) => {
+			.then(function(digests) {
 				seedUsers.forEach((user, i) => user.password = digests[i]);
 				console.log('Seeding database')
 				return Promise.all([
