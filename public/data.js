@@ -25,11 +25,11 @@ function quickFetch(route, method) {
 
 
 function viewSwitch(currentView) {
-
+	
 	let viewWrap =
-		`
-<section class="viewWrapper">${currentView}</section>
-`;
+	`
+	<section class="viewWrapper">${currentView}</section>
+	`;
 	return viewWrap;
 };
 
@@ -169,6 +169,16 @@ var unauthorizedAccess =
 	<h3>looks like you entered incorrect credentials!</h3>
 	<p>Check your spelling and try again! </p>
 	<button class="failedUpdateButton" name="unauthorizedButton">Retry</button>
+</section>
+`;
+
+/*popup with details on returned fail */
+var protectedAccount =
+	`<section class="failedUpdate prompt" >
+	<h1>Woops!</h1>
+	<h3>This account is protected!</h3>
+	<p>You can not alter this account!</p>
+	<button class="failedUpdateButton" name="failedUpdate">Retry</button>
 </section>
 `;
 

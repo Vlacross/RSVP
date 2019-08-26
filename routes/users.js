@@ -127,6 +127,20 @@ router.put('/roles', (req, res) => {
 		return res.status(400).json(msg).end()
 	}
 
+	User.findById(id)
+		.then(user => {
+			if (user.username === "big" || user.username === "basicUser") {
+				msg = {
+					code: 418,
+					message: `${user.username} is a protected account, can not alter!`,
+					reason: `${user.username} is a protected account, can not alter!`
+				}
+				console.error(msg)
+				return res.status(400).json(msg).end()
+			}
+		})
+		.catch(err => { console.log(err, 21.5)})
+
 	User.findByIdAndUpdate(id, { $set: { role: parseInt(role) } }, { new: true })
 		.then(updatedUser => {
 			return res.status(203).end()
@@ -140,13 +154,20 @@ router.delete('/delete/:id', (req, res) => {
         return res.status(400).end()
     };
     const userId = req.params.id;
-    // console.log(userId)
 	
-	// EventPlan
-	// Post.findByIdAndUpdate(postId, { $push: { 'comments': commentId } }, { new: true })
-	// 	.then(updatedPost => {
-	// 		return res.json(updatedPost.serialize()).status(203).end()
-	// 	})
+		User.findById(userId)
+		.then(user => {
+			if (user.username === "big" || user.username === "basicUser") {
+				msg = {
+					code: 418,
+					message: `${user.username} is a protected account, can not alter!`,
+					reason: `${user.username} is a protected account, can not alter!`
+				}
+				console.error(msg)
+				return res.status(400).json(msg).end()
+			}
+		
+		
    
     Post.find({author: userId})
         .then(posts => {
@@ -166,6 +187,8 @@ router.delete('/delete/:id', (req, res) => {
 		 usr.remove()
 	 })
 	.then(res.status(204).end()) 
+	})
+	.catch(err => { console.log(err, 21.5)})
 });
 
 

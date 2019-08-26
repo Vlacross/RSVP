@@ -243,10 +243,15 @@ function accountManage(route, accountId) {
 			},
 			body: JSON.stringify(updatedUser)
 		})
+		.then(res => res.json())
 		.then(res => {
 			if(res.status === 203){
 			let type = 'update'
 			promptSuccess(type)}
+			if(res.status === 418) {
+				let type = 'protected'
+				handleFail(type)
+			}
 		})
 		.catch(err => {
 			let type = 'update'
@@ -270,14 +275,24 @@ function deleteUser(usr) {
 	let route = `users/delete/${user.id}`;
 	let method = 'delete';
 
+	
+
 
 	quickFetch(route, method)
+		.then(res => res.json())
 		.then(res => {
 
-			if(account.id === user.id) {
+			if(res.code === 418) {
+				let type = 'protected'
+				handleFail(type)
+			}
+
+			 else if(account.id === user.id) {
 				return	logOut()
 			}
-			showUsers()
+			else {
+				showUsers()
+			}
 		})
 		.catch(err => {
 			let type = 'update'
@@ -695,6 +710,8 @@ function handleFail(type) {
 			break;
 		case 'delete':
 			msg = failedDelete;	
+		case 'protected':
+			msg = protectedAccount;
 		};
 
 		$('.viewWrapper').replaceWith(viewSwitch(msg))
