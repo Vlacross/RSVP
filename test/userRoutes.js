@@ -258,7 +258,7 @@ describe('User delete route', function () {
 					.set('Application', 'application/json')
 					.set('Content-Type', 'application/json')
 					.then(res => {
-						expect(res).to.have.status(204)
+						expect(res).to.have.status(203)
 					})
 
 			})
