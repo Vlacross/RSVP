@@ -243,16 +243,24 @@ function accountManage(route, accountId) {
 			},
 			body: JSON.stringify(updatedUser)
 		})
-		.then(res => res.json())
 		.then(res => {
 			if(res.status === 203){
 			let type = 'update'
-			promptSuccess(type)}
-			if(res.status === 418) {
-				let type = 'protected'
-				handleFail(type)
+			promptSuccess(type)
 			}
+
+			else {
+				return res.json()
+				.then(res => {
+					if(res.code === 418) {
+					let type = 'protected'
+					handleFail(type)
+					}
+				})
+			}
+
 		})
+		
 		.catch(err => {
 			let type = 'update'
 				handleFail(type)

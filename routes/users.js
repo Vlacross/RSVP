@@ -138,14 +138,14 @@ router.put('/roles', (req, res) => {
 				console.error(msg)
 				return res.status(400).json(msg).end()
 			}
+			
+			User.findByIdAndUpdate(id, { $set: { role: parseInt(role) } }, { new: true })
+			.then(updatedUser => {
+				return res.status(203).end()
+			})
+			
 		})
 		.catch(err => { console.log(err, 21.5)})
-
-	User.findByIdAndUpdate(id, { $set: { role: parseInt(role) } }, { new: true })
-		.then(updatedUser => {
-			return res.status(203).end()
-		})
-		.catch(err => console.log(err, 22))
 });
 
 router.delete('/delete/:id', (req, res) => {
@@ -186,7 +186,7 @@ router.delete('/delete/:id', (req, res) => {
 		 }
 		 usr.remove()
 	 })
-	.then(res.status(204).end()) 
+	.then(res.status(203).end()) 
 	})
 	.catch(err => { console.log(err, 21.5)})
 });
