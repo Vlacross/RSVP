@@ -5,7 +5,8 @@
   "main": "schema.js",
   "scripts": {
     "test": "mocha --timeout 5000 --exit",
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev": "NODE_ENV=development nodemon server.js"
   },
   "author": "",
   "license": "ISC",
