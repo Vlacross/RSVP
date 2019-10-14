@@ -409,7 +409,11 @@ let homePage =
 	`
 	<section class="homePageView">
 
-	<div class="menuTab"><span class="tabText">MENU</span></div>
+	<div class="menuTab">
+    <input type="button" class="menuTab menuTab-button" style="border-radius: 50%; position: absolute; left: -5%; top: -6%; border: none; background: none; margin: 0px;">
+    	<span class="tabText">MENU</span>
+		</input>
+	</div>
 
 					<nav class="siteNav">
 
