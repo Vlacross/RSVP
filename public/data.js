@@ -226,21 +226,33 @@ const loginForm =
 
 
 				<label for="userNameInput">Username</label>
-					<input id="userNameInput" name="userNameInput" class="userNameInput" type="text" required>
+					<input id="userNameInput" name="userNameInput" class="userNameInput loginput" type="text" required>
 				
 
 				<label for="userPassInput">PassWord</label>
-					<input id="userPassInput" name="userPassInput" class="userPassInput" type="text" required>
+					<input id="userPassInput" name="userPassInput" class="userPassInput loginput" type="password" required> 
+					<button id="pw-show" class="pw-show">Show</button>
+					
+					<div class="demo-login-legend">
+						<div class="login-legend-auto">
+							<input class="autofill basic" type="button" value="autofill">
+							<input class="autofill admin" type="button" value="autofill">
+						</div>
 
-					<span class="demoSpanTop">DemoUser: <span class="demoNames">basicUser</span>    DemoPassword: <span class="demoNames">basicPass</span></span>
-					<span class="demoSpanBottom">DemoAdmin: <span class="demoNames">big</span>         DemoAdminPass: <span class="demoNames">ben</span></span>
-			
+						<div class="demo-login-legend-text" >
+							<span class="demoSpanTop">DemoUser: <span class="demoNames">basicUser</span></span> 
+							<span class="demoSpanTop">DemoPassword: <span class="demoNames">basicPass</span></span>
+							
+							<span class="demoSpanBottom">DemoAdmin: <span class="demoNames">big</span></span>
+							<span class="demoSpanBottom">DemoAdminPass: <span class="demoNames">ben</span></span>
+						</div>
+					</div>
 
-				<button class="loginSubmit" type="submit" name="submitButton">Submit</button>
+				<button class="loginSubmit login-button" type="submit" name="submitButton">Submit</button>
 					
 	</fieldset>
 		<div class="loginBackButton">
-					<button class="toggleIntro" type="submit" name="toggleIntro">Back</button>
+					<button class="toggleIntro login-button" type="submit" name="toggleIntro">Back</button>
 		</div>		
 	</div>
 </form>

@@ -17,6 +17,21 @@ function renderSignIn() {
 	/*listens for 'loginSubmit' */
 };
 
+/*autofills username and password fields with demo account info*/
+function autoFill(account) {
+	$('.userNameInput').val(account.username)
+	$('.userPassInput').val(account.password)
+	/*listens for 'autofill' */
+};
+
+/*toggles password-hide on login*/
+function togglePass() {
+	let type = $('.userPassInput').attr('type') === 'text' ? 'password' : 'text';
+	$('.userPassInput').attr('type', type)
+	/*listens for '' */
+};
+
+
 /*changes the view and prompts for details to create a new user */
 function renderSignUp() {
 
@@ -923,6 +938,15 @@ function watchFetchActions() {
 	$('body').on('click', 'button.loginSubmit', function (e) {
 		e.preventDefault();
 		logIn(route);
+	});
+	$('body').on('click', 'input.autofill', function (e) {
+		e.preventDefault();
+		let account = this.classList.contains('basic') ? { username: 'basicUser', password: 'basicPass' } : { username: 'big', password: 'ben' };
+		autoFill(account)
+	});
+	$('body').on('click', 'button.pw-show', function (e) {
+		e.preventDefault();
+		togglePass()
 	});
 
 	$('body').on('click', 'button.introRegisterButton', function (e) {

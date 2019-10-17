@@ -9,7 +9,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* background-color: rgba(0, 0, 0, 0.815); */
+    margin: 0;
     background-color: rgba(255, 255, 255, 0.931);
     
 }
@@ -38,6 +38,7 @@ fieldset {
 
 fieldset input {
     margin: 4px;
+    width: 300pxheight  35px
 }
 
 .demoNames {
@@ -96,6 +97,7 @@ button {
     background-color: rgba(143, 0, 0, 0.801);
     color: rgb(216, 217, 253);
     font-weight: 700;
+    font-size: 1.2em;
 }
 
 button:hover {
@@ -191,7 +193,7 @@ button:focus {
 }
 
 .accessView {
-    width: 80%;
+    width: 100%;
    
 }
 
@@ -199,10 +201,7 @@ button:focus {
     display: flex;
     flex-direction: column;
     align-items: center;
-}
-
-.toggleIntro {
-
+    border: none;
 }
 
 .authForm {
@@ -225,6 +224,58 @@ button:focus {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.loginput {
+    font-weight: 700;
+    font-size: 1em;
+    width: 300px;
+    height: 35px;
+}
+
+.login-button {
+    width: 300px;
+}
+
+#pw-show {
+    width: 100px;
+    margin-top: 10px;
+}
+
+.demo-login-legend {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    flex-direction: row;
+    width: 100%;
+    justify-content: center;
+}
+
+.demo-login-legend-text {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+}
+
+.login-legend-auto {
+    width: 35%;
+    display: flex;
+    border: none;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: flex-end;
+}
+
+.autofill {
+    width: 80px;
+    height: 35px;
+    border-radius: 8px;
+    background-color: rgba(143, 0, 0, 0.801);
+    color: rgb(216, 217, 253);
+    font-weight: 700;
+    font-size: 1.2em;
 }
 
 .accessFieldsetDiv {
@@ -666,10 +717,10 @@ a:hover {
         max-width: 180px;
     }
 
-    button {
+    /* button {
         width: 96%;
         margin: 3% 2% 0% 2%; 
-    }
+    } */
 
     .commentFormSubmit {
         width: 100%;
@@ -682,7 +733,7 @@ a:hover {
 
     .introButton {
         width: 30%;
-        height: 25px;
+        /* height: 25px; */
         border-radius: 8px;
         margin-bottom: 8%;
     }
@@ -779,13 +830,24 @@ a:hover {
         font-size: 3em;
     }
 
+    .accessFieldset {
+        border: none;
+    }
+
+    .demo-login-legend-text {
+        width: 70%;
+    }
+    
+    .login-legend-auto {
+        width: 30%;
+    }
  
 }
 
 
 @media only screen and (max-width: 400px) {
 
-
+   
 
 
 }
