@@ -375,8 +375,9 @@ fieldset[class~="event"] {
 
 .navButton {
     width: 100px;
-    height: 4%;
+    height: 45px;
     margin-top: 20%;
+    font-size: 1em;
 }
 
 .menuTab {
@@ -675,6 +676,7 @@ a:hover {
     }
 
     .navButton {
+        font-size: 1.2em;
         width: 80%;
         height: 10%;
         margin-top: 4%;
