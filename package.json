@@ -21,7 +21,7 @@
     "js-yaml": "^3.13.1",
     "jsonwebtoken": "^8.5.1",
     "mocha": "^6.1.4",
-    "mongoose": "^5.6.4",
+    "mongoose": "^5.7.7",
     "morgan": "^1.9.1",
     "nbd": "^0.2.2",
     "ndb": "^1.1.3",
