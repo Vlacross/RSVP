@@ -61,10 +61,11 @@ router.delete('/delete/:id', (req, res) => {
 		return Post.findByIdAndUpdate(comment.postId, { $pull: { 'comments': req.params.id }}
 		)
 	})
+	.catch(err => console.log(err))
 
 	CommentPost.findByIdAndRemove(req.params.id)
-		.then(res.status(204).end()
-		)
+		.then(res.status(204).end() )
+		.catch(err => console.log(err))
 });
 
 module.exports = router

@@ -71,7 +71,7 @@ describe('Event routes actions', function() {
 	before(function () {
 
 		console.log('mounting DB: ', MONGODB_URI_TEST)
-		return mongoose.connect(MONGODB_URI_TEST, { useNewUrlParser: true })
+		return mongoose.connect(MONGODB_URI_TEST, { useUnifiedTopology: true, useNewUrlParser: true, useFindAndModify: false, useCreateIndex: true })
 	})
 
 	beforeEach(function () {

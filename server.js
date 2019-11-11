@@ -37,7 +37,12 @@ app.use(morgan(
 let server;
 
 function runServer() {
-	mongoose.connect(MONGODB_URI, { useNewUrlParser: true, autoIndex: false }, err => {
+	mongoose.connect(MONGODB_URI, { 
+		useUnifiedTopology: true, 
+		useNewUrlParser: true, 
+		useFindAndModify: false, 
+		useCreateIndex: true, 
+		autoIndex: false }, err => {
 		if (err) {Test
 			console.log(err)
 			reject(err)

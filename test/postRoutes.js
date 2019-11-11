@@ -60,7 +60,11 @@ describe('post route actions', function() {
 
 	before(function () {
 		console.log('mounting DB: ', MONGODB_URI_TEST)
-		return mongoose.connect(MONGODB_URI_TEST, { useNewUrlParser: true })
+		return mongoose.connect(MONGODB_URI_TEST, { useUnifiedTopology: true, useNewUrlParser: true, useFindAndModify: false, useCreateIndex: true })
+		.catch(err => {
+			console.error(`ERROR: ${err.message}`);
+			console.error(err);
+		});
 
 	})
 	beforeEach(function () {
@@ -87,7 +91,11 @@ describe('post route actions', function() {
 	});
 	after(function () {
 		console.log('dismounting DB')
-		return mongoose.disconnect();
+		return mongoose.disconnect()
+		.catch(err => {
+			console.error(`ERROR: ${err.message}`);
+			console.error(err);
+		});
 	});
 
 
