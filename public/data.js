@@ -3,10 +3,21 @@ let body;
 let comments;
 let title;
 let date;
+let checkInt;
 
 let fullname;
 let username;
 let password;
+
+let today = () => {
+	let date = new Date()
+	let y = date.getFullYear();
+	let m = date.getMonth() + 1;
+	let d = date.getDate();
+	let today = `${y}-${m}-${d}`
+
+	return today;
+}
 
 
 function quickFetch(route, method) {
@@ -248,7 +259,7 @@ const loginForm =
 						</div>
 					</div>
 
-				<button class="loginSubmit login-button" type="submit" name="submitButton">Submit</button>
+				<button class="loginputsubmit login-button" type="submit" name="submitButton">Submit</button>
 					
 	</fieldset>
 		<div class="loginBackButton">
@@ -337,12 +348,112 @@ const signupForm =
 
 
 /*form for creating a new event-- follows after creating host account / master admin */
+
+function validateForm() {
+	let form = $('.authform');
+	let inputList = $('.authForm :input').serializeArray().splice(1);
+	let submitButton = $('.newEventSubmit');
+
+	let inputs = {
+		eDate: () => ($('.dateOfEventInput')),
+		eDesc: () => ($('.eventDescriptionInput')),
+		eFull: () => ($('.fullNameInput')),
+		eUser: () => ($('.userNameInput')),
+		ePass: () => ($('.userPassInput')),
+		eCont: () =>($('.userContactInfoInput'))
+	}
+
+	submitButton.attr('disabled', true);
+
+	let dateCheck = (date) => (date >= today())
+	let emailFormat = () => (/^[A-Za-z\d\.\-]+@+[A-Za-z\d\.\-]+(\.)+[A-Za-z\d\.\-]+$/g.test( inputs.eCont().val() ) ? true : false);
+	let lengthCheck = (val, num) => (val.length >= num);
+
+	let updateStatus = function() {
+
+		let inputValidationStatus = {
+			eDate: (dateCheck(inputs.eDate().val()) && inputs.eDate().removeClass('invalid')),
+			eDesc: (lengthCheck(inputs.eDesc().val(), 4) && inputs.eDesc().removeClass('invalid')),
+			eFull: (lengthCheck(inputs.eFull().val(), 4) && inputs.eFull().removeClass('invalid')),
+			eUser: (lengthCheck(inputs.eUser().val(), 4) && inputs.eUser().removeClass('invalid')),
+			ePass: (lengthCheck(inputs.ePass().val(), 4) && inputs.ePass().removeClass('invalid')),
+			eCont: (emailFormat(inputs.eCont()) && lengthCheck(inputs.eCont().val(), 4) && inputs.eCont().removeClass('invalid'))
+		}
+
+		return inputValidationStatus;
+	}
+
+	function enableSubmit() {
+		let stat = updateStatus();
+		console.log(stat)
+		let allInputs = Object.keys(stat).length;
+		for (let k in stat) {
+			if(!stat[k]) {
+				submitButton.attr('disabled', true);
+			}else {
+				allInputs--
+			}
+			if(allInputs === 0) {
+				submitButton.attr('disabled', false)
+			}
+		}
+		return stat;
+	}
+
+	checkInt = window.setInterval(enableSubmit, 500)
+	/*window.clearInterval(checkInt); */
+
+	function errorMsg(input) {
+		switch(input) {
+			case 'eDate':
+				return 'Invalid date!';
+				break;
+			case 'eDesc':
+				return 'Description must contain at least 4 characters!';
+				break;
+			case 'eFull':
+				return 'Fullname must contain at least 4 characters!';
+				break;
+			case 'eUser':
+				return 'Username must contain at least 4 characters!';
+				break;
+			case 'ePass':
+				return 'Password must contain at least 4 characters!';
+				break;
+			case 'eCont':
+				return 'Invalid email format!';
+				break;
+		}
+	}
+	
+	
+
+	function invalidate(input, msg){
+		console.log(msg)
+		input.addClass('invalid')
+		submitButton.attr('disabled', true)
+		input.next().text(msg)
+	}
+
+	Object.keys(inputs).forEach(key => {
+		inputs[key]()[0].onblur = function() {
+			let status =  updateStatus()
+			let msg = errorMsg(key)
+			!status[key] && invalidate(inputs[key](), msg)
+			
+		}
+
+		inputs[key]()[0].onfocus = function(e) {
+			e.preventDefault();
+			inputs[key]().next().empty()
+		}
+
+	})
+
+};
+
+
 function newEventForm(name) {
-	let date = new Date()
-	let y = date.getFullYear();
-	let m = date.getMonth();
-	let d = date.getDate();
-	let today = `${y} + "-" + ${m} + "-" + ${d}`
 
 	let eventForm =
 
@@ -358,12 +469,12 @@ function newEventForm(name) {
 
 				
 				<label for="dateOfEventInput" class="dateOfEventLabel event">Choose a date for your event: </label>
-					<input id="dateOfEventInput" name="dateOfEventInput" class="dateOfEventInput event" type="date" min="${today}" required>
-				
+					<input id="dateOfEventInput" name="dateOfEventInput" class="dateOfEventInput event" type="date" min="${today()}" required>
+					<span id="eDate-error" class="input-error"></span>
 
 				<label for="eventDescriptionInput" class="eventDescriptionLabel event">Add a quick description about your event: </label>
 					<input id="eventDescriptionInput" name="eventDescriptionInput" class="eventDescriptionInput event" type="text" required>
-				
+					<span id="eDesc-error" class="input-error"></span>
 
 			</div>
 
@@ -372,30 +483,35 @@ function newEventForm(name) {
 				<h2>Enter details for your new account!</h2>
 
 				<label for="fullNameInput" class="fullNameLabel event" >FullName</label>
-					<input id="fullNameInput" name="fullNameInput" class="fullNameInput event" type="text">
-				
+					<input id="fullNameInput" name="fullNameInput" class="fullNameInput event" type="text" autocomplete="nope">
+					<span id="fName-error" class="input-error"></span>
+
 
 				<label for="userNameInput" class="userNameLabel event">UserName</label>
-					<input id="userNameInput" name="userNameInput" class="userNameInput event" type="text" required>
-				
+					<input id="userNameInput" name="userNameInput" class="userNameInput event" type="text" autocomplete="nope" required>
+					<span id="uName-error" class="input-error"></span>
+
 
 				<label for="userPassInput" class="userPassLabel event">PassWord </label>
-					<input id="userPassInput" name="userPassInput" class="userPassInput event" type="text" required>
-				
+					<input id="userPassInput" name="userPassInput" class="userPassInput event" type="text" autocomplete="nope" required>
+					<span id="uPass-error" class="input-error"></span>
+
 
 				<label for="userContactInfoInput" class="userContactInfoLabel event">Enter an e-mail</label>
-					<input id="userContactInfoInput" name="userContactInfoInput" class="userContactInfoInput event" type="email" required>
-				
+					<input id="userContactInfoInput" name="userContactInfoInput" class="userContactInfoInput event" type="email" autocomplete="nope" required>
+					<span id="uCon-error" class="input-error"></span>
+
 				</div>
 
 
 						<button class="newEventSubmit event" type="submit" name="newEventSubmit">Submit</button>
 	</fieldset>
 				<div class="loginBackButton">
-					<button class="toggleIntro" type="submit" name="toggleIntro">Back</button>
+					<button class="toggleIntro new-event-back" type="submit" name="toggleIntro">Back</button>
 				</div>
 </form>
 `;
+
 
 	return eventForm;
 }

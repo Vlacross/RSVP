@@ -114,10 +114,21 @@ button:focus {
     font-size: 2em;
 }
 
+.input-error {
+    height: 30px;
+    font-size: 0.8em;
+    font-weight: 700;
+    color: red;
+}
+
 .eventCheck {
     display: flex;
     flex-direction: column;
     text-align: center;
+}
+
+.invalid {
+    box-shadow: 0 0 5px red inset;
 }
 
 .eventCheckButtons {

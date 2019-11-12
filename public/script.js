@@ -196,7 +196,7 @@ function checkEventName(route) {
 		if(resj.message === 'false') {
 			$('.banner').addClass('hidden')
 			$('.accessView').replaceWith(introViewSwitch(newEventForm(name)))
-			
+			validateForm()
 		}
 		if(resj.message === 'true') {
 			let type = 'nameTaken'
@@ -976,8 +976,15 @@ function watchFetchActions() {
 	});
 	$('body').on('click', 'button.newEventSubmit', function (e) {
 		e.preventDefault()
+		window.clearInterval(checkInt);
+		console.log('clearing ints')
 		$('.banner').removeClass('hidden')
 		buildEvent();
+	});
+	$('body').on('click', 'button.new-event-back', function (e) {
+		e.preventDefault()
+		window.clearInterval(checkInt);
+		console.log('clearing ints')
 	});
 	
 
