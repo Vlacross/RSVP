@@ -955,7 +955,7 @@ function watchFetchActions() {
 	});
 	$('body').on('click', 'button.event-autofill', function (e) {
 		e.preventDefault();
-		let event = $('.eventNameInput').val() === '' ? 'testEvent' : 'demoEvent';
+		let event = $('.eventNameInput').val() === '' ? 'demoEvent' : 'Woops, You\'ll have to empty this box now ';
 		/*Woops, You'll have to empty this box now */
 		console.log(event)
 		$('.eventNameInput').val(event);
