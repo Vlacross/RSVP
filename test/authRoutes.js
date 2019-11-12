@@ -168,7 +168,7 @@ describe('User route actions', function () {
 				})
 		});
 
-		it('should reject username under 6 letters', function () {
+		it('should reject username under 5 letters', function () {
 			mockUser.username = 'user'
 
 			return chai.request(app)
@@ -177,7 +177,7 @@ describe('User route actions', function () {
 				.then(res => {
 					expect(res).to.be.an('object')
 					expect(res.body.code).to.be.eql(422)
-					expect(res.body.message).to.eql('Username must be between 6-14 characters')
+					expect(res.body.message).to.eql('Username must be between 5-14 characters')
 				})
 		});
 
@@ -190,7 +190,7 @@ describe('User route actions', function () {
 				.then(res => {
 					expect(res).to.be.an('object')
 					expect(res.body.code).to.be.eql(422)
-					expect(res.body.message).to.eql('Username must be between 6-14 characters')
+					expect(res.body.message).to.eql('Username must be between 5-14 characters')
 				})
 		});
 
