@@ -17,7 +17,7 @@ const jwtAuth = passport.authenticate('JWT', { session: false});
 const { JWT_SECRET, ALG, EXP } = require('../config');
 const { User } = require('../models');
 const EventPlan = require('../models/events');
-const { validateEvent, checkEventName, checkUsername } = require('../Middleware/validators');
+const { validateEventName, validateUserDetails, checkEventName, checkUsername } = require('../Middleware/validators');
 
 const opts = {
 	algorithm: ALG,
@@ -43,8 +43,8 @@ router.post('/', localAuth, (req, res) => {
 });
 
 
-/*Check event before signup */
-router.post('/eventCheck', validateEvent, (req, res) => {
+/*Check event existance before signup */
+router.post('/eventCheck', validateEventName, (req, res) => {
 
 	EventPlan.findOne({name: req.body.eventName})
 	.then(event => {
@@ -59,47 +59,10 @@ router.post('/eventCheck', validateEvent, (req, res) => {
 
 
 /*Can create a new user account */
-router.post('/create', checkUsername, (req, res) => {
+router.post('/create', checkUsername, validateUserDetails, (req, res) => {
 
-	const requiredFields = ['fullname', 'username', 'password', 'event', 'role', 'attending']
-	let missing = requiredFields.filter(field => (!req.body[field]))
-	if (missing.length > 0) {
-		msg = {
-			code: 422,
-			message: `Missing ${missing} in header!`,
-			reason: `Missing ${missing} in header!`
-		}
-		return res.status(400).json(msg).end()
-	}
-
-	const trimmed = ['username', 'password'];
-	let untrimmed = trimmed.find(field => req.body[field].trim() !== req.body[field])
-	if(untrimmed) {
-		let msg = {
-			code: 422,
-			message: "whiteSpace found in credentials! Username and password can't start or end with a space!",
-			reason: 'whiteSpace found in user/pass'}
-		return res.status(400).json(msg).end()
-	}
-	
 	const { fullname: full, username: user, password: pass, event, role, attending } = req.body
 
-	if(user.length <= 5 || user.length >= 15) {
-		let msg = {
-			code: 422,
-			message: 'Username must be between 6-14 characters',
-			reason: 'Username must be between 6-14 characters'}
-		return res.status(422).json(msg).end()
-	}
-
-	
-	if(pass.length <=7 || user.length >= 43) {
-		let msg = {
-			code: 422,
-			message: 'Password must be between 10-42 characters',
-			reason: 'Password must be between 10-42 characters'}
-		return res.status(422).json(msg).end()
-	}
 
 	User.create({
 		fullname: full,

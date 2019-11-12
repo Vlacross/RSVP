@@ -6,7 +6,7 @@ const EventPlan = require('../models/events');
 const User = require('../models/users');
 
 /*write express middleware here */
-validateEvent = function (req, res, next) {
+let validateEventName = function (req, res, next) {
 
     let name = req.body.eventName
 
@@ -44,7 +44,77 @@ validateEvent = function (req, res, next) {
       })
   };
 
-  checkEventName = function (req, res, next) {
+
+
+  
+  let validateUserDetails = function(req, res, next) {
+    
+    let returnPackage = {
+      fullname: req.body.fullname || '',
+      username: req.body.username || '',
+      event: req.body.event || '',
+      role: req.body.role || '',
+      attending: req.body.attending || ''
+    }
+    
+    const requiredFields = ['fullname', 'username', 'password', 'event', 'role', 'attending']
+    let missing = requiredFields.filter(field => (!req.body[field]))
+    if (missing.length > 0) {
+      msg = {
+        code: 422,
+        message: `Missing ${missing} in header!`,
+        reason: `Missing ${missing} in header!`,
+        details: returnPackage,
+        attending: req.body.attending || ''
+      }
+		return res.status(400).json(msg).end()
+	}
+
+	const trimmed = ['username', 'password'];
+	let untrimmed = trimmed.find(field => req.body[field].trim() !== req.body[field])
+	if(untrimmed) {
+    let msg = {
+      code: 422,
+			message: "whiteSpace found in credentials! Username and password can't start or end with a space!",
+      reason: 'whiteSpace found in user/pass',
+      details: returnPackage,
+      attending: req.body.attending || ''
+    }
+      return res.status(400).json(msg).end()
+	}
+	
+  const { fullname: full, username: user, password: pass, event, role, attending } = req.body
+  
+
+
+	if(user.length <= 4 || user.length >= 15) {
+    let msg = {
+			code: 422,
+			message: 'Username must be between 5-14 characters',
+      reason: 'Username must be between 5-14 characters',
+      details: returnPackage,
+      attending: req.body.attending || ''
+    }
+		return res.status(422).json(msg).end()
+	}
+
+	
+	if(pass.length <=4 || pass.length >= 43) {
+		let msg = {
+			code: 422,
+			message: 'Password must be between 5-42 characters',
+      reason: 'Password must be between 5-42 characters',
+      details: returnPackage,
+      attending: req.body.attending || ''
+    }
+		return res.status(422).json(msg).end()
+  }
+  
+  return next()
+
+}
+
+  let checkEventName = function (req, res, next) {
     
     let name = req.body.name
 
@@ -69,7 +139,7 @@ validateEvent = function (req, res, next) {
       })
   };
 
-  validateAttendance = function (req, res, next) {
+  let validateAttendance = function (req, res, next) {
     let name = req.body.eventName
     let userId = req.body.id
 
@@ -90,7 +160,7 @@ validateEvent = function (req, res, next) {
         })
   };
 
-  checkUsername = function(req, res, next) {
+  let checkUsername = function(req, res, next) {
     let user = req.body.username
 
     return User.findOne({username: user}, function(err, user) {
@@ -112,4 +182,4 @@ validateEvent = function (req, res, next) {
   };
 
 
-module.exports = { validateEvent, validateAttendance, checkEventName, checkUsername }
+module.exports = { validateEventName, validateAttendance, checkEventName, checkUsername, validateUserDetails }
