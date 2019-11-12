@@ -196,7 +196,7 @@ function checkEventName(route) {
 		if(resj.message === 'false') {
 			$('.banner').addClass('hidden')
 			$('.accessView').replaceWith(introViewSwitch(newEventForm(name)))
-			validateForm()
+			validateEventForm()
 		}
 		if(resj.message === 'true') {
 			let type = 'nameTaken'
@@ -952,6 +952,13 @@ function watchFetchActions() {
 	$('body').on('click', 'button.introRegisterButton', function (e) {
 		e.preventDefault();
 		renderSignUp();
+	});
+	$('body').on('click', 'button.event-autofill', function (e) {
+		e.preventDefault();
+		let event = $('.eventNameInput').val() === '' ? 'testEvent' : 'demoEvent';
+		/*Woops, You'll have to empty this box now */
+		console.log(event)
+		$('.eventNameInput').val(event);
 	});
 	$('body').on('click', 'button.eventNameButton', function (e) {
 		e.preventDefault();

@@ -125,6 +125,7 @@ button:focus {
     display: flex;
     flex-direction: column;
     text-align: center;
+    align-items: center;
 }
 
 .invalid {
@@ -134,7 +135,7 @@ button:focus {
 .eventCheckButtons {
     display: flex;
     justify-content: space-around;
-   
+    width: 100%;
 }
 
 .eventNameInput {

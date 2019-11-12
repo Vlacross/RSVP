@@ -278,6 +278,7 @@ const eventCheck =
 
 	<label for="eventNameCheck" class="eventNameCheckLabel " >Search for an event to sign up for</label>
 		<input id="eventNameInput" name="eventNameInput" class="eventNameInput" type="text" required>
+		<button class="event-autofill">Use the Demo</button>
 		<span>DemoEvent: <span class="demoNames">demoEvent</span></span>
 	
 	<div class="eventCheckButtons">
@@ -306,7 +307,86 @@ const newEventCheck =
 </form>
 `
 
+function validateSignupForm() {
+	let submitButton = $('.signUpSubmit');
+	submitButton.attr('disabled', true);
 
+	let inputs = {
+		uFull: () => ($('#fullNameInput')),
+		uPass: () => ($('#userPassInput')),
+		uNam: () => ($('#userNameInput'))
+	}
+
+
+	let lengthCheck = (val, num) => (val.length >= num);
+
+	let updateStatus = function() {
+		let inputValidationStatus = {
+			uFull: (lengthCheck(inputs.uFull().val(), 4) && inputs.uFull().removeClass('invalid')),
+			uPass: (lengthCheck(inputs.uPass().val(), 4) && inputs.uPass().removeClass('invalid')),
+			uNam: (lengthCheck(inputs.uNam().val(), 4) && inputs.uNam().removeClass('invalid'))
+		}
+
+		return inputValidationStatus;
+	}
+
+	function enableSubmit() {
+		let stat = updateStatus();
+		let allInputs = Object.keys(stat).length;
+		for (let k in stat) {
+			if(!stat[k]) {
+				submitButton.attr('disabled', true);
+			}else {
+				allInputs--
+			}
+			if(allInputs === 0) {
+				submitButton.attr('disabled', false)
+			}
+		}
+		return stat;
+	}
+
+	checkInt = window.setInterval(enableSubmit, 500)
+	/*window.clearInterval(checkInt); */
+
+	function errorMsg(input) {
+		switch(input) {
+			case 'uFull':
+				return 'Full Name must contain at least 4 characters!';
+				break;
+			case 'uPass':
+				return 'Password must contain at least 4 characters!';
+				break;
+			case 'uNam':
+				return 'Username must contain at least 4 characters!';
+				break;
+	}
+}
+	
+	
+
+	function invalidate(input, msg){
+		input.addClass('invalid')
+		submitButton.attr('disabled', true)
+		input.next().text(msg)
+	}
+
+	Object.keys(inputs).forEach(key => {
+		inputs[key]()[0].onblur = function() {
+			let status =  updateStatus()
+			let msg = errorMsg(key)
+			!status[key] && invalidate(inputs[key](), msg)
+			
+		}
+
+		inputs[key]()[0].onfocus = function(e) {
+			e.preventDefault();
+			inputs[key]().next().empty()
+		}
+
+	})
+
+};
 
 /*form for new user */
 const signupForm =
@@ -317,16 +397,16 @@ const signupForm =
 		<input autocomplete="false" name="hidden" type="text" style="display:none;">
 
 			<label for="fullNameInput" class="fullNameLabel event" >FullName</label>
-				<input id="fullNameInput" name="fullNameInput" class="fullNameInput event" type="text" required>
-			
+				<input id="fullNameInput" name="fullNameInput" class="fullNameInput event" autocomplete="nope" type="text" required>
+				<span id="uFull-error" class="input-error"></span>
 
 				<label for="userNameInput" class="userNameInputLabel event">UserName</label>
-					<input id="userNameInput" name="userNameInput" class="userNameInput event" type="text" required>
-				
+					<input id="userNameInput" name="userNameInput" class="userNameInput event" autocomplete="nope" type="text" required>
+					<span id="uNam-error" class="input-error"></span>
 
 				<label for="userPassInput" class="userPassInputLabel event">PassWord </label>
-					<input id="userPassInput" name="userPassInput" class="userPassInput event" type="text" required>
-				
+					<input id="userPassInput" name="userPassInput" class="userPassInput event" autocomplete="nope" type="text" required>
+					<span id="uPass-error" class="input-error"></span>
 
 				<div class="attending">
 					<label for"going" class="goingLabel event">Going</label>
@@ -349,9 +429,7 @@ const signupForm =
 
 /*form for creating a new event-- follows after creating host account / master admin */
 
-function validateForm() {
-	let form = $('.authform');
-	let inputList = $('.authForm :input').serializeArray().splice(1);
+function validateEventForm() {
 	let submitButton = $('.newEventSubmit');
 
 	let inputs = {
@@ -385,7 +463,6 @@ function validateForm() {
 
 	function enableSubmit() {
 		let stat = updateStatus();
-		console.log(stat)
 		let allInputs = Object.keys(stat).length;
 		for (let k in stat) {
 			if(!stat[k]) {
@@ -429,7 +506,6 @@ function validateForm() {
 	
 
 	function invalidate(input, msg){
-		console.log(msg)
 		input.addClass('invalid')
 		submitButton.attr('disabled', true)
 		input.next().text(msg)
