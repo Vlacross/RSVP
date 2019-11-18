@@ -201,8 +201,16 @@ function displayReject(resj, area) {
 	let msg = resj.message
 	let button;
 	button = 'failedRejectButton';
+
 if(!area) {
- button = 'failedIntroButton'
+ button = 'failedIntroButton';
+// 	let back;
+// 	let retry;
+// 	back = 'failedRejectButton';
+// 	retry = 'update-retry';
+// if(!area) {
+//  button = 'failedIntroButton';
+//  retry = 'sign-up-retry';
 };
 
 	var rejectResponse =
@@ -210,7 +218,7 @@ if(!area) {
 		<h1>Woops!</h1>
 		<h3>Something went wrong!</h3>
 		<p>${msg} </p>
-		<button class="${button}" name="failedIntroButton">Retry</button>
+		<button class="${button}" name="failedIntroButton">Back</button>
 	</section>
 `;
 
@@ -259,7 +267,7 @@ const loginForm =
 						</div>
 					</div>
 
-				<button class="loginputsubmit login-button" type="submit" name="submitButton">Submit</button>
+				<button class="loginSubmit login-button" type="submit" name="submitButton">Submit</button>
 					
 	</fieldset>
 		<div class="loginBackButton">

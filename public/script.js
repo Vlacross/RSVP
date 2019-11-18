@@ -94,6 +94,7 @@ function checkEvent(route) {
 
 		localStorage.setItem('event', JSON.stringify(resj.event))
 		$('.accessView').replaceWith(introViewSwitch(signupForm))
+		validateSignupForm();
 		}
 	})
 	.catch(err => {
@@ -937,6 +938,7 @@ function watchFetchActions() {
 	});
 	$('body').on('click', 'button.loginSubmit', function (e) {
 		e.preventDefault();
+		window.clearInterval(checkInt)
 		logIn(route);
 	});
 	$('body').on('click', 'input.autofill', function (e) {
@@ -957,7 +959,6 @@ function watchFetchActions() {
 		e.preventDefault();
 		let event = $('.eventNameInput').val() === '' ? 'demoEvent' : 'Woops, You\'ll have to empty this box now ';
 		/*Woops, You'll have to empty this box now */
-		console.log(event)
 		$('.eventNameInput').val(event);
 	});
 	$('body').on('click', 'button.eventNameButton', function (e) {
@@ -984,20 +985,19 @@ function watchFetchActions() {
 	$('body').on('click', 'button.newEventSubmit', function (e) {
 		e.preventDefault()
 		window.clearInterval(checkInt);
-		console.log('clearing ints')
 		$('.banner').removeClass('hidden')
 		buildEvent();
 	});
 	$('body').on('click', 'button.new-event-back', function (e) {
 		e.preventDefault()
 		window.clearInterval(checkInt);
-		console.log('clearing ints')
 	});
 	
 
 	$('body').on('click', 'button.toggleIntro', function (e) {
 		e.preventDefault();
 		toggleIntro()
+		window.clearInterval(checkInt)
 	});
 
 	$('body').on('click', 'button.appInfoButton', function (e) {
