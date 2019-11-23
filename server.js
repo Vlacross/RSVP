@@ -43,7 +43,7 @@ function runServer() {
 		useFindAndModify: false, 
 		useCreateIndex: true, 
 		autoIndex: false }, err => {
-		if (err) {Test
+		if (err) {
 			console.log(err)
 			reject(err)
 		}

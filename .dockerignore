@@ -1,0 +1,6 @@
+.git
+Dockerfile
+README.md
+.travis.yml
+node_modules
+
