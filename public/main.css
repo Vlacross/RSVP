@@ -184,6 +184,7 @@ button:focus {
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100%
 }
 
 .introButton {
@@ -196,6 +197,7 @@ button:focus {
 
 .introPageFieldset {
     padding: 8px;
+    width: 100%;
     border: none;
     align-items:center;
 }
