@@ -470,9 +470,9 @@ describe('User route actions', function () {
 
 
 
-		it('should create a new event and return event data', function () {
+		it('should create a new event and return event data', async function () {
 
-			return chai.request(app)
+			return await chai.request(app)
 				.post('/login/newEvent')
 				.send(mockEvent)
 				.then(res => {

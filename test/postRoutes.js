@@ -203,9 +203,9 @@ describe('Post model create route', function() {
 describe('Post Model delete route', function () {
 
 
-	it('should delete a single post', function () {
+	it('should delete a single post', async function () {
 
-		return chai.request(app)
+		return await chai.request(app)
 		.post('/login/create')
 		.send(mockUser)
 		.then(res => {

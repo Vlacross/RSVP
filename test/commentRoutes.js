@@ -121,7 +121,7 @@ describe('Comment routes actions', function() {
 					console.log(err)
 				});
 
-			return chai.request(app)
+			return await chai.request(app)
 				.delete(`/comments/delete/${comment.id}`)
 				.set('Authorization', `Bearer ${token}`)
 				.set('Application', 'application/json')

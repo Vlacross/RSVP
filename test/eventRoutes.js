@@ -90,7 +90,7 @@ describe('Event routes actions', function() {
 						console.log(err)
 					});
 
-				return chai.request(app)
+				return await chai.request(app)
 					.get(`/events/find/${eventId}`)
 					.set('Authorization', `Bearer ${token}`)
 					.set('Application', 'application/json')
