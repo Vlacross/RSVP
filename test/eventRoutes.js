@@ -2,49 +2,15 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const expect = chai.expect;
 const mongoose = require('mongoose');
-const faker = require('faker');
-const DB = mongoose.connection;
-const bcrypt = require('bcryptjs');
 
 const { MONGODB_URI_TEST } = require('../config');
-
-const Post = require('../models/posts');
-const User = require('../models/users');
-const CommentPost = require('../models/comments');
-const EventPlan = require('../models/events');
-
-const seedEvents = require('../db/events');
-const seedPosts = require('../db/posts');
-const seedUsers = require('../db/users');
-const seedComments = require('../db/comments');
+const { connectDatabase, disconnectDatabase, seedDatabase, buildToken } = require('../utils/dbActions');
+const { EventPlan, User } = require('../models');
 
 
 chai.use(chaiHttp);
 
 const { app } = require('../server');
-
-const jwt = require('jsonwebtoken')
-const { JWT_SECRET, ALG, EXP } = require('../config');
-
-
-const opts = {
-	algorithm: ALG,
-	expiresIn: EXP
-};
-
-const buildToken = function (user) {
-	return jwt.sign({ user }, JWT_SECRET, opts
-	)
-};
-
-
-var preMockEvent = {
-	name: 'preMockEvent',
-	host: 'preMockHost',
-	dateOfEvent: new Date(),
-	contactInfo: 'preMock@mock.com',
-	summary: 'preMockSummary'
-};
 
 var mockUser = {
 	fullname: 'mockFull',
@@ -55,53 +21,24 @@ var mockUser = {
 	attending: true
 };
 
-var preMockUser = {
-	fullname: 'preMockFull',
-	username: 'preMockUser',
-    password: 'preMockPass',
-    event: '242424242424242424242424',
-	role: 3,
-	attending: true
-};
-
-
 describe('Event routes actions', function() {
 
 
 	before(function () {
-
 		console.log('mounting DB: ', MONGODB_URI_TEST)
-		return mongoose.connect(MONGODB_URI_TEST, { useUnifiedTopology: true, useNewUrlParser: true, useFindAndModify: false, useCreateIndex: true })
-	})
+		return connectDatabase()
+	});
 
 	beforeEach(function () {
 
-		console.log('Dropping Database');
-		 return mongoose.connection.db.dropDatabase()
-			.then(() => {
-				return Promise.all(seedUsers.map(user => bcrypt.hash(user.password, 10)));
-			})
-			.then(function(digests) {
-				seedUsers.forEach((user, i) => user.password = digests[i]);
-				console.log('Seeding database')
-				return Promise.all([
-					Post.insertMany(seedPosts),
-					User.insertMany(seedUsers),
-					CommentPost.insertMany(seedComments),
-					EventPlan.insertMany(seedEvents),
-					EventPlan.create(preMockEvent),
-					User.create(preMockUser)
-				])
-			})
-			.catch(err => {
-				console.error(`ERROR: ${err.message}`);
-				console.error(err);
-			})
-	})
+		console.info('Dropping Database');
+		let db = mongoose.connection.db
+		return seedDatabase(db);
+	});
 
 	after(function () {
 		console.log('dismounting DB')
-		return mongoose.disconnect();
+		return disconnectDatabase();
 	});
 
 
@@ -132,17 +69,28 @@ describe('Event routes actions', function() {
 	describe('Event GET route', function() {
 
 		
-		it('should find an event by id', function() {
+		it('should find an event by id', async function() {
 
 				let eventId;
+				let token;
+				
+				await EventPlan.findOne({_id: "242424242424242424242424"})
+					.then(res => {
+						eventId = res.id
+					})
+					.catch(err => {
+						console.log(err)
+					});
 
-				EventPlan.findOne({name: 'preMockEvent'})
-				.then(res => {
-					eventId = res.id	
+				await User.findOne({_id: "333333333333333333333301"})
+					.then(async res => {
+						token = await buildToken(res.username)
+					})
+					.catch(err => {
+						console.log(err)
+					});
 
-					let token = buildToken(preMockUser.username)
-
-					return chai.request(app)
+				return chai.request(app)
 					.get(`/events/find/${eventId}`)
 					.set('Authorization', `Bearer ${token}`)
 					.set('Application', 'application/json')
@@ -152,8 +100,8 @@ describe('Event routes actions', function() {
 							expect(res.body).to.be.an('object')
 							expect(res.body.id).to.eql(eventId)
 						})
-					
-					});
+						.catch(err => console.log(err))
+						
 				})
 	});
 
