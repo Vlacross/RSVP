@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
 
-const CommentPost = require('./comments');
+const Comment = require('./comments');
 
 /* Post style schema */
 const postSchema = new Schema({
@@ -61,11 +61,11 @@ postSchema.pre('remove', function() {
   let arr = this.comments;
   
   for(let i = 0; i < arr.length; i++) {
-    CommentPost.findByIdAndDelete(i)
+    Comment.findByIdAndDelete(i)
   }
 
   arr.forEach(comment => {
-    CommentPost.findByIdAndDelete(comment)
+    Comment.findByIdAndDelete(comment)
     })
     
 });

@@ -9,9 +9,7 @@ const passport = require('passport');
 passport.use('JWT', jwtStrategy);
 const jwtAuth = passport.authenticate('JWT', { session: false });
 
-const User = require('../models/users');
-const CommentPost = require('../models/comments');
-const Post = require('../models/posts');
+const { Comment, Post} = require('../models');
 
 router.use(bodyParser.json());
 router.use('*', jwtAuth);
@@ -80,7 +78,7 @@ router.delete('/purgeComments/:id', (req, res) => {
 		return res.status(400).json(msg).end()
 	}
 	
-	CommentPost.find({postId: req.params.id})
+	Comment.find({postId: req.params.id})
 		.then(comments => {
 			comments.forEach(comment => comment.remove())
 		})

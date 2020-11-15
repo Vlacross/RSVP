@@ -9,14 +9,13 @@ const passport = require('passport');
 const jwtAuth = passport.authenticate('JWT', { session: false });
 passport.use('JWT', jwtStrategy);
 
-const CommentPost = require('../models/comments');
-const Post = require('./../models/posts');
+const { Comment, Post} = require('../models');
 
 router.use(bodyParser.json());
 router.use('*', jwtAuth);
 
 
-	/*Can create a new CommentPost */
+	/*Can create a new Comment */
 	/*Access to All roles */
 router.post('/create', jsonParser, (req, res) => {
 
@@ -38,7 +37,7 @@ router.post('/create', jsonParser, (req, res) => {
 		postId,
 		event
 	};
-	CommentPost.create(comment)
+	Comment.create(comment)
 		.then(newComment => {
 			res.status(202).json(newComment)
 
@@ -56,14 +55,14 @@ router.delete('/delete/:id', (req, res) => {
 		console.error('missing \'id\'!!')
 		return res.status(400)
 	};
-	CommentPost.findOne({_id: req.params.id})
+	Comment.findOne({_id: req.params.id})
 	.then(comment => {
 		return Post.findByIdAndUpdate(comment.postId, { $pull: { 'comments': req.params.id }}
 		)
 	})
 	.catch(err => console.log(err))
 
-	CommentPost.findByIdAndRemove(req.params.id)
+	Comment.findByIdAndRemove(req.params.id)
 		.then(res.status(204).end() )
 		.catch(err => console.log(err))
 });

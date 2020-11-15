@@ -12,10 +12,7 @@ passport.use('JWT', jwtStrategy);
 
 const jwtAuth = passport.authenticate('JWT', { session: false });
 
-const CommentPost = require('../models/comments');
-const Post = require('../models/posts');
-const User = require('../models/users');
-const EventPlan = require('../models/events');
+const { User, Post, Comment } = require('../models');
 
 const { JWT_SECRET, ALG, EXP } = require('../config');
 
@@ -176,7 +173,7 @@ router.delete('/delete/:id', (req, res) => {
                 post.remove()
             });  
 		});
-	CommentPost.find({userId: userId})
+		Comment.find({userId: userId})
 		.then(comments => {
 			comments.forEach(comment => comment.remove())
 		})
